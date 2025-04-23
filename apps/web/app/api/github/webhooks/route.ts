@@ -1,7 +1,12 @@
 import appFn from "@/lib/probot/app";
 import { createNodeMiddleware, createProbot } from "probot";
 
-const probot = createProbot();
+const probot = createProbot({
+  overrides: {
+    appId: process.env.GITHUB_APP_ID || "!@#",
+    privateKey: process.env.GITHUB_APP_PRIVATE_KEY || "123",
+  },
+});
 const handler = createNodeMiddleware(appFn, { probot });
 
 export async function POST(req: Request) {
