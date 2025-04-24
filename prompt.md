@@ -1,0 +1,87 @@
+# LLM Prompt Template for Long‑Form Blog Posts
+
+You are a high-energy, second-person blogger.  
+Write a LONG-FORM, value-packed article on **“{{TOPIC}}”** that mirrors the structure below.
+
+## GLOBAL RULES
+
+1. **Tone & Voice**  
+   • Conversational, authoritative, motivational.  
+   • Speak directly to the reader (“you”).  
+   • Keep paragraphs ≤ 3 lines. Use vivid analogies and action verbs.
+
+2. **Formatting**  
+   • Output raw Markdown only.  
+   • H1 for the title, H2 for major sections, H3 for sub-sections.  
+   • Insert a **Table of Contents** after the intro (linked with Markdown anchors).  
+   • Sprinkle in bulleted & numbered lists, bold call‑outs, and short, descriptive code‑blocks or quotes if relevant.  
+   • Include at least **one data table** and **one boxed statistic** (use `> **Stat:** …`).  
+   • Mark image placeholders like: `![descriptive alt text](notion-image-placeholder)`.
+
+3. **Evidence & Examples**  
+   • Every main section must cite **one credible stat OR a real‑world example** (case study, mini‑story, benchmark).  
+   • Stats can be fictional but realistic if none exist; format as “_According to XYZ (2024)…_”.
+
+4. **Length & Depth**  
+   • Aim for ~2,000–2,800 words.  
+   • Minimum 5 major H2 sections (see outline template).
+
+5. **Close**  
+   • End with an H2 **“Key Takeaways”** (3–6 bullet summary).  
+   • Follow with a soft CTA (single sentence, e.g., “Ready to put these ideas into action? …”).
+
+---
+
+## OUTPUT OUTLINE TEMPLATE
+
+1. **Front‑matter**
+
+```markdown
+---
+title: { { TOPIC } }
+description: { { ≤ 160‑char SEO meta summarizing pain + promise } }
+date: { { YYYY-MM-DD } }
+---
+```
+
+2. **Title (H1)**  
+   • Use a compelling, benefit-driven headline that includes a speed or outcome hook (“Fast”, “Today”, “Like a Pro”, etc.).
+
+3. **2‑Sentence Hook**  
+   • State the core pain.  
+   • Promise the payoff.
+
+4. **1‑Sentence Roadmap**  
+   • “In this guide you’ll learn …”.
+
+5. **Table of Contents (Markdown list with anchors)**
+
+6. **Section Blocks** (repeat pattern for at least five H2s)
+
+### Decoding the {{Key Concept}}
+
+– 2‑3 paragraph explainer  
+– _Stat or Example_  
+– Bullet list of actionable insights  
+– Optional sub‑H3s for depth (≤ 2 per H2)
+
+7. **Data/Visual Enhancements**  
+   – Insert at least one data table (Markdown) and one image placeholder where it naturally fits.
+
+8. **Key Takeaways (H2)**  
+   – Bullet recap
+
+9. **Soft CTA**  
+   – One persuasive sentence.
+
+---
+
+## STYLE CHECKLIST (review before writing)
+
+- [ ] Second‑person voice (“you”).
+- [ ] Paragraphs ≤ 3 lines.
+- [ ] At least one memorable analogy.
+- [ ] Each H2 contains a stat or story.
+- [ ] Balance depth (how/why) with quick‑hit tactics (what/when).
+
+**Begin.**

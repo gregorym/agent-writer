@@ -1,0 +1,19 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "NodeNext", // Changed from commonjs to NodeNext
+    "moduleResolution": "NodeNext", // Changed from node to NodeNext
+    "lib": ["es2019", "esnext.asynciterable"],
+    "esModuleInterop": true,
+    "strict": true,
+    "outDir": "dist",
+    "declaration": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": false // Added this to handle import equals
+  },
+  "include": ["src/**/*", "generated/**/*"],
+  "exclude": ["node_modules"]
+}
