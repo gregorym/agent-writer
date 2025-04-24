@@ -15,8 +15,6 @@ export function SignupForm({
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,8 +30,6 @@ export function SignupForm({
         body: JSON.stringify({
           email,
           password,
-          first_name: firstName,
-          last_name: lastName,
         }),
       });
 
@@ -71,30 +67,6 @@ export function SignupForm({
         </div>
       )}
       <div className="grid gap-6">
-        <div className="flex gap-3">
-          <div className="grid flex-1 gap-3">
-            <Label htmlFor="firstName">First Name</Label>
-            <Input
-              id="firstName"
-              type="text"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="grid flex-1 gap-3">
-            <Label htmlFor="lastName">Last Name</Label>
-            <Input
-              id="lastName"
-              type="text"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-          </div>
-        </div>
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
           <Input

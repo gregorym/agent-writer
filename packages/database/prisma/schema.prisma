@@ -12,43 +12,47 @@ generator client {
   output   = "../generated/client"
 }
 
-// ===== USER & AUTHENTICATION MODELS =====
-
 model User {
-  id                 String  @id @default(cuid())
-  email              String  @unique
-  name               String?
-  avatar_url         String?
-  stripe_customer_id String? @unique // Stripe customer ID
+  id            String  @id @default(cuid())
+  email         String  @unique
+  password_hash String?
+  role          String?
 
-  created_at    DateTime       @default(now())
-  updated_at    DateTime       @updatedAt
-  sessions      Session[]
-  keys          Key[]
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  
+  sessions Session[]
   subscriptions Subscription[]
+  websites Website[]
 
+  @@index([password_hash])
   @@map("users")
 }
 
 model Session {
-  id String @id
-
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id
   userId    String
-  expiresAt DateTime // UNIX timestamp in seconds
-  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@map("sessions")
 }
 
-model Key {
-  id             String  @id // e.g., "google:123456789"
-  user           User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id        String
-  providerId     String? // e.g., "google"
-  providerUserId String? // e.g., "123456789"
+model Website {
+  id          String   @id @default(cuid())
+  user_id     String
+  name        String
+  url         String
+  topic       String?
+  
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
-  @@map("auth_keys")
+  user User @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@map("websites")
 }
 
 model Subscription {
