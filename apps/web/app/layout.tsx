@@ -1,3 +1,4 @@
+import TRPCProvider from "@/trpc/provider";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -13,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        {children}
+        <TRPCProvider>{children}</TRPCProvider>
         <Toaster />
       </body>
     </html>
