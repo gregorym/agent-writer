@@ -44,14 +44,19 @@ model Website {
   user_id     String
   name        String
   url         String
-  topic       String?
-  
+  context     String?
+  slug        String @unique
+  auto_publish Boolean @default(false)
+
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
   user User @relation(fields: [user_id], references: [id])
+  articles Article[]
+  ghostIntegration GhostIntegration? 
 
   @@index([user_id])
+  @@index([slug])
   @@map("websites")
 }
 
@@ -74,4 +79,35 @@ model Subscription {
   @@index([user_id])
   @@index([stripe_subscription_id])
   @@map("subscriptions")
+}
+
+model Article {
+  id           Int      @id @default(autoincrement())
+  website_id   String   // Changed to String to match Website.id type
+  scheduled_at DateTime? @db.Date // Use @db.Date for DATE type
+  topic        String?
+  title        String?
+  markdown     String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  website Website @relation(fields: [website_id], references: [id])
+
+  @@index([website_id])
+  @@map("articles")
+}
+
+model GhostIntegration {
+  id         Int      @id @default(autoincrement())
+  website_id String   @unique // Add unique constraint for one-to-one relation
+  api_key    String
+  api_url    String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  website Website @relation(fields: [website_id], references: [id])
+
+  @@map("ghost_integrations")
 }

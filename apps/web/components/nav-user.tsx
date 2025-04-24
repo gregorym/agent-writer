@@ -26,7 +26,7 @@ export function NavUser() {
 
   useEffect(() => {
     if (!isFetched) return;
-    if (me && me.role !== "ADMIN") {
+    if (!me) {
       router.push("/");
     }
   }, [me, isFetched]);

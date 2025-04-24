@@ -13,30 +13,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { IconShadow } from "@tabler/icons-react";
-import { File, User2Icon } from "lucide-react";
-
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Users",
-      url: "/admin/users",
-      icon: User2Icon,
-    },
-    {
-      title: "Assets",
-      url: "/admin/assets",
-      icon: File,
-    },
-  ],
-};
+import { PenTool } from "lucide-react";
+import { useParams } from "next/navigation";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { slug } = useParams();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -46,16 +28,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="/admin/users">
-                <IconShadow className="!size-5" />
-                <span className="text-base font-semibold">Memora</span>
+              <a href="/">
+                <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+                  <PenTool className="size-4" />
+                </div>
+
+                <span className="text-base font-semibold">Bloggy</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

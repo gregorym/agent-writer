@@ -33,6 +33,16 @@ export type Website = $Result.DefaultSelection<Prisma.$WebsitePayload>
  * 
  */
 export type Subscription = $Result.DefaultSelection<Prisma.$SubscriptionPayload>
+/**
+ * Model Article
+ * 
+ */
+export type Article = $Result.DefaultSelection<Prisma.$ArticlePayload>
+/**
+ * Model GhostIntegration
+ * 
+ */
+export type GhostIntegration = $Result.DefaultSelection<Prisma.$GhostIntegrationPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -198,6 +208,26 @@ export class PrismaClient<
     * ```
     */
   get subscription(): Prisma.SubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.article`: Exposes CRUD operations for the **Article** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Articles
+    * const articles = await prisma.article.findMany()
+    * ```
+    */
+  get article(): Prisma.ArticleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.ghostIntegration`: Exposes CRUD operations for the **GhostIntegration** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GhostIntegrations
+    * const ghostIntegrations = await prisma.ghostIntegration.findMany()
+    * ```
+    */
+  get ghostIntegration(): Prisma.GhostIntegrationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -641,7 +671,9 @@ export namespace Prisma {
     User: 'User',
     Session: 'Session',
     Website: 'Website',
-    Subscription: 'Subscription'
+    Subscription: 'Subscription',
+    Article: 'Article',
+    GhostIntegration: 'GhostIntegration'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -660,7 +692,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "website" | "subscription"
+      modelProps: "user" | "session" | "website" | "subscription" | "article" | "ghostIntegration"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -960,6 +992,154 @@ export namespace Prisma {
           }
         }
       }
+      Article: {
+        payload: Prisma.$ArticlePayload<ExtArgs>
+        fields: Prisma.ArticleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ArticleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ArticleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>
+          }
+          findFirst: {
+            args: Prisma.ArticleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ArticleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>
+          }
+          findMany: {
+            args: Prisma.ArticleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>[]
+          }
+          create: {
+            args: Prisma.ArticleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>
+          }
+          createMany: {
+            args: Prisma.ArticleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ArticleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>[]
+          }
+          delete: {
+            args: Prisma.ArticleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>
+          }
+          update: {
+            args: Prisma.ArticleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>
+          }
+          deleteMany: {
+            args: Prisma.ArticleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ArticleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ArticleUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>[]
+          }
+          upsert: {
+            args: Prisma.ArticleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticlePayload>
+          }
+          aggregate: {
+            args: Prisma.ArticleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateArticle>
+          }
+          groupBy: {
+            args: Prisma.ArticleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ArticleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ArticleCountArgs<ExtArgs>
+            result: $Utils.Optional<ArticleCountAggregateOutputType> | number
+          }
+        }
+      }
+      GhostIntegration: {
+        payload: Prisma.$GhostIntegrationPayload<ExtArgs>
+        fields: Prisma.GhostIntegrationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GhostIntegrationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GhostIntegrationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>
+          }
+          findFirst: {
+            args: Prisma.GhostIntegrationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GhostIntegrationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>
+          }
+          findMany: {
+            args: Prisma.GhostIntegrationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>[]
+          }
+          create: {
+            args: Prisma.GhostIntegrationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>
+          }
+          createMany: {
+            args: Prisma.GhostIntegrationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GhostIntegrationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>[]
+          }
+          delete: {
+            args: Prisma.GhostIntegrationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>
+          }
+          update: {
+            args: Prisma.GhostIntegrationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>
+          }
+          deleteMany: {
+            args: Prisma.GhostIntegrationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GhostIntegrationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GhostIntegrationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>[]
+          }
+          upsert: {
+            args: Prisma.GhostIntegrationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GhostIntegrationPayload>
+          }
+          aggregate: {
+            args: Prisma.GhostIntegrationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGhostIntegration>
+          }
+          groupBy: {
+            args: Prisma.GhostIntegrationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GhostIntegrationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GhostIntegrationCountArgs<ExtArgs>
+            result: $Utils.Optional<GhostIntegrationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1048,6 +1228,8 @@ export namespace Prisma {
     session?: SessionOmit
     website?: WebsiteOmit
     subscription?: SubscriptionOmit
+    article?: ArticleOmit
+    ghostIntegration?: GhostIntegrationOmit
   }
 
   /* Types for Logging */
@@ -1183,6 +1365,37 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountWebsitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WebsiteWhereInput
+  }
+
+
+  /**
+   * Count Type WebsiteCountOutputType
+   */
+
+  export type WebsiteCountOutputType = {
+    articles: number
+  }
+
+  export type WebsiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    articles?: boolean | WebsiteCountOutputTypeCountArticlesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WebsiteCountOutputType without action
+   */
+  export type WebsiteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WebsiteCountOutputType
+     */
+    select?: WebsiteCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WebsiteCountOutputType without action
+   */
+  export type WebsiteCountOutputTypeCountArticlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArticleWhereInput
   }
 
 
@@ -3376,7 +3589,9 @@ export namespace Prisma {
     user_id: string | null
     name: string | null
     url: string | null
-    topic: string | null
+    context: string | null
+    slug: string | null
+    auto_publish: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -3386,7 +3601,9 @@ export namespace Prisma {
     user_id: string | null
     name: string | null
     url: string | null
-    topic: string | null
+    context: string | null
+    slug: string | null
+    auto_publish: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -3396,7 +3613,9 @@ export namespace Prisma {
     user_id: number
     name: number
     url: number
-    topic: number
+    context: number
+    slug: number
+    auto_publish: number
     created_at: number
     updated_at: number
     _all: number
@@ -3408,7 +3627,9 @@ export namespace Prisma {
     user_id?: true
     name?: true
     url?: true
-    topic?: true
+    context?: true
+    slug?: true
+    auto_publish?: true
     created_at?: true
     updated_at?: true
   }
@@ -3418,7 +3639,9 @@ export namespace Prisma {
     user_id?: true
     name?: true
     url?: true
-    topic?: true
+    context?: true
+    slug?: true
+    auto_publish?: true
     created_at?: true
     updated_at?: true
   }
@@ -3428,7 +3651,9 @@ export namespace Prisma {
     user_id?: true
     name?: true
     url?: true
-    topic?: true
+    context?: true
+    slug?: true
+    auto_publish?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -3511,7 +3736,9 @@ export namespace Prisma {
     user_id: string
     name: string
     url: string
-    topic: string | null
+    context: string | null
+    slug: string
+    auto_publish: boolean
     created_at: Date
     updated_at: Date
     _count: WebsiteCountAggregateOutputType | null
@@ -3538,10 +3765,15 @@ export namespace Prisma {
     user_id?: boolean
     name?: boolean
     url?: boolean
-    topic?: boolean
+    context?: boolean
+    slug?: boolean
+    auto_publish?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    articles?: boolean | Website$articlesArgs<ExtArgs>
+    ghostIntegration?: boolean | Website$ghostIntegrationArgs<ExtArgs>
+    _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["website"]>
 
   export type WebsiteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3549,7 +3781,9 @@ export namespace Prisma {
     user_id?: boolean
     name?: boolean
     url?: boolean
-    topic?: boolean
+    context?: boolean
+    slug?: boolean
+    auto_publish?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3560,7 +3794,9 @@ export namespace Prisma {
     user_id?: boolean
     name?: boolean
     url?: boolean
-    topic?: boolean
+    context?: boolean
+    slug?: boolean
+    auto_publish?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3571,14 +3807,19 @@ export namespace Prisma {
     user_id?: boolean
     name?: boolean
     url?: boolean
-    topic?: boolean
+    context?: boolean
+    slug?: boolean
+    auto_publish?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "url" | "topic" | "created_at" | "updated_at", ExtArgs["result"]["website"]>
+  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "url" | "context" | "slug" | "auto_publish" | "created_at" | "updated_at", ExtArgs["result"]["website"]>
   export type WebsiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    articles?: boolean | Website$articlesArgs<ExtArgs>
+    ghostIntegration?: boolean | Website$ghostIntegrationArgs<ExtArgs>
+    _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WebsiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3591,13 +3832,17 @@ export namespace Prisma {
     name: "Website"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      articles: Prisma.$ArticlePayload<ExtArgs>[]
+      ghostIntegration: Prisma.$GhostIntegrationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       user_id: string
       name: string
       url: string
-      topic: string | null
+      context: string | null
+      slug: string
+      auto_publish: boolean
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["website"]>
@@ -3995,6 +4240,8 @@ export namespace Prisma {
   export interface Prisma__WebsiteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    articles<T extends Website$articlesArgs<ExtArgs> = {}>(args?: Subset<T, Website$articlesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ghostIntegration<T extends Website$ghostIntegrationArgs<ExtArgs> = {}>(args?: Subset<T, Website$ghostIntegrationArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4028,7 +4275,9 @@ export namespace Prisma {
     readonly user_id: FieldRef<"Website", 'String'>
     readonly name: FieldRef<"Website", 'String'>
     readonly url: FieldRef<"Website", 'String'>
-    readonly topic: FieldRef<"Website", 'String'>
+    readonly context: FieldRef<"Website", 'String'>
+    readonly slug: FieldRef<"Website", 'String'>
+    readonly auto_publish: FieldRef<"Website", 'Boolean'>
     readonly created_at: FieldRef<"Website", 'DateTime'>
     readonly updated_at: FieldRef<"Website", 'DateTime'>
   }
@@ -4424,6 +4673,49 @@ export namespace Prisma {
      * Limit how many Websites to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Website.articles
+   */
+  export type Website$articlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    where?: ArticleWhereInput
+    orderBy?: ArticleOrderByWithRelationInput | ArticleOrderByWithRelationInput[]
+    cursor?: ArticleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ArticleScalarFieldEnum | ArticleScalarFieldEnum[]
+  }
+
+  /**
+   * Website.ghostIntegration
+   */
+  export type Website$ghostIntegrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    where?: GhostIntegrationWhereInput
   }
 
   /**
@@ -5629,6 +5921,2242 @@ export namespace Prisma {
 
 
   /**
+   * Model Article
+   */
+
+  export type AggregateArticle = {
+    _count: ArticleCountAggregateOutputType | null
+    _avg: ArticleAvgAggregateOutputType | null
+    _sum: ArticleSumAggregateOutputType | null
+    _min: ArticleMinAggregateOutputType | null
+    _max: ArticleMaxAggregateOutputType | null
+  }
+
+  export type ArticleAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ArticleSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ArticleMinAggregateOutputType = {
+    id: number | null
+    website_id: string | null
+    scheduled_at: Date | null
+    topic: string | null
+    title: string | null
+    markdown: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ArticleMaxAggregateOutputType = {
+    id: number | null
+    website_id: string | null
+    scheduled_at: Date | null
+    topic: string | null
+    title: string | null
+    markdown: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ArticleCountAggregateOutputType = {
+    id: number
+    website_id: number
+    scheduled_at: number
+    topic: number
+    title: number
+    markdown: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ArticleAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ArticleSumAggregateInputType = {
+    id?: true
+  }
+
+  export type ArticleMinAggregateInputType = {
+    id?: true
+    website_id?: true
+    scheduled_at?: true
+    topic?: true
+    title?: true
+    markdown?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ArticleMaxAggregateInputType = {
+    id?: true
+    website_id?: true
+    scheduled_at?: true
+    topic?: true
+    title?: true
+    markdown?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ArticleCountAggregateInputType = {
+    id?: true
+    website_id?: true
+    scheduled_at?: true
+    topic?: true
+    title?: true
+    markdown?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ArticleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Article to aggregate.
+     */
+    where?: ArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Articles to fetch.
+     */
+    orderBy?: ArticleOrderByWithRelationInput | ArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Articles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Articles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Articles
+    **/
+    _count?: true | ArticleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ArticleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ArticleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ArticleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ArticleMaxAggregateInputType
+  }
+
+  export type GetArticleAggregateType<T extends ArticleAggregateArgs> = {
+        [P in keyof T & keyof AggregateArticle]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateArticle[P]>
+      : GetScalarType<T[P], AggregateArticle[P]>
+  }
+
+
+
+
+  export type ArticleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArticleWhereInput
+    orderBy?: ArticleOrderByWithAggregationInput | ArticleOrderByWithAggregationInput[]
+    by: ArticleScalarFieldEnum[] | ArticleScalarFieldEnum
+    having?: ArticleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ArticleCountAggregateInputType | true
+    _avg?: ArticleAvgAggregateInputType
+    _sum?: ArticleSumAggregateInputType
+    _min?: ArticleMinAggregateInputType
+    _max?: ArticleMaxAggregateInputType
+  }
+
+  export type ArticleGroupByOutputType = {
+    id: number
+    website_id: string
+    scheduled_at: Date | null
+    topic: string | null
+    title: string | null
+    markdown: string | null
+    created_at: Date
+    updated_at: Date
+    _count: ArticleCountAggregateOutputType | null
+    _avg: ArticleAvgAggregateOutputType | null
+    _sum: ArticleSumAggregateOutputType | null
+    _min: ArticleMinAggregateOutputType | null
+    _max: ArticleMaxAggregateOutputType | null
+  }
+
+  type GetArticleGroupByPayload<T extends ArticleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ArticleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ArticleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ArticleGroupByOutputType[P]>
+            : GetScalarType<T[P], ArticleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ArticleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    scheduled_at?: boolean
+    topic?: boolean
+    title?: boolean
+    markdown?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["article"]>
+
+  export type ArticleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    scheduled_at?: boolean
+    topic?: boolean
+    title?: boolean
+    markdown?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["article"]>
+
+  export type ArticleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    scheduled_at?: boolean
+    topic?: boolean
+    title?: boolean
+    markdown?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["article"]>
+
+  export type ArticleSelectScalar = {
+    id?: boolean
+    website_id?: boolean
+    scheduled_at?: boolean
+    topic?: boolean
+    title?: boolean
+    markdown?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "topic" | "title" | "markdown" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
+  export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type ArticleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type ArticleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+
+  export type $ArticlePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Article"
+    objects: {
+      website: Prisma.$WebsitePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      website_id: string
+      scheduled_at: Date | null
+      topic: string | null
+      title: string | null
+      markdown: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["article"]>
+    composites: {}
+  }
+
+  type ArticleGetPayload<S extends boolean | null | undefined | ArticleDefaultArgs> = $Result.GetResult<Prisma.$ArticlePayload, S>
+
+  type ArticleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ArticleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ArticleCountAggregateInputType | true
+    }
+
+  export interface ArticleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Article'], meta: { name: 'Article' } }
+    /**
+     * Find zero or one Article that matches the filter.
+     * @param {ArticleFindUniqueArgs} args - Arguments to find a Article
+     * @example
+     * // Get one Article
+     * const article = await prisma.article.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ArticleFindUniqueArgs>(args: SelectSubset<T, ArticleFindUniqueArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Article that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ArticleFindUniqueOrThrowArgs} args - Arguments to find a Article
+     * @example
+     * // Get one Article
+     * const article = await prisma.article.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ArticleFindUniqueOrThrowArgs>(args: SelectSubset<T, ArticleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Article that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleFindFirstArgs} args - Arguments to find a Article
+     * @example
+     * // Get one Article
+     * const article = await prisma.article.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ArticleFindFirstArgs>(args?: SelectSubset<T, ArticleFindFirstArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Article that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleFindFirstOrThrowArgs} args - Arguments to find a Article
+     * @example
+     * // Get one Article
+     * const article = await prisma.article.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ArticleFindFirstOrThrowArgs>(args?: SelectSubset<T, ArticleFindFirstOrThrowArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Articles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Articles
+     * const articles = await prisma.article.findMany()
+     * 
+     * // Get first 10 Articles
+     * const articles = await prisma.article.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const articleWithIdOnly = await prisma.article.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ArticleFindManyArgs>(args?: SelectSubset<T, ArticleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Article.
+     * @param {ArticleCreateArgs} args - Arguments to create a Article.
+     * @example
+     * // Create one Article
+     * const Article = await prisma.article.create({
+     *   data: {
+     *     // ... data to create a Article
+     *   }
+     * })
+     * 
+     */
+    create<T extends ArticleCreateArgs>(args: SelectSubset<T, ArticleCreateArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Articles.
+     * @param {ArticleCreateManyArgs} args - Arguments to create many Articles.
+     * @example
+     * // Create many Articles
+     * const article = await prisma.article.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ArticleCreateManyArgs>(args?: SelectSubset<T, ArticleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Articles and returns the data saved in the database.
+     * @param {ArticleCreateManyAndReturnArgs} args - Arguments to create many Articles.
+     * @example
+     * // Create many Articles
+     * const article = await prisma.article.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Articles and only return the `id`
+     * const articleWithIdOnly = await prisma.article.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ArticleCreateManyAndReturnArgs>(args?: SelectSubset<T, ArticleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Article.
+     * @param {ArticleDeleteArgs} args - Arguments to delete one Article.
+     * @example
+     * // Delete one Article
+     * const Article = await prisma.article.delete({
+     *   where: {
+     *     // ... filter to delete one Article
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ArticleDeleteArgs>(args: SelectSubset<T, ArticleDeleteArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Article.
+     * @param {ArticleUpdateArgs} args - Arguments to update one Article.
+     * @example
+     * // Update one Article
+     * const article = await prisma.article.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ArticleUpdateArgs>(args: SelectSubset<T, ArticleUpdateArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Articles.
+     * @param {ArticleDeleteManyArgs} args - Arguments to filter Articles to delete.
+     * @example
+     * // Delete a few Articles
+     * const { count } = await prisma.article.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ArticleDeleteManyArgs>(args?: SelectSubset<T, ArticleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Articles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Articles
+     * const article = await prisma.article.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ArticleUpdateManyArgs>(args: SelectSubset<T, ArticleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Articles and returns the data updated in the database.
+     * @param {ArticleUpdateManyAndReturnArgs} args - Arguments to update many Articles.
+     * @example
+     * // Update many Articles
+     * const article = await prisma.article.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Articles and only return the `id`
+     * const articleWithIdOnly = await prisma.article.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ArticleUpdateManyAndReturnArgs>(args: SelectSubset<T, ArticleUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Article.
+     * @param {ArticleUpsertArgs} args - Arguments to update or create a Article.
+     * @example
+     * // Update or create a Article
+     * const article = await prisma.article.upsert({
+     *   create: {
+     *     // ... data to create a Article
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Article we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ArticleUpsertArgs>(args: SelectSubset<T, ArticleUpsertArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Articles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleCountArgs} args - Arguments to filter Articles to count.
+     * @example
+     * // Count the number of Articles
+     * const count = await prisma.article.count({
+     *   where: {
+     *     // ... the filter for the Articles we want to count
+     *   }
+     * })
+    **/
+    count<T extends ArticleCountArgs>(
+      args?: Subset<T, ArticleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ArticleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Article.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ArticleAggregateArgs>(args: Subset<T, ArticleAggregateArgs>): Prisma.PrismaPromise<GetArticleAggregateType<T>>
+
+    /**
+     * Group by Article.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ArticleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ArticleGroupByArgs['orderBy'] }
+        : { orderBy?: ArticleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ArticleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetArticleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Article model
+   */
+  readonly fields: ArticleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Article.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ArticleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    website<T extends WebsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WebsiteDefaultArgs<ExtArgs>>): Prisma__WebsiteClient<$Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Article model
+   */
+  interface ArticleFieldRefs {
+    readonly id: FieldRef<"Article", 'Int'>
+    readonly website_id: FieldRef<"Article", 'String'>
+    readonly scheduled_at: FieldRef<"Article", 'DateTime'>
+    readonly topic: FieldRef<"Article", 'String'>
+    readonly title: FieldRef<"Article", 'String'>
+    readonly markdown: FieldRef<"Article", 'String'>
+    readonly created_at: FieldRef<"Article", 'DateTime'>
+    readonly updated_at: FieldRef<"Article", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Article findUnique
+   */
+  export type ArticleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which Article to fetch.
+     */
+    where: ArticleWhereUniqueInput
+  }
+
+  /**
+   * Article findUniqueOrThrow
+   */
+  export type ArticleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which Article to fetch.
+     */
+    where: ArticleWhereUniqueInput
+  }
+
+  /**
+   * Article findFirst
+   */
+  export type ArticleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which Article to fetch.
+     */
+    where?: ArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Articles to fetch.
+     */
+    orderBy?: ArticleOrderByWithRelationInput | ArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Articles.
+     */
+    cursor?: ArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Articles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Articles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Articles.
+     */
+    distinct?: ArticleScalarFieldEnum | ArticleScalarFieldEnum[]
+  }
+
+  /**
+   * Article findFirstOrThrow
+   */
+  export type ArticleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which Article to fetch.
+     */
+    where?: ArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Articles to fetch.
+     */
+    orderBy?: ArticleOrderByWithRelationInput | ArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Articles.
+     */
+    cursor?: ArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Articles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Articles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Articles.
+     */
+    distinct?: ArticleScalarFieldEnum | ArticleScalarFieldEnum[]
+  }
+
+  /**
+   * Article findMany
+   */
+  export type ArticleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * Filter, which Articles to fetch.
+     */
+    where?: ArticleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Articles to fetch.
+     */
+    orderBy?: ArticleOrderByWithRelationInput | ArticleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Articles.
+     */
+    cursor?: ArticleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Articles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Articles.
+     */
+    skip?: number
+    distinct?: ArticleScalarFieldEnum | ArticleScalarFieldEnum[]
+  }
+
+  /**
+   * Article create
+   */
+  export type ArticleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Article.
+     */
+    data: XOR<ArticleCreateInput, ArticleUncheckedCreateInput>
+  }
+
+  /**
+   * Article createMany
+   */
+  export type ArticleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Articles.
+     */
+    data: ArticleCreateManyInput | ArticleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Article createManyAndReturn
+   */
+  export type ArticleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * The data used to create many Articles.
+     */
+    data: ArticleCreateManyInput | ArticleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Article update
+   */
+  export type ArticleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Article.
+     */
+    data: XOR<ArticleUpdateInput, ArticleUncheckedUpdateInput>
+    /**
+     * Choose, which Article to update.
+     */
+    where: ArticleWhereUniqueInput
+  }
+
+  /**
+   * Article updateMany
+   */
+  export type ArticleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Articles.
+     */
+    data: XOR<ArticleUpdateManyMutationInput, ArticleUncheckedUpdateManyInput>
+    /**
+     * Filter which Articles to update
+     */
+    where?: ArticleWhereInput
+    /**
+     * Limit how many Articles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Article updateManyAndReturn
+   */
+  export type ArticleUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * The data used to update Articles.
+     */
+    data: XOR<ArticleUpdateManyMutationInput, ArticleUncheckedUpdateManyInput>
+    /**
+     * Filter which Articles to update
+     */
+    where?: ArticleWhereInput
+    /**
+     * Limit how many Articles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Article upsert
+   */
+  export type ArticleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Article to update in case it exists.
+     */
+    where: ArticleWhereUniqueInput
+    /**
+     * In case the Article found by the `where` argument doesn't exist, create a new Article with this data.
+     */
+    create: XOR<ArticleCreateInput, ArticleUncheckedCreateInput>
+    /**
+     * In case the Article was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ArticleUpdateInput, ArticleUncheckedUpdateInput>
+  }
+
+  /**
+   * Article delete
+   */
+  export type ArticleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
+     * Filter which Article to delete.
+     */
+    where: ArticleWhereUniqueInput
+  }
+
+  /**
+   * Article deleteMany
+   */
+  export type ArticleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Articles to delete
+     */
+    where?: ArticleWhereInput
+    /**
+     * Limit how many Articles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Article without action
+   */
+  export type ArticleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Article
+     */
+    select?: ArticleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Article
+     */
+    omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GhostIntegration
+   */
+
+  export type AggregateGhostIntegration = {
+    _count: GhostIntegrationCountAggregateOutputType | null
+    _avg: GhostIntegrationAvgAggregateOutputType | null
+    _sum: GhostIntegrationSumAggregateOutputType | null
+    _min: GhostIntegrationMinAggregateOutputType | null
+    _max: GhostIntegrationMaxAggregateOutputType | null
+  }
+
+  export type GhostIntegrationAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type GhostIntegrationSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type GhostIntegrationMinAggregateOutputType = {
+    id: number | null
+    website_id: string | null
+    api_key: string | null
+    api_url: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GhostIntegrationMaxAggregateOutputType = {
+    id: number | null
+    website_id: string | null
+    api_key: string | null
+    api_url: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GhostIntegrationCountAggregateOutputType = {
+    id: number
+    website_id: number
+    api_key: number
+    api_url: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type GhostIntegrationAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type GhostIntegrationSumAggregateInputType = {
+    id?: true
+  }
+
+  export type GhostIntegrationMinAggregateInputType = {
+    id?: true
+    website_id?: true
+    api_key?: true
+    api_url?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type GhostIntegrationMaxAggregateInputType = {
+    id?: true
+    website_id?: true
+    api_key?: true
+    api_url?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type GhostIntegrationCountAggregateInputType = {
+    id?: true
+    website_id?: true
+    api_key?: true
+    api_url?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type GhostIntegrationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GhostIntegration to aggregate.
+     */
+    where?: GhostIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GhostIntegrations to fetch.
+     */
+    orderBy?: GhostIntegrationOrderByWithRelationInput | GhostIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GhostIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GhostIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GhostIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GhostIntegrations
+    **/
+    _count?: true | GhostIntegrationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GhostIntegrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GhostIntegrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GhostIntegrationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GhostIntegrationMaxAggregateInputType
+  }
+
+  export type GetGhostIntegrationAggregateType<T extends GhostIntegrationAggregateArgs> = {
+        [P in keyof T & keyof AggregateGhostIntegration]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGhostIntegration[P]>
+      : GetScalarType<T[P], AggregateGhostIntegration[P]>
+  }
+
+
+
+
+  export type GhostIntegrationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GhostIntegrationWhereInput
+    orderBy?: GhostIntegrationOrderByWithAggregationInput | GhostIntegrationOrderByWithAggregationInput[]
+    by: GhostIntegrationScalarFieldEnum[] | GhostIntegrationScalarFieldEnum
+    having?: GhostIntegrationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GhostIntegrationCountAggregateInputType | true
+    _avg?: GhostIntegrationAvgAggregateInputType
+    _sum?: GhostIntegrationSumAggregateInputType
+    _min?: GhostIntegrationMinAggregateInputType
+    _max?: GhostIntegrationMaxAggregateInputType
+  }
+
+  export type GhostIntegrationGroupByOutputType = {
+    id: number
+    website_id: string
+    api_key: string
+    api_url: string
+    created_at: Date
+    updated_at: Date
+    _count: GhostIntegrationCountAggregateOutputType | null
+    _avg: GhostIntegrationAvgAggregateOutputType | null
+    _sum: GhostIntegrationSumAggregateOutputType | null
+    _min: GhostIntegrationMinAggregateOutputType | null
+    _max: GhostIntegrationMaxAggregateOutputType | null
+  }
+
+  type GetGhostIntegrationGroupByPayload<T extends GhostIntegrationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GhostIntegrationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GhostIntegrationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GhostIntegrationGroupByOutputType[P]>
+            : GetScalarType<T[P], GhostIntegrationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GhostIntegrationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    api_url?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ghostIntegration"]>
+
+  export type GhostIntegrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    api_url?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ghostIntegration"]>
+
+  export type GhostIntegrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    api_url?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["ghostIntegration"]>
+
+  export type GhostIntegrationSelectScalar = {
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    api_url?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type GhostIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "api_key" | "api_url" | "created_at" | "updated_at", ExtArgs["result"]["ghostIntegration"]>
+  export type GhostIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type GhostIntegrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type GhostIntegrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+
+  export type $GhostIntegrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GhostIntegration"
+    objects: {
+      website: Prisma.$WebsitePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      website_id: string
+      api_key: string
+      api_url: string
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["ghostIntegration"]>
+    composites: {}
+  }
+
+  type GhostIntegrationGetPayload<S extends boolean | null | undefined | GhostIntegrationDefaultArgs> = $Result.GetResult<Prisma.$GhostIntegrationPayload, S>
+
+  type GhostIntegrationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GhostIntegrationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GhostIntegrationCountAggregateInputType | true
+    }
+
+  export interface GhostIntegrationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GhostIntegration'], meta: { name: 'GhostIntegration' } }
+    /**
+     * Find zero or one GhostIntegration that matches the filter.
+     * @param {GhostIntegrationFindUniqueArgs} args - Arguments to find a GhostIntegration
+     * @example
+     * // Get one GhostIntegration
+     * const ghostIntegration = await prisma.ghostIntegration.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GhostIntegrationFindUniqueArgs>(args: SelectSubset<T, GhostIntegrationFindUniqueArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GhostIntegration that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GhostIntegrationFindUniqueOrThrowArgs} args - Arguments to find a GhostIntegration
+     * @example
+     * // Get one GhostIntegration
+     * const ghostIntegration = await prisma.ghostIntegration.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GhostIntegrationFindUniqueOrThrowArgs>(args: SelectSubset<T, GhostIntegrationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GhostIntegration that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GhostIntegrationFindFirstArgs} args - Arguments to find a GhostIntegration
+     * @example
+     * // Get one GhostIntegration
+     * const ghostIntegration = await prisma.ghostIntegration.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GhostIntegrationFindFirstArgs>(args?: SelectSubset<T, GhostIntegrationFindFirstArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GhostIntegration that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GhostIntegrationFindFirstOrThrowArgs} args - Arguments to find a GhostIntegration
+     * @example
+     * // Get one GhostIntegration
+     * const ghostIntegration = await prisma.ghostIntegration.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GhostIntegrationFindFirstOrThrowArgs>(args?: SelectSubset<T, GhostIntegrationFindFirstOrThrowArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GhostIntegrations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GhostIntegrationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GhostIntegrations
+     * const ghostIntegrations = await prisma.ghostIntegration.findMany()
+     * 
+     * // Get first 10 GhostIntegrations
+     * const ghostIntegrations = await prisma.ghostIntegration.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const ghostIntegrationWithIdOnly = await prisma.ghostIntegration.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GhostIntegrationFindManyArgs>(args?: SelectSubset<T, GhostIntegrationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GhostIntegration.
+     * @param {GhostIntegrationCreateArgs} args - Arguments to create a GhostIntegration.
+     * @example
+     * // Create one GhostIntegration
+     * const GhostIntegration = await prisma.ghostIntegration.create({
+     *   data: {
+     *     // ... data to create a GhostIntegration
+     *   }
+     * })
+     * 
+     */
+    create<T extends GhostIntegrationCreateArgs>(args: SelectSubset<T, GhostIntegrationCreateArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GhostIntegrations.
+     * @param {GhostIntegrationCreateManyArgs} args - Arguments to create many GhostIntegrations.
+     * @example
+     * // Create many GhostIntegrations
+     * const ghostIntegration = await prisma.ghostIntegration.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GhostIntegrationCreateManyArgs>(args?: SelectSubset<T, GhostIntegrationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GhostIntegrations and returns the data saved in the database.
+     * @param {GhostIntegrationCreateManyAndReturnArgs} args - Arguments to create many GhostIntegrations.
+     * @example
+     * // Create many GhostIntegrations
+     * const ghostIntegration = await prisma.ghostIntegration.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GhostIntegrations and only return the `id`
+     * const ghostIntegrationWithIdOnly = await prisma.ghostIntegration.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GhostIntegrationCreateManyAndReturnArgs>(args?: SelectSubset<T, GhostIntegrationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GhostIntegration.
+     * @param {GhostIntegrationDeleteArgs} args - Arguments to delete one GhostIntegration.
+     * @example
+     * // Delete one GhostIntegration
+     * const GhostIntegration = await prisma.ghostIntegration.delete({
+     *   where: {
+     *     // ... filter to delete one GhostIntegration
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GhostIntegrationDeleteArgs>(args: SelectSubset<T, GhostIntegrationDeleteArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GhostIntegration.
+     * @param {GhostIntegrationUpdateArgs} args - Arguments to update one GhostIntegration.
+     * @example
+     * // Update one GhostIntegration
+     * const ghostIntegration = await prisma.ghostIntegration.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GhostIntegrationUpdateArgs>(args: SelectSubset<T, GhostIntegrationUpdateArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GhostIntegrations.
+     * @param {GhostIntegrationDeleteManyArgs} args - Arguments to filter GhostIntegrations to delete.
+     * @example
+     * // Delete a few GhostIntegrations
+     * const { count } = await prisma.ghostIntegration.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GhostIntegrationDeleteManyArgs>(args?: SelectSubset<T, GhostIntegrationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GhostIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GhostIntegrationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GhostIntegrations
+     * const ghostIntegration = await prisma.ghostIntegration.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GhostIntegrationUpdateManyArgs>(args: SelectSubset<T, GhostIntegrationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GhostIntegrations and returns the data updated in the database.
+     * @param {GhostIntegrationUpdateManyAndReturnArgs} args - Arguments to update many GhostIntegrations.
+     * @example
+     * // Update many GhostIntegrations
+     * const ghostIntegration = await prisma.ghostIntegration.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GhostIntegrations and only return the `id`
+     * const ghostIntegrationWithIdOnly = await prisma.ghostIntegration.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GhostIntegrationUpdateManyAndReturnArgs>(args: SelectSubset<T, GhostIntegrationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GhostIntegration.
+     * @param {GhostIntegrationUpsertArgs} args - Arguments to update or create a GhostIntegration.
+     * @example
+     * // Update or create a GhostIntegration
+     * const ghostIntegration = await prisma.ghostIntegration.upsert({
+     *   create: {
+     *     // ... data to create a GhostIntegration
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GhostIntegration we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GhostIntegrationUpsertArgs>(args: SelectSubset<T, GhostIntegrationUpsertArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GhostIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GhostIntegrationCountArgs} args - Arguments to filter GhostIntegrations to count.
+     * @example
+     * // Count the number of GhostIntegrations
+     * const count = await prisma.ghostIntegration.count({
+     *   where: {
+     *     // ... the filter for the GhostIntegrations we want to count
+     *   }
+     * })
+    **/
+    count<T extends GhostIntegrationCountArgs>(
+      args?: Subset<T, GhostIntegrationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GhostIntegrationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GhostIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GhostIntegrationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GhostIntegrationAggregateArgs>(args: Subset<T, GhostIntegrationAggregateArgs>): Prisma.PrismaPromise<GetGhostIntegrationAggregateType<T>>
+
+    /**
+     * Group by GhostIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GhostIntegrationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GhostIntegrationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GhostIntegrationGroupByArgs['orderBy'] }
+        : { orderBy?: GhostIntegrationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GhostIntegrationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGhostIntegrationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GhostIntegration model
+   */
+  readonly fields: GhostIntegrationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GhostIntegration.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GhostIntegrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    website<T extends WebsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WebsiteDefaultArgs<ExtArgs>>): Prisma__WebsiteClient<$Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GhostIntegration model
+   */
+  interface GhostIntegrationFieldRefs {
+    readonly id: FieldRef<"GhostIntegration", 'Int'>
+    readonly website_id: FieldRef<"GhostIntegration", 'String'>
+    readonly api_key: FieldRef<"GhostIntegration", 'String'>
+    readonly api_url: FieldRef<"GhostIntegration", 'String'>
+    readonly created_at: FieldRef<"GhostIntegration", 'DateTime'>
+    readonly updated_at: FieldRef<"GhostIntegration", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GhostIntegration findUnique
+   */
+  export type GhostIntegrationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GhostIntegration to fetch.
+     */
+    where: GhostIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GhostIntegration findUniqueOrThrow
+   */
+  export type GhostIntegrationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GhostIntegration to fetch.
+     */
+    where: GhostIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GhostIntegration findFirst
+   */
+  export type GhostIntegrationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GhostIntegration to fetch.
+     */
+    where?: GhostIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GhostIntegrations to fetch.
+     */
+    orderBy?: GhostIntegrationOrderByWithRelationInput | GhostIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GhostIntegrations.
+     */
+    cursor?: GhostIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GhostIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GhostIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GhostIntegrations.
+     */
+    distinct?: GhostIntegrationScalarFieldEnum | GhostIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * GhostIntegration findFirstOrThrow
+   */
+  export type GhostIntegrationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GhostIntegration to fetch.
+     */
+    where?: GhostIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GhostIntegrations to fetch.
+     */
+    orderBy?: GhostIntegrationOrderByWithRelationInput | GhostIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GhostIntegrations.
+     */
+    cursor?: GhostIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GhostIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GhostIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GhostIntegrations.
+     */
+    distinct?: GhostIntegrationScalarFieldEnum | GhostIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * GhostIntegration findMany
+   */
+  export type GhostIntegrationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GhostIntegrations to fetch.
+     */
+    where?: GhostIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GhostIntegrations to fetch.
+     */
+    orderBy?: GhostIntegrationOrderByWithRelationInput | GhostIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GhostIntegrations.
+     */
+    cursor?: GhostIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GhostIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GhostIntegrations.
+     */
+    skip?: number
+    distinct?: GhostIntegrationScalarFieldEnum | GhostIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * GhostIntegration create
+   */
+  export type GhostIntegrationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GhostIntegration.
+     */
+    data: XOR<GhostIntegrationCreateInput, GhostIntegrationUncheckedCreateInput>
+  }
+
+  /**
+   * GhostIntegration createMany
+   */
+  export type GhostIntegrationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GhostIntegrations.
+     */
+    data: GhostIntegrationCreateManyInput | GhostIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GhostIntegration createManyAndReturn
+   */
+  export type GhostIntegrationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to create many GhostIntegrations.
+     */
+    data: GhostIntegrationCreateManyInput | GhostIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GhostIntegration update
+   */
+  export type GhostIntegrationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GhostIntegration.
+     */
+    data: XOR<GhostIntegrationUpdateInput, GhostIntegrationUncheckedUpdateInput>
+    /**
+     * Choose, which GhostIntegration to update.
+     */
+    where: GhostIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GhostIntegration updateMany
+   */
+  export type GhostIntegrationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GhostIntegrations.
+     */
+    data: XOR<GhostIntegrationUpdateManyMutationInput, GhostIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which GhostIntegrations to update
+     */
+    where?: GhostIntegrationWhereInput
+    /**
+     * Limit how many GhostIntegrations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GhostIntegration updateManyAndReturn
+   */
+  export type GhostIntegrationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to update GhostIntegrations.
+     */
+    data: XOR<GhostIntegrationUpdateManyMutationInput, GhostIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which GhostIntegrations to update
+     */
+    where?: GhostIntegrationWhereInput
+    /**
+     * Limit how many GhostIntegrations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GhostIntegration upsert
+   */
+  export type GhostIntegrationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GhostIntegration to update in case it exists.
+     */
+    where: GhostIntegrationWhereUniqueInput
+    /**
+     * In case the GhostIntegration found by the `where` argument doesn't exist, create a new GhostIntegration with this data.
+     */
+    create: XOR<GhostIntegrationCreateInput, GhostIntegrationUncheckedCreateInput>
+    /**
+     * In case the GhostIntegration was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GhostIntegrationUpdateInput, GhostIntegrationUncheckedUpdateInput>
+  }
+
+  /**
+   * GhostIntegration delete
+   */
+  export type GhostIntegrationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter which GhostIntegration to delete.
+     */
+    where: GhostIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GhostIntegration deleteMany
+   */
+  export type GhostIntegrationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GhostIntegrations to delete
+     */
+    where?: GhostIntegrationWhereInput
+    /**
+     * Limit how many GhostIntegrations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GhostIntegration without action
+   */
+  export type GhostIntegrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GhostIntegration
+     */
+    select?: GhostIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GhostIntegration
+     */
+    omit?: GhostIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GhostIntegrationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -5668,7 +8196,9 @@ export namespace Prisma {
     user_id: 'user_id',
     name: 'name',
     url: 'url',
-    topic: 'topic',
+    context: 'context',
+    slug: 'slug',
+    auto_publish: 'auto_publish',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -5692,6 +8222,32 @@ export namespace Prisma {
   };
 
   export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+  export const ArticleScalarFieldEnum: {
+    id: 'id',
+    website_id: 'website_id',
+    scheduled_at: 'scheduled_at',
+    topic: 'topic',
+    title: 'title',
+    markdown: 'markdown',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
+
+
+  export const GhostIntegrationScalarFieldEnum: {
+    id: 'id',
+    website_id: 'website_id',
+    api_key: 'api_key',
+    api_url: 'api_url',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type GhostIntegrationScalarFieldEnum = (typeof GhostIntegrationScalarFieldEnum)[keyof typeof GhostIntegrationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -5752,6 +8308,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -5762,13 +8325,6 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -5908,10 +8464,14 @@ export namespace Prisma {
     user_id?: StringFilter<"Website"> | string
     name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
-    topic?: StringNullableFilter<"Website"> | string | null
+    context?: StringNullableFilter<"Website"> | string | null
+    slug?: StringFilter<"Website"> | string
+    auto_publish?: BoolFilter<"Website"> | boolean
     created_at?: DateTimeFilter<"Website"> | Date | string
     updated_at?: DateTimeFilter<"Website"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    articles?: ArticleListRelationFilter
+    ghostIntegration?: XOR<GhostIntegrationNullableScalarRelationFilter, GhostIntegrationWhereInput> | null
   }
 
   export type WebsiteOrderByWithRelationInput = {
@@ -5919,32 +8479,42 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     url?: SortOrder
-    topic?: SortOrderInput | SortOrder
+    context?: SortOrderInput | SortOrder
+    slug?: SortOrder
+    auto_publish?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
+    articles?: ArticleOrderByRelationAggregateInput
+    ghostIntegration?: GhostIntegrationOrderByWithRelationInput
   }
 
   export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    slug?: string
     AND?: WebsiteWhereInput | WebsiteWhereInput[]
     OR?: WebsiteWhereInput[]
     NOT?: WebsiteWhereInput | WebsiteWhereInput[]
     user_id?: StringFilter<"Website"> | string
     name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
-    topic?: StringNullableFilter<"Website"> | string | null
+    context?: StringNullableFilter<"Website"> | string | null
+    auto_publish?: BoolFilter<"Website"> | boolean
     created_at?: DateTimeFilter<"Website"> | Date | string
     updated_at?: DateTimeFilter<"Website"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+    articles?: ArticleListRelationFilter
+    ghostIntegration?: XOR<GhostIntegrationNullableScalarRelationFilter, GhostIntegrationWhereInput> | null
+  }, "id" | "slug">
 
   export type WebsiteOrderByWithAggregationInput = {
     id?: SortOrder
     user_id?: SortOrder
     name?: SortOrder
     url?: SortOrder
-    topic?: SortOrderInput | SortOrder
+    context?: SortOrderInput | SortOrder
+    slug?: SortOrder
+    auto_publish?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: WebsiteCountOrderByAggregateInput
@@ -5960,7 +8530,9 @@ export namespace Prisma {
     user_id?: StringWithAggregatesFilter<"Website"> | string
     name?: StringWithAggregatesFilter<"Website"> | string
     url?: StringWithAggregatesFilter<"Website"> | string
-    topic?: StringNullableWithAggregatesFilter<"Website"> | string | null
+    context?: StringNullableWithAggregatesFilter<"Website"> | string | null
+    slug?: StringWithAggregatesFilter<"Website"> | string
+    auto_publish?: BoolWithAggregatesFilter<"Website"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"Website"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Website"> | Date | string
   }
@@ -6055,6 +8627,140 @@ export namespace Prisma {
     canceled_at?: DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
+  }
+
+  export type ArticleWhereInput = {
+    AND?: ArticleWhereInput | ArticleWhereInput[]
+    OR?: ArticleWhereInput[]
+    NOT?: ArticleWhereInput | ArticleWhereInput[]
+    id?: IntFilter<"Article"> | number
+    website_id?: StringFilter<"Article"> | string
+    scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
+    topic?: StringNullableFilter<"Article"> | string | null
+    title?: StringNullableFilter<"Article"> | string | null
+    markdown?: StringNullableFilter<"Article"> | string | null
+    created_at?: DateTimeFilter<"Article"> | Date | string
+    updated_at?: DateTimeFilter<"Article"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }
+
+  export type ArticleOrderByWithRelationInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    scheduled_at?: SortOrderInput | SortOrder
+    topic?: SortOrderInput | SortOrder
+    title?: SortOrderInput | SortOrder
+    markdown?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    website?: WebsiteOrderByWithRelationInput
+  }
+
+  export type ArticleWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: ArticleWhereInput | ArticleWhereInput[]
+    OR?: ArticleWhereInput[]
+    NOT?: ArticleWhereInput | ArticleWhereInput[]
+    website_id?: StringFilter<"Article"> | string
+    scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
+    topic?: StringNullableFilter<"Article"> | string | null
+    title?: StringNullableFilter<"Article"> | string | null
+    markdown?: StringNullableFilter<"Article"> | string | null
+    created_at?: DateTimeFilter<"Article"> | Date | string
+    updated_at?: DateTimeFilter<"Article"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }, "id">
+
+  export type ArticleOrderByWithAggregationInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    scheduled_at?: SortOrderInput | SortOrder
+    topic?: SortOrderInput | SortOrder
+    title?: SortOrderInput | SortOrder
+    markdown?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: ArticleCountOrderByAggregateInput
+    _avg?: ArticleAvgOrderByAggregateInput
+    _max?: ArticleMaxOrderByAggregateInput
+    _min?: ArticleMinOrderByAggregateInput
+    _sum?: ArticleSumOrderByAggregateInput
+  }
+
+  export type ArticleScalarWhereWithAggregatesInput = {
+    AND?: ArticleScalarWhereWithAggregatesInput | ArticleScalarWhereWithAggregatesInput[]
+    OR?: ArticleScalarWhereWithAggregatesInput[]
+    NOT?: ArticleScalarWhereWithAggregatesInput | ArticleScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Article"> | number
+    website_id?: StringWithAggregatesFilter<"Article"> | string
+    scheduled_at?: DateTimeNullableWithAggregatesFilter<"Article"> | Date | string | null
+    topic?: StringNullableWithAggregatesFilter<"Article"> | string | null
+    title?: StringNullableWithAggregatesFilter<"Article"> | string | null
+    markdown?: StringNullableWithAggregatesFilter<"Article"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Article"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Article"> | Date | string
+  }
+
+  export type GhostIntegrationWhereInput = {
+    AND?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
+    OR?: GhostIntegrationWhereInput[]
+    NOT?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
+    id?: IntFilter<"GhostIntegration"> | number
+    website_id?: StringFilter<"GhostIntegration"> | string
+    api_key?: StringFilter<"GhostIntegration"> | string
+    api_url?: StringFilter<"GhostIntegration"> | string
+    created_at?: DateTimeFilter<"GhostIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"GhostIntegration"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }
+
+  export type GhostIntegrationOrderByWithRelationInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    api_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    website?: WebsiteOrderByWithRelationInput
+  }
+
+  export type GhostIntegrationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    website_id?: string
+    AND?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
+    OR?: GhostIntegrationWhereInput[]
+    NOT?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
+    api_key?: StringFilter<"GhostIntegration"> | string
+    api_url?: StringFilter<"GhostIntegration"> | string
+    created_at?: DateTimeFilter<"GhostIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"GhostIntegration"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }, "id" | "website_id">
+
+  export type GhostIntegrationOrderByWithAggregationInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    api_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: GhostIntegrationCountOrderByAggregateInput
+    _avg?: GhostIntegrationAvgOrderByAggregateInput
+    _max?: GhostIntegrationMaxOrderByAggregateInput
+    _min?: GhostIntegrationMinOrderByAggregateInput
+    _sum?: GhostIntegrationSumOrderByAggregateInput
+  }
+
+  export type GhostIntegrationScalarWhereWithAggregatesInput = {
+    AND?: GhostIntegrationScalarWhereWithAggregatesInput | GhostIntegrationScalarWhereWithAggregatesInput[]
+    OR?: GhostIntegrationScalarWhereWithAggregatesInput[]
+    NOT?: GhostIntegrationScalarWhereWithAggregatesInput | GhostIntegrationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"GhostIntegration"> | number
+    website_id?: StringWithAggregatesFilter<"GhostIntegration"> | string
+    api_key?: StringWithAggregatesFilter<"GhostIntegration"> | string
+    api_url?: StringWithAggregatesFilter<"GhostIntegration"> | string
+    created_at?: DateTimeWithAggregatesFilter<"GhostIntegration"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"GhostIntegration"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -6177,10 +8883,14 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
-    topic?: string | null
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutWebsitesInput
+    articles?: ArticleCreateNestedManyWithoutWebsiteInput
+    ghostIntegration?: GhostIntegrationCreateNestedOneWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateInput = {
@@ -6188,19 +8898,27 @@ export namespace Prisma {
     user_id: string
     name: string
     url: string
-    topic?: string | null
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
+    ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
   }
 
   export type WebsiteUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
+    articles?: ArticleUpdateManyWithoutWebsiteNestedInput
+    ghostIntegration?: GhostIntegrationUpdateOneWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateInput = {
@@ -6208,9 +8926,13 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
+    ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
   }
 
   export type WebsiteCreateManyInput = {
@@ -6218,7 +8940,9 @@ export namespace Prisma {
     user_id: string
     name: string
     url: string
-    topic?: string | null
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -6227,7 +8951,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6237,7 +8963,9 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6339,6 +9067,138 @@ export namespace Prisma {
     trial_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cancel_at_period_end?: BoolFieldUpdateOperationsInput | boolean
     canceled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleCreateInput = {
+    scheduled_at?: Date | string | null
+    topic?: string | null
+    title?: string | null
+    markdown?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    website: WebsiteCreateNestedOneWithoutArticlesInput
+  }
+
+  export type ArticleUncheckedCreateInput = {
+    id?: number
+    website_id: string
+    scheduled_at?: Date | string | null
+    topic?: string | null
+    title?: string | null
+    markdown?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ArticleUpdateInput = {
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    markdown?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    website?: WebsiteUpdateOneRequiredWithoutArticlesNestedInput
+  }
+
+  export type ArticleUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    website_id?: StringFieldUpdateOperationsInput | string
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    markdown?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleCreateManyInput = {
+    id?: number
+    website_id: string
+    scheduled_at?: Date | string | null
+    topic?: string | null
+    title?: string | null
+    markdown?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ArticleUpdateManyMutationInput = {
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    markdown?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    website_id?: StringFieldUpdateOperationsInput | string
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    markdown?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GhostIntegrationCreateInput = {
+    api_key: string
+    api_url: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    website: WebsiteCreateNestedOneWithoutGhostIntegrationInput
+  }
+
+  export type GhostIntegrationUncheckedCreateInput = {
+    id?: number
+    website_id: string
+    api_key: string
+    api_url: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GhostIntegrationUpdateInput = {
+    api_key?: StringFieldUpdateOperationsInput | string
+    api_url?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    website?: WebsiteUpdateOneRequiredWithoutGhostIntegrationNestedInput
+  }
+
+  export type GhostIntegrationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    website_id?: StringFieldUpdateOperationsInput | string
+    api_key?: StringFieldUpdateOperationsInput | string
+    api_url?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GhostIntegrationCreateManyInput = {
+    id?: number
+    website_id: string
+    api_key: string
+    api_url: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GhostIntegrationUpdateManyMutationInput = {
+    api_key?: StringFieldUpdateOperationsInput | string
+    api_url?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GhostIntegrationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    website_id?: StringFieldUpdateOperationsInput | string
+    api_key?: StringFieldUpdateOperationsInput | string
+    api_url?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6519,12 +9379,34 @@ export namespace Prisma {
     expiresAt?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type ArticleListRelationFilter = {
+    every?: ArticleWhereInput
+    some?: ArticleWhereInput
+    none?: ArticleWhereInput
+  }
+
+  export type GhostIntegrationNullableScalarRelationFilter = {
+    is?: GhostIntegrationWhereInput | null
+    isNot?: GhostIntegrationWhereInput | null
+  }
+
+  export type ArticleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type WebsiteCountOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
     name?: SortOrder
     url?: SortOrder
-    topic?: SortOrder
+    context?: SortOrder
+    slug?: SortOrder
+    auto_publish?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -6534,7 +9416,9 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     url?: SortOrder
-    topic?: SortOrder
+    context?: SortOrder
+    slug?: SortOrder
+    auto_publish?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -6544,9 +9428,19 @@ export namespace Prisma {
     user_id?: SortOrder
     name?: SortOrder
     url?: SortOrder
-    topic?: SortOrder
+    context?: SortOrder
+    slug?: SortOrder
+    auto_publish?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -6569,11 +9463,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type SubscriptionCountOrderByAggregateInput = {
@@ -6659,12 +9548,85 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type WebsiteScalarRelationFilter = {
+    is?: WebsiteWhereInput
+    isNot?: WebsiteWhereInput
+  }
+
+  export type ArticleCountOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    scheduled_at?: SortOrder
+    topic?: SortOrder
+    title?: SortOrder
+    markdown?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ArticleAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ArticleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    scheduled_at?: SortOrder
+    topic?: SortOrder
+    title?: SortOrder
+    markdown?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ArticleMinOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    scheduled_at?: SortOrder
+    topic?: SortOrder
+    title?: SortOrder
+    markdown?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ArticleSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type GhostIntegrationCountOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    api_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GhostIntegrationAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type GhostIntegrationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    api_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GhostIntegrationMinOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    api_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GhostIntegrationSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type SessionCreateNestedManyWithoutUserInput = {
@@ -6825,12 +9787,90 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ArticleCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput> | ArticleCreateWithoutWebsiteInput[] | ArticleUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ArticleCreateOrConnectWithoutWebsiteInput | ArticleCreateOrConnectWithoutWebsiteInput[]
+    createMany?: ArticleCreateManyWebsiteInputEnvelope
+    connect?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+  }
+
+  export type GhostIntegrationCreateNestedOneWithoutWebsiteInput = {
+    create?: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
+    connectOrCreate?: GhostIntegrationCreateOrConnectWithoutWebsiteInput
+    connect?: GhostIntegrationWhereUniqueInput
+  }
+
+  export type ArticleUncheckedCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput> | ArticleCreateWithoutWebsiteInput[] | ArticleUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ArticleCreateOrConnectWithoutWebsiteInput | ArticleCreateOrConnectWithoutWebsiteInput[]
+    createMany?: ArticleCreateManyWebsiteInputEnvelope
+    connect?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+  }
+
+  export type GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput = {
+    create?: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
+    connectOrCreate?: GhostIntegrationCreateOrConnectWithoutWebsiteInput
+    connect?: GhostIntegrationWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type UserUpdateOneRequiredWithoutWebsitesNestedInput = {
     create?: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
     connectOrCreate?: UserCreateOrConnectWithoutWebsitesInput
     upsert?: UserUpsertWithoutWebsitesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWebsitesInput, UserUpdateWithoutWebsitesInput>, UserUncheckedUpdateWithoutWebsitesInput>
+  }
+
+  export type ArticleUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput> | ArticleCreateWithoutWebsiteInput[] | ArticleUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ArticleCreateOrConnectWithoutWebsiteInput | ArticleCreateOrConnectWithoutWebsiteInput[]
+    upsert?: ArticleUpsertWithWhereUniqueWithoutWebsiteInput | ArticleUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: ArticleCreateManyWebsiteInputEnvelope
+    set?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    disconnect?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    delete?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    connect?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    update?: ArticleUpdateWithWhereUniqueWithoutWebsiteInput | ArticleUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: ArticleUpdateManyWithWhereWithoutWebsiteInput | ArticleUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: ArticleScalarWhereInput | ArticleScalarWhereInput[]
+  }
+
+  export type GhostIntegrationUpdateOneWithoutWebsiteNestedInput = {
+    create?: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
+    connectOrCreate?: GhostIntegrationCreateOrConnectWithoutWebsiteInput
+    upsert?: GhostIntegrationUpsertWithoutWebsiteInput
+    disconnect?: GhostIntegrationWhereInput | boolean
+    delete?: GhostIntegrationWhereInput | boolean
+    connect?: GhostIntegrationWhereUniqueInput
+    update?: XOR<XOR<GhostIntegrationUpdateToOneWithWhereWithoutWebsiteInput, GhostIntegrationUpdateWithoutWebsiteInput>, GhostIntegrationUncheckedUpdateWithoutWebsiteInput>
+  }
+
+  export type ArticleUncheckedUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput> | ArticleCreateWithoutWebsiteInput[] | ArticleUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: ArticleCreateOrConnectWithoutWebsiteInput | ArticleCreateOrConnectWithoutWebsiteInput[]
+    upsert?: ArticleUpsertWithWhereUniqueWithoutWebsiteInput | ArticleUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: ArticleCreateManyWebsiteInputEnvelope
+    set?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    disconnect?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    delete?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    connect?: ArticleWhereUniqueInput | ArticleWhereUniqueInput[]
+    update?: ArticleUpdateWithWhereUniqueWithoutWebsiteInput | ArticleUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: ArticleUpdateManyWithWhereWithoutWebsiteInput | ArticleUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: ArticleScalarWhereInput | ArticleScalarWhereInput[]
+  }
+
+  export type GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput = {
+    create?: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
+    connectOrCreate?: GhostIntegrationCreateOrConnectWithoutWebsiteInput
+    upsert?: GhostIntegrationUpsertWithoutWebsiteInput
+    disconnect?: GhostIntegrationWhereInput | boolean
+    delete?: GhostIntegrationWhereInput | boolean
+    connect?: GhostIntegrationWhereUniqueInput
+    update?: XOR<XOR<GhostIntegrationUpdateToOneWithWhereWithoutWebsiteInput, GhostIntegrationUpdateWithoutWebsiteInput>, GhostIntegrationUncheckedUpdateWithoutWebsiteInput>
   }
 
   export type UserCreateNestedOneWithoutSubscriptionsInput = {
@@ -6841,10 +9881,6 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutSubscriptionsNestedInput = {
@@ -6861,6 +9897,34 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type WebsiteCreateNestedOneWithoutArticlesInput = {
+    create?: XOR<WebsiteCreateWithoutArticlesInput, WebsiteUncheckedCreateWithoutArticlesInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutArticlesInput
+    connect?: WebsiteWhereUniqueInput
+  }
+
+  export type WebsiteUpdateOneRequiredWithoutArticlesNestedInput = {
+    create?: XOR<WebsiteCreateWithoutArticlesInput, WebsiteUncheckedCreateWithoutArticlesInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutArticlesInput
+    upsert?: WebsiteUpsertWithoutArticlesInput
+    connect?: WebsiteWhereUniqueInput
+    update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutArticlesInput, WebsiteUpdateWithoutArticlesInput>, WebsiteUncheckedUpdateWithoutArticlesInput>
+  }
+
+  export type WebsiteCreateNestedOneWithoutGhostIntegrationInput = {
+    create?: XOR<WebsiteCreateWithoutGhostIntegrationInput, WebsiteUncheckedCreateWithoutGhostIntegrationInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutGhostIntegrationInput
+    connect?: WebsiteWhereUniqueInput
+  }
+
+  export type WebsiteUpdateOneRequiredWithoutGhostIntegrationNestedInput = {
+    create?: XOR<WebsiteCreateWithoutGhostIntegrationInput, WebsiteUncheckedCreateWithoutGhostIntegrationInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutGhostIntegrationInput
+    upsert?: WebsiteUpsertWithoutGhostIntegrationInput
+    connect?: WebsiteWhereUniqueInput
+    update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutGhostIntegrationInput, WebsiteUpdateWithoutGhostIntegrationInput>, WebsiteUncheckedUpdateWithoutGhostIntegrationInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6972,6 +10036,19 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -6981,11 +10058,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -7027,14 +10099,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type SessionCreateWithoutUserInput = {
@@ -7098,18 +10162,26 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
-    topic?: string | null
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    articles?: ArticleCreateNestedManyWithoutWebsiteInput
+    ghostIntegration?: GhostIntegrationCreateNestedOneWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
     url: string
-    topic?: string | null
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
+    ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutUserInput = {
@@ -7205,7 +10277,9 @@ export namespace Prisma {
     user_id?: StringFilter<"Website"> | string
     name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
-    topic?: StringNullableFilter<"Website"> | string | null
+    context?: StringNullableFilter<"Website"> | string | null
+    slug?: StringFilter<"Website"> | string
+    auto_publish?: BoolFilter<"Website"> | boolean
     created_at?: DateTimeFilter<"Website"> | Date | string
     updated_at?: DateTimeFilter<"Website"> | Date | string
   }
@@ -7297,6 +10371,55 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
   }
 
+  export type ArticleCreateWithoutWebsiteInput = {
+    scheduled_at?: Date | string | null
+    topic?: string | null
+    title?: string | null
+    markdown?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ArticleUncheckedCreateWithoutWebsiteInput = {
+    id?: number
+    scheduled_at?: Date | string | null
+    topic?: string | null
+    title?: string | null
+    markdown?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ArticleCreateOrConnectWithoutWebsiteInput = {
+    where: ArticleWhereUniqueInput
+    create: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type ArticleCreateManyWebsiteInputEnvelope = {
+    data: ArticleCreateManyWebsiteInput | ArticleCreateManyWebsiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GhostIntegrationCreateWithoutWebsiteInput = {
+    api_key: string
+    api_url: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GhostIntegrationUncheckedCreateWithoutWebsiteInput = {
+    id?: number
+    api_key: string
+    api_url: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GhostIntegrationCreateOrConnectWithoutWebsiteInput = {
+    where: GhostIntegrationWhereUniqueInput
+    create: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
+  }
+
   export type UserUpsertWithoutWebsitesInput = {
     update: XOR<UserUpdateWithoutWebsitesInput, UserUncheckedUpdateWithoutWebsitesInput>
     create: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
@@ -7328,6 +10451,62 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ArticleUpsertWithWhereUniqueWithoutWebsiteInput = {
+    where: ArticleWhereUniqueInput
+    update: XOR<ArticleUpdateWithoutWebsiteInput, ArticleUncheckedUpdateWithoutWebsiteInput>
+    create: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type ArticleUpdateWithWhereUniqueWithoutWebsiteInput = {
+    where: ArticleWhereUniqueInput
+    data: XOR<ArticleUpdateWithoutWebsiteInput, ArticleUncheckedUpdateWithoutWebsiteInput>
+  }
+
+  export type ArticleUpdateManyWithWhereWithoutWebsiteInput = {
+    where: ArticleScalarWhereInput
+    data: XOR<ArticleUpdateManyMutationInput, ArticleUncheckedUpdateManyWithoutWebsiteInput>
+  }
+
+  export type ArticleScalarWhereInput = {
+    AND?: ArticleScalarWhereInput | ArticleScalarWhereInput[]
+    OR?: ArticleScalarWhereInput[]
+    NOT?: ArticleScalarWhereInput | ArticleScalarWhereInput[]
+    id?: IntFilter<"Article"> | number
+    website_id?: StringFilter<"Article"> | string
+    scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
+    topic?: StringNullableFilter<"Article"> | string | null
+    title?: StringNullableFilter<"Article"> | string | null
+    markdown?: StringNullableFilter<"Article"> | string | null
+    created_at?: DateTimeFilter<"Article"> | Date | string
+    updated_at?: DateTimeFilter<"Article"> | Date | string
+  }
+
+  export type GhostIntegrationUpsertWithoutWebsiteInput = {
+    update: XOR<GhostIntegrationUpdateWithoutWebsiteInput, GhostIntegrationUncheckedUpdateWithoutWebsiteInput>
+    create: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
+    where?: GhostIntegrationWhereInput
+  }
+
+  export type GhostIntegrationUpdateToOneWithWhereWithoutWebsiteInput = {
+    where?: GhostIntegrationWhereInput
+    data: XOR<GhostIntegrationUpdateWithoutWebsiteInput, GhostIntegrationUncheckedUpdateWithoutWebsiteInput>
+  }
+
+  export type GhostIntegrationUpdateWithoutWebsiteInput = {
+    api_key?: StringFieldUpdateOperationsInput | string
+    api_url?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GhostIntegrationUncheckedUpdateWithoutWebsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    api_key?: StringFieldUpdateOperationsInput | string
+    api_url?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutSubscriptionsInput = {
@@ -7390,6 +10569,142 @@ export namespace Prisma {
     websites?: WebsiteUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type WebsiteCreateWithoutArticlesInput = {
+    id?: string
+    name: string
+    url: string
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutWebsitesInput
+    ghostIntegration?: GhostIntegrationCreateNestedOneWithoutWebsiteInput
+  }
+
+  export type WebsiteUncheckedCreateWithoutArticlesInput = {
+    id?: string
+    user_id: string
+    name: string
+    url: string
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
+  }
+
+  export type WebsiteCreateOrConnectWithoutArticlesInput = {
+    where: WebsiteWhereUniqueInput
+    create: XOR<WebsiteCreateWithoutArticlesInput, WebsiteUncheckedCreateWithoutArticlesInput>
+  }
+
+  export type WebsiteUpsertWithoutArticlesInput = {
+    update: XOR<WebsiteUpdateWithoutArticlesInput, WebsiteUncheckedUpdateWithoutArticlesInput>
+    create: XOR<WebsiteCreateWithoutArticlesInput, WebsiteUncheckedCreateWithoutArticlesInput>
+    where?: WebsiteWhereInput
+  }
+
+  export type WebsiteUpdateToOneWithWhereWithoutArticlesInput = {
+    where?: WebsiteWhereInput
+    data: XOR<WebsiteUpdateWithoutArticlesInput, WebsiteUncheckedUpdateWithoutArticlesInput>
+  }
+
+  export type WebsiteUpdateWithoutArticlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
+    ghostIntegration?: GhostIntegrationUpdateOneWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteUncheckedUpdateWithoutArticlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteCreateWithoutGhostIntegrationInput = {
+    id?: string
+    name: string
+    url: string
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutWebsitesInput
+    articles?: ArticleCreateNestedManyWithoutWebsiteInput
+  }
+
+  export type WebsiteUncheckedCreateWithoutGhostIntegrationInput = {
+    id?: string
+    user_id: string
+    name: string
+    url: string
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
+  }
+
+  export type WebsiteCreateOrConnectWithoutGhostIntegrationInput = {
+    where: WebsiteWhereUniqueInput
+    create: XOR<WebsiteCreateWithoutGhostIntegrationInput, WebsiteUncheckedCreateWithoutGhostIntegrationInput>
+  }
+
+  export type WebsiteUpsertWithoutGhostIntegrationInput = {
+    update: XOR<WebsiteUpdateWithoutGhostIntegrationInput, WebsiteUncheckedUpdateWithoutGhostIntegrationInput>
+    create: XOR<WebsiteCreateWithoutGhostIntegrationInput, WebsiteUncheckedCreateWithoutGhostIntegrationInput>
+    where?: WebsiteWhereInput
+  }
+
+  export type WebsiteUpdateToOneWithWhereWithoutGhostIntegrationInput = {
+    where?: WebsiteWhereInput
+    data: XOR<WebsiteUpdateWithoutGhostIntegrationInput, WebsiteUncheckedUpdateWithoutGhostIntegrationInput>
+  }
+
+  export type WebsiteUpdateWithoutGhostIntegrationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
+    articles?: ArticleUpdateManyWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteUncheckedUpdateWithoutGhostIntegrationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
+  }
+
   export type SessionCreateManyUserInput = {
     id: string
     expiresAt: Date | string
@@ -7413,7 +10728,9 @@ export namespace Prisma {
     id?: string
     name: string
     url: string
-    topic?: string | null
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -7478,25 +10795,74 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    articles?: ArticleUpdateManyWithoutWebsiteNestedInput
+    ghostIntegration?: GhostIntegrationUpdateOneWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
-    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
+    ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleCreateManyWebsiteInput = {
+    id?: number
+    scheduled_at?: Date | string | null
+    topic?: string | null
+    title?: string | null
+    markdown?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ArticleUpdateWithoutWebsiteInput = {
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    markdown?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleUncheckedUpdateWithoutWebsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    markdown?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleUncheckedUpdateManyWithoutWebsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    markdown?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

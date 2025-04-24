@@ -137,7 +137,9 @@ exports.Prisma.WebsiteScalarFieldEnum = {
   user_id: 'user_id',
   name: 'name',
   url: 'url',
-  topic: 'topic',
+  context: 'context',
+  slug: 'slug',
+  auto_publish: 'auto_publish',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -153,6 +155,26 @@ exports.Prisma.SubscriptionScalarFieldEnum = {
   trial_end: 'trial_end',
   cancel_at_period_end: 'cancel_at_period_end',
   canceled_at: 'canceled_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.ArticleScalarFieldEnum = {
+  id: 'id',
+  website_id: 'website_id',
+  scheduled_at: 'scheduled_at',
+  topic: 'topic',
+  title: 'title',
+  markdown: 'markdown',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.GhostIntegrationScalarFieldEnum = {
+  id: 'id',
+  website_id: 'website_id',
+  api_key: 'api_key',
+  api_url: 'api_url',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -177,7 +199,9 @@ exports.Prisma.ModelName = {
   User: 'User',
   Session: 'Session',
   Website: 'Website',
-  Subscription: 'Subscription'
+  Subscription: 'Subscription',
+  Article: 'Article',
+  GhostIntegration: 'GhostIntegration'
 };
 
 /**
