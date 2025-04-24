@@ -6,7 +6,7 @@ import { protectedProcedure, router } from "../trpc";
 const websiteSchema = z.object({
   name: z.string().min(1, "Name cannot be empty"),
   url: z.string().url("Invalid URL format"),
-  topic: z.string().optional(),
+  topic: z.string().min(1, "Topic cannot be empty"), // Make topic required
 });
 
 export const websitesRouter = router({
@@ -38,7 +38,7 @@ export const websitesRouter = router({
   }),
 
   create: protectedProcedure
-    .input(websiteSchema)
+    .input(websiteSchema) // Use the updated schema
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
       const { name, url, topic } = input;
@@ -49,7 +49,8 @@ export const websitesRouter = router({
             user_id: userId,
             name,
             url,
-            topic,
+            context: topic,
+            slug: name.toLowerCase().replace(/\s+/g, "-"),
           },
         });
         return newWebsite;

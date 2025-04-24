@@ -1,0 +1,37 @@
+{
+  "name": "@bloggy/worker",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup src/index.ts --format esm --watch --external @bloggy/database --external prisma --onSuccess \"node dist/index.js\"",
+    "build": "tsup src/index.ts --format esm --external @bloggy/database --external prisma",
+    "test": "vitest",
+    "start": "pm2 start dist/index.js --name bloggy-worker"
+  },
+  "node": {
+    "version": "20"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.787.0",
+    "@bloggy/database": "workspace:*",
+    "@types/amqplib": "^0.10.1",
+    "amqplib": "^0.10.4",
+    "dotenv": "^16.4.5",
+    "pg-boss": "^10.2.0",
+    "vitest": "^3.1.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "ts-node": "^10.9.2",
+    "tsup": "8.4.0",
+    "typescript": "^5.8.3"
+  }
+}

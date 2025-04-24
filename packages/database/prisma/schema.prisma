@@ -40,7 +40,7 @@ model Session {
 }
 
 model Website {
-  id          String   @id @default(cuid())
+  id          Int       @id @default(autoincrement())
   user_id     String
   name        String
   url         String
@@ -83,7 +83,7 @@ model Subscription {
 
 model Article {
   id           Int      @id @default(autoincrement())
-  website_id   String   // Changed to String to match Website.id type
+  website_id   Int      // Changed to Int to match Website.id type
   scheduled_at DateTime? @db.Date // Use @db.Date for DATE type
   topic        String?
   title        String?
@@ -100,7 +100,7 @@ model Article {
 
 model GhostIntegration {
   id         Int      @id @default(autoincrement())
-  website_id String   @unique // Add unique constraint for one-to-one relation
+  website_id Int      @unique // Add unique constraint for one-to-one relation
   api_key    String
   api_url    String
 

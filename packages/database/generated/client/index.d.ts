@@ -3580,12 +3580,22 @@ export namespace Prisma {
 
   export type AggregateWebsite = {
     _count: WebsiteCountAggregateOutputType | null
+    _avg: WebsiteAvgAggregateOutputType | null
+    _sum: WebsiteSumAggregateOutputType | null
     _min: WebsiteMinAggregateOutputType | null
     _max: WebsiteMaxAggregateOutputType | null
   }
 
+  export type WebsiteAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type WebsiteSumAggregateOutputType = {
+    id: number | null
+  }
+
   export type WebsiteMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     user_id: string | null
     name: string | null
     url: string | null
@@ -3597,7 +3607,7 @@ export namespace Prisma {
   }
 
   export type WebsiteMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     user_id: string | null
     name: string | null
     url: string | null
@@ -3621,6 +3631,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type WebsiteAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type WebsiteSumAggregateInputType = {
+    id?: true
+  }
 
   export type WebsiteMinAggregateInputType = {
     id?: true
@@ -3697,6 +3715,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: WebsiteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WebsiteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: WebsiteMinAggregateInputType
@@ -3727,12 +3757,14 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: WebsiteCountAggregateInputType | true
+    _avg?: WebsiteAvgAggregateInputType
+    _sum?: WebsiteSumAggregateInputType
     _min?: WebsiteMinAggregateInputType
     _max?: WebsiteMaxAggregateInputType
   }
 
   export type WebsiteGroupByOutputType = {
-    id: string
+    id: number
     user_id: string
     name: string
     url: string
@@ -3742,6 +3774,8 @@ export namespace Prisma {
     created_at: Date
     updated_at: Date
     _count: WebsiteCountAggregateOutputType | null
+    _avg: WebsiteAvgAggregateOutputType | null
+    _sum: WebsiteSumAggregateOutputType | null
     _min: WebsiteMinAggregateOutputType | null
     _max: WebsiteMaxAggregateOutputType | null
   }
@@ -3836,7 +3870,7 @@ export namespace Prisma {
       ghostIntegration: Prisma.$GhostIntegrationPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       user_id: string
       name: string
       url: string
@@ -4271,7 +4305,7 @@ export namespace Prisma {
    * Fields of the Website model
    */
   interface WebsiteFieldRefs {
-    readonly id: FieldRef<"Website", 'String'>
+    readonly id: FieldRef<"Website", 'Int'>
     readonly user_id: FieldRef<"Website", 'String'>
     readonly name: FieldRef<"Website", 'String'>
     readonly url: FieldRef<"Website", 'String'>
@@ -5934,15 +5968,17 @@ export namespace Prisma {
 
   export type ArticleAvgAggregateOutputType = {
     id: number | null
+    website_id: number | null
   }
 
   export type ArticleSumAggregateOutputType = {
     id: number | null
+    website_id: number | null
   }
 
   export type ArticleMinAggregateOutputType = {
     id: number | null
-    website_id: string | null
+    website_id: number | null
     scheduled_at: Date | null
     topic: string | null
     title: string | null
@@ -5953,7 +5989,7 @@ export namespace Prisma {
 
   export type ArticleMaxAggregateOutputType = {
     id: number | null
-    website_id: string | null
+    website_id: number | null
     scheduled_at: Date | null
     topic: string | null
     title: string | null
@@ -5977,10 +6013,12 @@ export namespace Prisma {
 
   export type ArticleAvgAggregateInputType = {
     id?: true
+    website_id?: true
   }
 
   export type ArticleSumAggregateInputType = {
     id?: true
+    website_id?: true
   }
 
   export type ArticleMinAggregateInputType = {
@@ -6105,7 +6143,7 @@ export namespace Prisma {
 
   export type ArticleGroupByOutputType = {
     id: number
-    website_id: string
+    website_id: number
     scheduled_at: Date | null
     topic: string | null
     title: string | null
@@ -6198,7 +6236,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      website_id: string
+      website_id: number
       scheduled_at: Date | null
       topic: string | null
       title: string | null
@@ -6630,7 +6668,7 @@ export namespace Prisma {
    */
   interface ArticleFieldRefs {
     readonly id: FieldRef<"Article", 'Int'>
-    readonly website_id: FieldRef<"Article", 'String'>
+    readonly website_id: FieldRef<"Article", 'Int'>
     readonly scheduled_at: FieldRef<"Article", 'DateTime'>
     readonly topic: FieldRef<"Article", 'String'>
     readonly title: FieldRef<"Article", 'String'>
@@ -7065,15 +7103,17 @@ export namespace Prisma {
 
   export type GhostIntegrationAvgAggregateOutputType = {
     id: number | null
+    website_id: number | null
   }
 
   export type GhostIntegrationSumAggregateOutputType = {
     id: number | null
+    website_id: number | null
   }
 
   export type GhostIntegrationMinAggregateOutputType = {
     id: number | null
-    website_id: string | null
+    website_id: number | null
     api_key: string | null
     api_url: string | null
     created_at: Date | null
@@ -7082,7 +7122,7 @@ export namespace Prisma {
 
   export type GhostIntegrationMaxAggregateOutputType = {
     id: number | null
-    website_id: string | null
+    website_id: number | null
     api_key: string | null
     api_url: string | null
     created_at: Date | null
@@ -7102,10 +7142,12 @@ export namespace Prisma {
 
   export type GhostIntegrationAvgAggregateInputType = {
     id?: true
+    website_id?: true
   }
 
   export type GhostIntegrationSumAggregateInputType = {
     id?: true
+    website_id?: true
   }
 
   export type GhostIntegrationMinAggregateInputType = {
@@ -7224,7 +7266,7 @@ export namespace Prisma {
 
   export type GhostIntegrationGroupByOutputType = {
     id: number
-    website_id: string
+    website_id: number
     api_key: string
     api_url: string
     created_at: Date
@@ -7307,7 +7349,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      website_id: string
+      website_id: number
       api_key: string
       api_url: string
       created_at: Date
@@ -7737,7 +7779,7 @@ export namespace Prisma {
    */
   interface GhostIntegrationFieldRefs {
     readonly id: FieldRef<"GhostIntegration", 'Int'>
-    readonly website_id: FieldRef<"GhostIntegration", 'String'>
+    readonly website_id: FieldRef<"GhostIntegration", 'Int'>
     readonly api_key: FieldRef<"GhostIntegration", 'String'>
     readonly api_url: FieldRef<"GhostIntegration", 'String'>
     readonly created_at: FieldRef<"GhostIntegration", 'DateTime'>
@@ -8308,13 +8350,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -8325,6 +8360,13 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -8460,7 +8502,7 @@ export namespace Prisma {
     AND?: WebsiteWhereInput | WebsiteWhereInput[]
     OR?: WebsiteWhereInput[]
     NOT?: WebsiteWhereInput | WebsiteWhereInput[]
-    id?: StringFilter<"Website"> | string
+    id?: IntFilter<"Website"> | number
     user_id?: StringFilter<"Website"> | string
     name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
@@ -8490,7 +8532,7 @@ export namespace Prisma {
   }
 
   export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     slug?: string
     AND?: WebsiteWhereInput | WebsiteWhereInput[]
     OR?: WebsiteWhereInput[]
@@ -8518,15 +8560,17 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: WebsiteCountOrderByAggregateInput
+    _avg?: WebsiteAvgOrderByAggregateInput
     _max?: WebsiteMaxOrderByAggregateInput
     _min?: WebsiteMinOrderByAggregateInput
+    _sum?: WebsiteSumOrderByAggregateInput
   }
 
   export type WebsiteScalarWhereWithAggregatesInput = {
     AND?: WebsiteScalarWhereWithAggregatesInput | WebsiteScalarWhereWithAggregatesInput[]
     OR?: WebsiteScalarWhereWithAggregatesInput[]
     NOT?: WebsiteScalarWhereWithAggregatesInput | WebsiteScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Website"> | string
+    id?: IntWithAggregatesFilter<"Website"> | number
     user_id?: StringWithAggregatesFilter<"Website"> | string
     name?: StringWithAggregatesFilter<"Website"> | string
     url?: StringWithAggregatesFilter<"Website"> | string
@@ -8634,7 +8678,7 @@ export namespace Prisma {
     OR?: ArticleWhereInput[]
     NOT?: ArticleWhereInput | ArticleWhereInput[]
     id?: IntFilter<"Article"> | number
-    website_id?: StringFilter<"Article"> | string
+    website_id?: IntFilter<"Article"> | number
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
@@ -8661,7 +8705,7 @@ export namespace Prisma {
     AND?: ArticleWhereInput | ArticleWhereInput[]
     OR?: ArticleWhereInput[]
     NOT?: ArticleWhereInput | ArticleWhereInput[]
-    website_id?: StringFilter<"Article"> | string
+    website_id?: IntFilter<"Article"> | number
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
@@ -8692,7 +8736,7 @@ export namespace Prisma {
     OR?: ArticleScalarWhereWithAggregatesInput[]
     NOT?: ArticleScalarWhereWithAggregatesInput | ArticleScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Article"> | number
-    website_id?: StringWithAggregatesFilter<"Article"> | string
+    website_id?: IntWithAggregatesFilter<"Article"> | number
     scheduled_at?: DateTimeNullableWithAggregatesFilter<"Article"> | Date | string | null
     topic?: StringNullableWithAggregatesFilter<"Article"> | string | null
     title?: StringNullableWithAggregatesFilter<"Article"> | string | null
@@ -8706,7 +8750,7 @@ export namespace Prisma {
     OR?: GhostIntegrationWhereInput[]
     NOT?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
     id?: IntFilter<"GhostIntegration"> | number
-    website_id?: StringFilter<"GhostIntegration"> | string
+    website_id?: IntFilter<"GhostIntegration"> | number
     api_key?: StringFilter<"GhostIntegration"> | string
     api_url?: StringFilter<"GhostIntegration"> | string
     created_at?: DateTimeFilter<"GhostIntegration"> | Date | string
@@ -8726,7 +8770,7 @@ export namespace Prisma {
 
   export type GhostIntegrationWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    website_id?: string
+    website_id?: number
     AND?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
     OR?: GhostIntegrationWhereInput[]
     NOT?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
@@ -8756,7 +8800,7 @@ export namespace Prisma {
     OR?: GhostIntegrationScalarWhereWithAggregatesInput[]
     NOT?: GhostIntegrationScalarWhereWithAggregatesInput | GhostIntegrationScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"GhostIntegration"> | number
-    website_id?: StringWithAggregatesFilter<"GhostIntegration"> | string
+    website_id?: IntWithAggregatesFilter<"GhostIntegration"> | number
     api_key?: StringWithAggregatesFilter<"GhostIntegration"> | string
     api_url?: StringWithAggregatesFilter<"GhostIntegration"> | string
     created_at?: DateTimeWithAggregatesFilter<"GhostIntegration"> | Date | string
@@ -8880,7 +8924,6 @@ export namespace Prisma {
   }
 
   export type WebsiteCreateInput = {
-    id?: string
     name: string
     url: string
     context?: string | null
@@ -8894,7 +8937,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedCreateInput = {
-    id?: string
+    id?: number
     user_id: string
     name: string
     url: string
@@ -8908,7 +8951,6 @@ export namespace Prisma {
   }
 
   export type WebsiteUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     context?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8922,7 +8964,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     user_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
@@ -8936,7 +8978,7 @@ export namespace Prisma {
   }
 
   export type WebsiteCreateManyInput = {
-    id?: string
+    id?: number
     user_id: string
     name: string
     url: string
@@ -8948,7 +8990,6 @@ export namespace Prisma {
   }
 
   export type WebsiteUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     context?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8959,7 +9000,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     user_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
@@ -9083,7 +9124,7 @@ export namespace Prisma {
 
   export type ArticleUncheckedCreateInput = {
     id?: number
-    website_id: string
+    website_id: number
     scheduled_at?: Date | string | null
     topic?: string | null
     title?: string | null
@@ -9104,7 +9145,7 @@ export namespace Prisma {
 
   export type ArticleUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    website_id?: StringFieldUpdateOperationsInput | string
+    website_id?: IntFieldUpdateOperationsInput | number
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9115,7 +9156,7 @@ export namespace Prisma {
 
   export type ArticleCreateManyInput = {
     id?: number
-    website_id: string
+    website_id: number
     scheduled_at?: Date | string | null
     topic?: string | null
     title?: string | null
@@ -9135,7 +9176,7 @@ export namespace Prisma {
 
   export type ArticleUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    website_id?: StringFieldUpdateOperationsInput | string
+    website_id?: IntFieldUpdateOperationsInput | number
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9154,7 +9195,7 @@ export namespace Prisma {
 
   export type GhostIntegrationUncheckedCreateInput = {
     id?: number
-    website_id: string
+    website_id: number
     api_key: string
     api_url: string
     created_at?: Date | string
@@ -9171,7 +9212,7 @@ export namespace Prisma {
 
   export type GhostIntegrationUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    website_id?: StringFieldUpdateOperationsInput | string
+    website_id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9180,7 +9221,7 @@ export namespace Prisma {
 
   export type GhostIntegrationCreateManyInput = {
     id?: number
-    website_id: string
+    website_id: number
     api_key: string
     api_url: string
     created_at?: Date | string
@@ -9196,7 +9237,7 @@ export namespace Prisma {
 
   export type GhostIntegrationUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    website_id?: StringFieldUpdateOperationsInput | string
+    website_id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9379,6 +9420,17 @@ export namespace Prisma {
     expiresAt?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -9411,6 +9463,10 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
+  export type WebsiteAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type WebsiteMaxOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
@@ -9435,15 +9491,11 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type WebsiteSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
-  export type IntFilter<$PrismaModel = never> = {
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
     notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -9451,7 +9503,20 @@ export namespace Prisma {
     lte?: number | IntFieldRefInput<$PrismaModel>
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -9518,22 +9583,6 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -9566,6 +9615,7 @@ export namespace Prisma {
 
   export type ArticleAvgOrderByAggregateInput = {
     id?: SortOrder
+    website_id?: SortOrder
   }
 
   export type ArticleMaxOrderByAggregateInput = {
@@ -9592,6 +9642,7 @@ export namespace Prisma {
 
   export type ArticleSumOrderByAggregateInput = {
     id?: SortOrder
+    website_id?: SortOrder
   }
 
   export type GhostIntegrationCountOrderByAggregateInput = {
@@ -9605,6 +9656,7 @@ export namespace Prisma {
 
   export type GhostIntegrationAvgOrderByAggregateInput = {
     id?: SortOrder
+    website_id?: SortOrder
   }
 
   export type GhostIntegrationMaxOrderByAggregateInput = {
@@ -9627,6 +9679,7 @@ export namespace Prisma {
 
   export type GhostIntegrationSumOrderByAggregateInput = {
     id?: SortOrder
+    website_id?: SortOrder
   }
 
   export type SessionCreateNestedManyWithoutUserInput = {
@@ -9849,6 +9902,14 @@ export namespace Prisma {
     update?: XOR<XOR<GhostIntegrationUpdateToOneWithWhereWithoutWebsiteInput, GhostIntegrationUpdateWithoutWebsiteInput>, GhostIntegrationUncheckedUpdateWithoutWebsiteInput>
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type ArticleUncheckedUpdateManyWithoutWebsiteNestedInput = {
     create?: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput> | ArticleCreateWithoutWebsiteInput[] | ArticleUncheckedCreateWithoutWebsiteInput[]
     connectOrCreate?: ArticleCreateOrConnectWithoutWebsiteInput | ArticleCreateOrConnectWithoutWebsiteInput[]
@@ -9889,14 +9950,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutSubscriptionsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSubscriptionsInput, UserUpdateWithoutSubscriptionsInput>, UserUncheckedUpdateWithoutSubscriptionsInput>
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type WebsiteCreateNestedOneWithoutArticlesInput = {
@@ -10041,25 +10094,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -10085,6 +10119,25 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -10159,7 +10212,6 @@ export namespace Prisma {
   }
 
   export type WebsiteCreateWithoutUserInput = {
-    id?: string
     name: string
     url: string
     context?: string | null
@@ -10172,7 +10224,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedCreateWithoutUserInput = {
-    id?: string
+    id?: number
     name: string
     url: string
     context?: string | null
@@ -10273,7 +10325,7 @@ export namespace Prisma {
     AND?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
     OR?: WebsiteScalarWhereInput[]
     NOT?: WebsiteScalarWhereInput | WebsiteScalarWhereInput[]
-    id?: StringFilter<"Website"> | string
+    id?: IntFilter<"Website"> | number
     user_id?: StringFilter<"Website"> | string
     name?: StringFilter<"Website"> | string
     url?: StringFilter<"Website"> | string
@@ -10474,7 +10526,7 @@ export namespace Prisma {
     OR?: ArticleScalarWhereInput[]
     NOT?: ArticleScalarWhereInput | ArticleScalarWhereInput[]
     id?: IntFilter<"Article"> | number
-    website_id?: StringFilter<"Article"> | string
+    website_id?: IntFilter<"Article"> | number
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
@@ -10570,7 +10622,6 @@ export namespace Prisma {
   }
 
   export type WebsiteCreateWithoutArticlesInput = {
-    id?: string
     name: string
     url: string
     context?: string | null
@@ -10583,7 +10634,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedCreateWithoutArticlesInput = {
-    id?: string
+    id?: number
     user_id: string
     name: string
     url: string
@@ -10612,7 +10663,6 @@ export namespace Prisma {
   }
 
   export type WebsiteUpdateWithoutArticlesInput = {
-    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     context?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10625,7 +10675,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedUpdateWithoutArticlesInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     user_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
@@ -10638,7 +10688,6 @@ export namespace Prisma {
   }
 
   export type WebsiteCreateWithoutGhostIntegrationInput = {
-    id?: string
     name: string
     url: string
     context?: string | null
@@ -10651,7 +10700,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedCreateWithoutGhostIntegrationInput = {
-    id?: string
+    id?: number
     user_id: string
     name: string
     url: string
@@ -10680,7 +10729,6 @@ export namespace Prisma {
   }
 
   export type WebsiteUpdateWithoutGhostIntegrationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     context?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10693,7 +10741,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedUpdateWithoutGhostIntegrationInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     user_id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
@@ -10725,7 +10773,7 @@ export namespace Prisma {
   }
 
   export type WebsiteCreateManyUserInput = {
-    id?: string
+    id?: number
     name: string
     url: string
     context?: string | null
@@ -10792,7 +10840,6 @@ export namespace Prisma {
   }
 
   export type WebsiteUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     context?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10805,7 +10852,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     context?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10818,7 +10865,7 @@ export namespace Prisma {
   }
 
   export type WebsiteUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     context?: NullableStringFieldUpdateOperationsInput | string | null
