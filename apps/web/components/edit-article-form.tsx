@@ -165,49 +165,49 @@ export function EditArticleForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="markdown"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Markdown Content (Optional)</FormLabel>
-              <div className="flex flex-col md:flex-row gap-4">
-                {/* Editor Column */}
-                <FormControl className="flex-1">
-                  <Textarea
-                    rows={20}
-                    placeholder="Enter the article content in Markdown (will be generated if left empty)"
-                    {...field}
-                    value={field.value ?? ""}
-                    className="min-h-[400px] md:min-h-[600px]"
-                  />
-                </FormControl>
-                {/* Preview Column - Only show if there is content */}
-                {field.value && (
-                  // Keep prose styles on the wrapping div
-                  <div className="flex-1 mt-4 md:mt-0 rounded-md border bg-muted p-4 min-h-[400px] md:min-h-[600px] overflow-auto prose dark:prose-invert max-w-none">
-                    <FormLabel className="mb-2 block">Preview</FormLabel>
-                    {/* Use MarkdownPreview from @uiw */}
-                    <MarkdownPreview
-                      source={field.value}
-                      // Explicitly set data-color-mode based on theme
-                      // This assumes you are using next-themes or similar
-                      // Note: This is a basic example; a theme hook might be better
-                      wrapperElement={{
-                        "data-color-mode":
-                          typeof document !== "undefined" &&
-                          document.documentElement.classList.contains("dark")
-                            ? "dark"
-                            : "light",
-                      }}
+        {/* Conditionally render the entire Markdown section */}
+        {article.markdown !== null && article.markdown !== undefined && (
+          <FormField
+            control={form.control}
+            name="markdown"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Markdown Content</FormLabel>{" "}
+                {/* Removed (Optional) */}
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Editor Column */}
+                  <FormControl className="flex-1">
+                    <Textarea
+                      rows={20}
+                      placeholder="Enter the article content in Markdown..."
+                      {...field}
+                      value={field.value ?? ""} // Keep handling nullish value for textarea
+                      className="min-h-[400px] md:min-h-[600px]"
                     />
-                  </div>
-                )}
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  </FormControl>
+                  {/* Preview Column - Only show if there is content */}
+                  {/* Check field.value for truthiness (not null, undefined, or empty string) */}
+                  {!!field.value && (
+                    <div className="flex-1 mt-4 md:mt-0 rounded-md border bg-muted p-4 min-h-[400px] md:min-h-[600px] overflow-auto">
+                      <FormLabel className="mb-2 block">Preview</FormLabel>
+                      <MarkdownPreview
+                        source={field.value}
+                        wrapperElement={{
+                          "data-color-mode":
+                            typeof document !== "undefined" &&
+                            document.documentElement.classList.contains("dark")
+                              ? "dark"
+                              : "light",
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         <Button type="submit" disabled={updateArticleMutation.isPending}>
           {updateArticleMutation.isPending ? "Saving..." : "Save Changes"}

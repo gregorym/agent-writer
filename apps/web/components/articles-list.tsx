@@ -109,7 +109,7 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
                 <FileText className="h-5 w-5 text-muted-foreground" />
                 <div>
                   <p className="font-medium">
-                    {article.title || article.topic || "Untitled Article"}{" "}
+                    {article.title || "Not generated yet"}{" "}
                     {/* Display topic if title is missing */}
                   </p>
                   <p className="text-sm text-muted-foreground">
