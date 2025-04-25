@@ -1,17 +1,23 @@
 import "dotenv/config";
 import PgBoss from "pg-boss";
+import * as CreateArticle from "./create-article";
 
 let isShuttingDown = false;
+const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
+
+const modules = [CreateArticle];
 
 async function start() {
   try {
-    const boss = new PgBoss(process.env.DATABASE_URL_POOLING);
-
+    console.log("Starting PgBoss...");
     boss.on("error", console.error);
-
     await boss.start();
 
-    console.log(`Worker started.`);
+    for (const module of modules) {
+      if (module.processAMQP) {
+        await module.processAMQP(boss);
+      }
+    }
   } catch (error) {
     console.error(error);
     process.exit(1);
@@ -30,12 +36,9 @@ async function shutdown() {
   console.log("Shutdown initiated...");
 
   // Call shutdown on each consumer concurrently
-  await Promise.all(consumers.map((consumer) => consumer.shutdown()));
+  // await Promise.all(consumers.map((consumer) => consumer.shutdown()));
 
-  // Close the connection
-  if (connection) {
-    await connection.close();
-  }
+  await boss.stop();
 
   console.log("All consumers have finished processing.");
   process.exit(0);

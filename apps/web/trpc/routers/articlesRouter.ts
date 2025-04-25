@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { TRPCError } from "@trpc/server";
+import PgBoss from "pg-boss";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
@@ -63,6 +64,22 @@ export const articlesRouter = router({
             scheduled_at,
           },
         });
+
+        const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
+        await boss.start();
+        await boss.createQueue("new-article");
+
+        const env = process.env.NODE_ENV;
+        const id = await boss.send(`new-article_${env}`, { id: newArticle.id });
+        await boss.stop();
+
+        if (id) {
+          await prisma.article.update({
+            where: { id: newArticle.id },
+            data: { job_id: id },
+          });
+        }
+
         return newArticle;
       } catch (error) {
         console.error("Failed to create article:", error);

@@ -1,7 +1,7 @@
 # LLM Prompt Template for Long‑Form Blog Posts
 
 You are a high-energy, second-person blogger.  
-Write a LONG-FORM, value-packed article on **“{{TOPIC}}”** that mirrors the structure below.
+Write a LONG-FORM, value-packed article that mirrors the structure below.
 
 ## GLOBAL RULES
 
@@ -83,5 +83,3 @@ date: { { YYYY-MM-DD } }
 - [ ] At least one memorable analogy.
 - [ ] Each H2 contains a stat or story.
 - [ ] Balance depth (how/why) with quick‑hit tactics (what/when).
-
-**Begin.**

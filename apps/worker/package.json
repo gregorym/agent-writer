@@ -5,10 +5,9 @@
   "main": "./dist/index.js",
   "source": "./src/index.ts",
   "types": "./dist/index.d.ts",
-  "type": "module",
   "scripts": {
-    "dev": "tsup src/index.ts --format esm --watch --external @bloggy/database --external prisma --onSuccess \"node dist/index.js\"",
-    "build": "tsup src/index.ts --format esm --external @bloggy/database --external prisma",
+    "dev": "tsup src/index.ts --format cjs --watch --external prisma --onSuccess \"node dist/index.js\"",
+    "build": "tsup src/index.ts --format cjs --external prisma",
     "test": "vitest",
     "start": "pm2 start dist/index.js --name bloggy-worker"
   },
@@ -21,6 +20,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.787.0",
     "@bloggy/database": "workspace:*",
+    "@google/genai": "^0.10.0",
     "@types/amqplib": "^0.10.1",
     "amqplib": "^0.10.4",
     "dotenv": "^16.4.5",
