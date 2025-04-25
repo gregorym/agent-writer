@@ -2,6 +2,7 @@
 
 import { type Article } from "@bloggy/database"; // Corrected import path
 import { zodResolver } from "@hookform/resolvers/zod";
+import MarkdownPreview from "@uiw/react-markdown-preview";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -170,15 +171,39 @@ export function EditArticleForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Markdown Content (Optional)</FormLabel>
-              <FormControl>
-                <Textarea
-                  rows={15} // Increase rows for markdown
-                  placeholder="Enter the article content in Markdown (will be generated if left empty)"
-                  {...field}
-                  // Ensure value is not null/undefined for Textarea
-                  value={field.value ?? ""}
-                />
-              </FormControl>
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Editor Column */}
+                <FormControl className="flex-1">
+                  <Textarea
+                    rows={20}
+                    placeholder="Enter the article content in Markdown (will be generated if left empty)"
+                    {...field}
+                    value={field.value ?? ""}
+                    className="min-h-[400px] md:min-h-[600px]"
+                  />
+                </FormControl>
+                {/* Preview Column - Only show if there is content */}
+                {field.value && (
+                  // Keep prose styles on the wrapping div
+                  <div className="flex-1 mt-4 md:mt-0 rounded-md border bg-muted p-4 min-h-[400px] md:min-h-[600px] overflow-auto prose dark:prose-invert max-w-none">
+                    <FormLabel className="mb-2 block">Preview</FormLabel>
+                    {/* Use MarkdownPreview from @uiw */}
+                    <MarkdownPreview
+                      source={field.value}
+                      // Explicitly set data-color-mode based on theme
+                      // This assumes you are using next-themes or similar
+                      // Note: This is a basic example; a theme hook might be better
+                      wrapperElement={{
+                        "data-color-mode":
+                          typeof document !== "undefined" &&
+                          document.documentElement.classList.contains("dark")
+                            ? "dark"
+                            : "light",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
               <FormMessage />
             </FormItem>
           )}
