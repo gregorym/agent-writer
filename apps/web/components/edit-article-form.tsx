@@ -4,7 +4,8 @@ import { type Article } from "@bloggy/database"; // Corrected import path
 import { zodResolver } from "@hookform/resolvers/zod";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2, Trash2 } from "lucide-react"; // Import Trash2
+import { useRouter } from "next/navigation"; // Import useRouter
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -48,17 +49,43 @@ export function EditArticleForm({
   article,
   onSuccess,
 }: EditArticleFormProps) {
+  const router = useRouter(); // Initialize router
+  const utils = trpc.useUtils(); // Get tRPC utils for cache invalidation
+
   const updateArticleMutation = trpc.articles.update.useMutation({
     onSuccess: (data) => {
       toast.success(
         `Article "${data.title || data.topic || "Untitled"}" updated successfully!`
       );
-      // Optionally reset form to new values or trigger navigation
+      utils.articles.all.invalidate({ websiteSlug }); // Invalidate list query
+      utils.articles.get.invalidate({ articleId: article.id, websiteSlug }); // Invalidate get query
       form.reset(data); // Reset form with updated data
       onSuccess?.();
     },
     onError: (error) => {
       toast.error(`Failed to update article: ${error.message}`);
+    },
+  });
+
+  // Add delete mutation
+  const deleteArticleMutation = trpc.articles.delete.useMutation({
+    onSuccess: () => {
+      toast.success(
+        `Article "${article.title || article.topic || "Untitled"}" deleted.`
+      );
+      utils.articles.all.invalidate({ websiteSlug }); // Invalidate list query on delete
+      // Navigate back to the website's article list or dashboard
+      router.push(`/w/${websiteSlug}`);
+      // Optionally call onSuccess if needed for parent component cleanup
+      // onSuccess?.();
+    },
+    onError: (error) => {
+      // Handle specific errors from the backend check
+      if (error.data?.code === "BAD_REQUEST") {
+        toast.error(error.message); // Show the specific reason why deletion failed
+      } else {
+        toast.error(`Failed to delete article: ${error.message}`);
+      }
     },
   });
 
@@ -80,6 +107,22 @@ export function EditArticleForm({
       websiteSlug,
     });
   }
+
+  // Function to handle deletion
+  function handleDelete() {
+    // Add confirmation dialog here if desired (e.g., using Shadcn's AlertDialog)
+    // For simplicity, directly calling mutate now
+    deleteArticleMutation.mutate({
+      articleId: article.id,
+      websiteSlug,
+    });
+  }
+
+  // Determine if the article can be deleted based on the criteria
+  const canDelete =
+    !article.markdown && // No markdown content
+    article.scheduled_at && // Has a scheduled date
+    new Date(article.scheduled_at) > new Date(); // Scheduled date is in the future
 
   return (
     <Form {...form}>
@@ -209,9 +252,31 @@ export function EditArticleForm({
           />
         )}
 
-        <Button type="submit" disabled={updateArticleMutation.isPending}>
-          {updateArticleMutation.isPending ? "Saving..." : "Save Changes"}
-        </Button>
+        <div className="flex justify-between items-center pt-4">
+          <Button type="submit" disabled={updateArticleMutation.isPending}>
+            {updateArticleMutation.isPending ? "Saving..." : "Save Changes"}
+          </Button>
+
+          {/* Conditionally render the Delete button */}
+          {canDelete && (
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleteArticleMutation.isPending}
+              size="icon" // Make it an icon button
+              aria-label="Delete article"
+            >
+              {deleteArticleMutation.isPending ? (
+                <span className="animate-spin h-4 w-4">
+                  <Loader2 className="h-4 w-4" />
+                </span>
+              ) : (
+                <Trash2 className="h-4 w-4" />
+              )}
+            </Button>
+          )}
+        </div>
       </form>
     </Form>
   );

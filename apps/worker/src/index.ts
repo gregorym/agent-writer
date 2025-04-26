@@ -1,11 +1,10 @@
 import "dotenv/config";
 import PgBoss from "pg-boss";
 import * as CreateArticle from "./create-article";
+import * as WebsiteContext from "./website-context";
 
 let isShuttingDown = false;
 const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
-
-const modules = [CreateArticle];
 
 async function start() {
   try {
@@ -13,6 +12,7 @@ async function start() {
     boss.on("error", console.error);
     await boss.start();
 
+    const modules = [CreateArticle, WebsiteContext];
     for (const module of modules) {
       if (module.processAMQP) {
         await module.processAMQP(boss);

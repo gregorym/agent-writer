@@ -54,6 +54,33 @@ export const articlesRouter = router({
 
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
+      // Check if an article is already scheduled for the same day
+      if (scheduled_at) {
+        const scheduledDate = new Date(scheduled_at);
+        scheduledDate.setUTCHours(0, 0, 0, 0); // Start of the day in UTC
+
+        const nextDay = new Date(scheduledDate);
+        nextDay.setUTCDate(scheduledDate.getUTCDate() + 1); // Start of the next day
+
+        const existingScheduledArticle = await prisma.article.findFirst({
+          where: {
+            website_id: websiteId,
+            scheduled_at: {
+              gte: scheduledDate,
+              lt: nextDay,
+            },
+          },
+          select: { id: true }, // Only need to check for existence
+        });
+
+        if (existingScheduledArticle) {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "An article is already scheduled for this day.",
+          });
+        }
+      }
+
       try {
         const newArticle = await prisma.article.create({
           data: {
@@ -67,10 +94,11 @@ export const articlesRouter = router({
 
         const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
         await boss.start();
-        await boss.createQueue("new-article");
+        // Ensure queue name is unique per environment if needed, or use a single queue
+        const queueName = `new-article_${process.env.NODE_ENV || "development"}`;
+        await boss.createQueue(queueName); // Might not be needed if auto-creation is handled
 
-        const env = process.env.NODE_ENV;
-        const id = await boss.send(`new-article_${env}`, { id: newArticle.id });
+        const id = await boss.send(queueName, { id: newArticle.id });
         await boss.stop();
 
         if (id) {
@@ -83,6 +111,10 @@ export const articlesRouter = router({
         return newArticle;
       } catch (error) {
         console.error("Failed to create article:", error);
+        // Avoid re-throwing if it's the CONFLICT error we already handled
+        if (error instanceof TRPCError && error.code === "CONFLICT") {
+          throw error;
+        }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create article",
@@ -130,17 +162,43 @@ export const articlesRouter = router({
 
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
+      // Fetch the article to check its properties
+      const article = await prisma.article.findUnique({
+        where: { id: articleId, website_id: websiteId },
+      });
+
+      if (!article) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Article not found or does not belong to this website.",
+        });
+      }
+
+      // Check conditions for deletion
+      const canDelete =
+        !article.markdown &&
+        article.scheduled_at &&
+        article.scheduled_at > new Date();
+
+      if (!canDelete) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "Article cannot be deleted. It must have no content and be scheduled for the future.",
+        });
+      }
+
       try {
         await prisma.article.delete({
-          where: { id: articleId, website_id: websiteId }, // Ensure article belongs to the website
+          where: { id: articleId, website_id: websiteId },
         });
         return { success: true };
       } catch (error: any) {
-        // Check if the error is because the record was not found
+        // Check if the error is because the record was not found (shouldn't happen after the check above, but good practice)
         if (error.code === "P2025") {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Article not found or does not belong to this website.",
+            message: "Article not found during deletion attempt.",
           });
         }
         console.error("Failed to delete article:", error);
@@ -183,7 +241,7 @@ export const articlesRouter = router({
 
       const articles = await prisma.article.findMany({
         where: { website_id: websiteId },
-        orderBy: { created_at: "desc" },
+        orderBy: { scheduled_at: "desc" },
       });
       return articles;
     }),

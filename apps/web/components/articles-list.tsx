@@ -1,7 +1,7 @@
 "use client";
 
 import { trpc } from "@/trpc/client";
-import { FileText, Plus } from "lucide-react"; // Import Plus icon
+import { Calendar1Icon, FileText, Plus } from "lucide-react"; // Import Plus icon
 import Link from "next/link"; // Import Link
 import { useState } from "react"; // Import useState
 import { CreateArticleForm } from "./create-article-form"; // Import the new form
@@ -112,8 +112,9 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
                     {article.title || "Not generated yet"}{" "}
                     {/* Display topic if title is missing */}
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    Created: {new Date(article.created_at).toLocaleDateString()}
+                  <p className="text-sm text-muted-foreground flex gap-1 items-center">
+                    <Calendar1Icon className="w-4 h-4" />
+                    {new Date(article.scheduled_at).toLocaleDateString()}
                   </p>
                 </div>
               </div>

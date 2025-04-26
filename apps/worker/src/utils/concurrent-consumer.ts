@@ -14,6 +14,7 @@ export default async function concurrentConsumer(
   processJob: (data: JobData) => Promise<any>
 ) {
   const finalQueueName = `${queueName}_${nodeEnv}`;
+  await boss.createQueue(finalQueueName);
 
   // Configure worker options
   const workOptions: Boss.WorkOptions = {
@@ -21,8 +22,8 @@ export default async function concurrentConsumer(
   };
 
   for (let i = 0; i < maxConcurrentJobs; i++) {
-    await boss.work(finalQueueName, workOptions, async (job) =>
-      processJob(job.data)
+    await boss.work(finalQueueName, workOptions, async ([job]) =>
+      processJob(job)
     );
   }
 

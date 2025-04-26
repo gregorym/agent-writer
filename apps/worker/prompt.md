@@ -17,14 +17,15 @@ Write a LONG-FORM, value-packed article that mirrors the structure below.
    • Sprinkle in bulleted & numbered lists, bold call‑outs, and short, descriptive code‑blocks or quotes if relevant.  
    • Include at least **one data table** and **one boxed statistic** (use `> **Stat:** …`).  
    • Mark image placeholders like: `![descriptive alt text](notion-image-placeholder)`.
+   • H2 should start with an image (ALT should be a prompt to generate the image)
 
 3. **Evidence & Examples**  
    • Every main section must cite **one credible stat OR a real‑world example** (case study, mini‑story, benchmark).  
    • Stats can be fictional but realistic if none exist; format as “_According to XYZ (2024)…_”.
 
 4. **Length & Depth**  
-   • Aim for ~2,000–2,800 words.  
-   • Minimum 5 major H2 sections (see outline template).
+   • Aim for ~1,500–2,500 words.  
+   • Minimum 4 major H2 sections (see outline template).
 
 5. **Close**  
    • End with an H2 **“Key Takeaways”** (3–6 bullet summary).  

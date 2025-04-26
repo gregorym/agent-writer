@@ -9,6 +9,11 @@ const websiteSchema = z.object({
   topic: z.string().min(1, "Topic cannot be empty"), // Make topic required
 });
 
+// Add schema for updating, including the slug
+const updateWebsiteSchema = websiteSchema.extend({
+  slug: z.string(),
+});
+
 export const websitesRouter = router({
   get: protectedProcedure
     .input(z.object({ slug: z.string() }))
@@ -59,6 +64,64 @@ export const websitesRouter = router({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create website",
+          cause: error,
+        });
+      }
+    }),
+
+  // Add the update procedure
+  update: protectedProcedure
+    .input(updateWebsiteSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { id: userId } = ctx.session.user;
+      const { slug, name, url, topic } = input;
+
+      // Verify the user owns the website
+      const existingWebsite = await prisma.website.findUnique({
+        where: { slug, user_id: userId },
+      });
+
+      if (!existingWebsite) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message:
+            "Website not found or you do not have permission to edit it.",
+        });
+      }
+
+      try {
+        const updatedWebsite = await prisma.website.update({
+          where: {
+            id: existingWebsite.id, // Use the actual ID for update
+          },
+          data: {
+            name,
+            url,
+            context: topic,
+            // Optionally update the slug if the name changes, handle potential conflicts
+            // slug: name.toLowerCase().replace(/\s+/g, "-"),
+          },
+        });
+        return updatedWebsite;
+      } catch (error) {
+        console.error("Failed to update website:", error);
+        // Handle potential unique constraint violation if slug is updated and conflicts
+        if (
+          error instanceof Error &&
+          "code" in error &&
+          error.code === "P2002" &&
+          error.meta?.target?.includes("slug")
+        ) {
+          throw new TRPCError({
+            code: "CONFLICT",
+            message:
+              "A website with this name (resulting in the same slug) already exists.",
+            cause: error,
+          });
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to update website",
           cause: error,
         });
       }

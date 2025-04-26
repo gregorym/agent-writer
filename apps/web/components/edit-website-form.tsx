@@ -14,9 +14,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea"; // Import Textarea
+import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/trpc/client";
-import { Loader2, Plus } from "lucide-react";
+import type { Website } from "@prisma/client"; // Import Website type
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -27,38 +29,46 @@ const formSchema = z.object({
     message: "Please enter a valid URL.",
   }),
   topic: z.string().min(1, {
-    // Make topic required
     message: "Topic cannot be empty.",
   }),
 });
 
-type CreateWebsiteFormProps = {
-  onSuccess?: () => void;
+type EditWebsiteFormProps = {
+  website: Website; // Pass the website data to pre-fill the form
 };
 
-export function CreateWebsiteForm({ onSuccess }: CreateWebsiteFormProps) {
-  const createWebsiteMutation = trpc.websites.create.useMutation({
-    onSuccess: (data) => {
-      toast.success(`Website "${data.name}" created successfully!`);
-      form.reset(); // Reset form fields
-      onSuccess?.(); // Call the success callback if provided
+export function EditWebsiteForm({ website }: EditWebsiteFormProps) {
+  const router = useRouter();
+  const utils = trpc.useUtils();
+
+  const updateWebsiteMutation = trpc.websites.update.useMutation({
+    onSuccess: async (data) => {
+      toast.success(`Website "${data.name}" updated successfully!`);
+      // Invalidate queries to refetch data
+      await utils.websites.get.invalidate({ slug: website.slug });
+      await utils.websites.all.invalidate();
+      // Optionally redirect or perform other actions
+      // router.push(`/w/${data.slug}`); // Redirect if slug changes, though not implemented here
     },
     onError: (error) => {
-      toast.error(`Failed to create website: ${error.message}`);
+      toast.error(`Failed to update website: ${error.message}`);
     },
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      url: "",
-      topic: "", // Keep default value empty
+      name: website.name || "",
+      url: website.url || "",
+      topic: website.context || "", // Use 'context' field from prisma model
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    createWebsiteMutation.mutate(values);
+    updateWebsiteMutation.mutate({
+      ...values,
+      slug: website.slug, // Pass the current slug to identify the website
+    });
   }
 
   return (
@@ -95,10 +105,10 @@ export function CreateWebsiteForm({ onSuccess }: CreateWebsiteFormProps) {
           name="topic"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Topic</FormLabel> {/* Removed (Optional) */}
+              <FormLabel>Topic</FormLabel>
               <FormControl>
-                <Textarea // Use Textarea instead of Input
-                  rows={4} // Set rows to 4
+                <Textarea
+                  rows={4}
                   placeholder="Describe the main topic of your website..."
                   {...field}
                 />
@@ -107,13 +117,11 @@ export function CreateWebsiteForm({ onSuccess }: CreateWebsiteFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={createWebsiteMutation.isPending}>
-          {createWebsiteMutation.isPending ? (
+        <Button type="submit" disabled={updateWebsiteMutation.isPending}>
+          {updateWebsiteMutation.isPending && (
             <Loader2 className="animate-spin mr-2" />
-          ) : (
-            <Plus className="mr-2" />
           )}
-          {createWebsiteMutation.isPending ? "Creating..." : "Create Website"}
+          {updateWebsiteMutation.isPending ? "Saving..." : "Save Changes"}
         </Button>
       </form>
     </Form>
