@@ -11,7 +11,8 @@ export async function generateWebsiteContext(prompt: string) {
     responseMimeType: "text/plain",
     systemInstruction: [
       {
-        text: `You will be provided with a website URL and its context. Your task is to generate a comprehensive context for the website based on the provided information.`,
+        text: `You will be provided with a website URL and its context. 
+        Your task is to generate a comprehensive description for the website based on the provided information. Only reply with the description, without any additional text or explanations.`,
       },
     ],
   };

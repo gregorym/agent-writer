@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -14,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea"; // Import Textarea
 import { trpc } from "@/trpc/client";
 import { Loader2, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -26,10 +26,6 @@ const formSchema = z.object({
   url: z.string().url({
     message: "Please enter a valid URL.",
   }),
-  topic: z.string().min(1, {
-    // Make topic required
-    message: "Topic cannot be empty.",
-  }),
 });
 
 type CreateWebsiteFormProps = {
@@ -37,11 +33,13 @@ type CreateWebsiteFormProps = {
 };
 
 export function CreateWebsiteForm({ onSuccess }: CreateWebsiteFormProps) {
+  const router = useRouter();
   const createWebsiteMutation = trpc.websites.create.useMutation({
     onSuccess: (data) => {
       toast.success(`Website "${data.name}" created successfully!`);
       form.reset(); // Reset form fields
       onSuccess?.(); // Call the success callback if provided
+      router.push(`/w/${data.slug}`); // Navigate to the new website page
     },
     onError: (error) => {
       toast.error(`Failed to create website: ${error.message}`);
@@ -53,7 +51,6 @@ export function CreateWebsiteForm({ onSuccess }: CreateWebsiteFormProps) {
     defaultValues: {
       name: "",
       url: "",
-      topic: "", // Keep default value empty
     },
   });
 
@@ -85,23 +82,6 @@ export function CreateWebsiteForm({ onSuccess }: CreateWebsiteFormProps) {
               <FormLabel>Website URL</FormLabel>
               <FormControl>
                 <Input placeholder="https://example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="topic"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Topic</FormLabel> {/* Removed (Optional) */}
-              <FormControl>
-                <Textarea // Use Textarea instead of Input
-                  rows={4} // Set rows to 4
-                  placeholder="Describe the main topic of your website..."
-                  {...field}
-                />
               </FormControl>
               <FormMessage />
             </FormItem>

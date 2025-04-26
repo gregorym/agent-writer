@@ -1,17 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { TRPCError } from "@trpc/server";
+import PgBoss from "pg-boss";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 const websiteSchema = z.object({
   name: z.string().min(1, "Name cannot be empty"),
   url: z.string().url("Invalid URL format"),
-  topic: z.string().min(1, "Topic cannot be empty"), // Make topic required
 });
 
 // Add schema for updating, including the slug
 const updateWebsiteSchema = websiteSchema.extend({
   slug: z.string(),
+  topic: z.string().min(1, "Topic cannot be empty"), // Make topic required
 });
 
 export const websitesRouter = router({
@@ -58,6 +59,16 @@ export const websitesRouter = router({
             slug: name.toLowerCase().replace(/\s+/g, "-"),
           },
         });
+
+        const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
+        await boss.start();
+        // Ensure queue name is unique per environment if needed, or use a single queue
+        const queueName = `website-context_${process.env.NODE_ENV || "development"}`;
+        await boss.createQueue(queueName); // Might not be needed if auto-creation is handled
+
+        const id = await boss.send(queueName, { id: newWebsite.id });
+        await boss.stop();
+
         return newWebsite;
       } catch (error) {
         console.error("Failed to create website:", error);
@@ -98,30 +109,63 @@ export const websitesRouter = router({
             name,
             url,
             context: topic,
-            // Optionally update the slug if the name changes, handle potential conflicts
-            // slug: name.toLowerCase().replace(/\s+/g, "-"),
           },
         });
         return updatedWebsite;
       } catch (error) {
         console.error("Failed to update website:", error);
-        // Handle potential unique constraint violation if slug is updated and conflicts
-        if (
-          error instanceof Error &&
-          "code" in error &&
-          error.code === "P2002" &&
-          error.meta?.target?.includes("slug")
-        ) {
-          throw new TRPCError({
-            code: "CONFLICT",
-            message:
-              "A website with this name (resulting in the same slug) already exists.",
-            cause: error,
-          });
-        }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to update website",
+          cause: error,
+        });
+      }
+    }),
+
+  // Add the delete procedure
+  delete: protectedProcedure
+    .input(z.object({ slug: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id: userId } = ctx.session.user;
+      const { slug } = input;
+
+      // Verify the user owns the website
+      const existingWebsite = await prisma.website.findUnique({
+        where: { slug, user_id: userId },
+        select: { id: true }, // Only select the ID
+      });
+
+      if (!existingWebsite) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message:
+            "Website not found or you do not have permission to delete it.",
+        });
+      }
+
+      try {
+        // Use a transaction to delete articles and the website
+        const deletedData = await prisma.$transaction(async (tx) => {
+          // Delete associated articles first
+          await tx.article.deleteMany({
+            where: { website_id: existingWebsite.id },
+          });
+
+          // Then delete the website
+          const deletedWebsite = await tx.website.delete({
+            where: {
+              id: existingWebsite.id,
+            },
+          });
+          return deletedWebsite;
+        });
+
+        return { success: true, deletedWebsiteId: deletedData.id };
+      } catch (error) {
+        console.error("Failed to delete website and its articles:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete website",
           cause: error,
         });
       }
