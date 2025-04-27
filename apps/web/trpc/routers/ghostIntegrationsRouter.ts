@@ -16,6 +16,31 @@ const ghostIntegrationUpdateSchema = z.object({
 });
 
 export const ghostIntegrationsRouter = router({
+  get: protectedProcedure
+    .input(z.object({ websiteId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { id: userId } = ctx.session.user;
+      const { websiteId } = input;
+
+      // Verify user owns the website associated with the integration
+      const integration = await prisma.ghostIntegration.findUnique({
+        where: { website_id: websiteId },
+        include: { website: true },
+      });
+
+      // It's okay if integration is null, means it hasn't been set up
+      if (integration && integration.website.user_id !== userId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have permission to view this integration.",
+        });
+      }
+
+      // Return only necessary fields, exclude sensitive data if needed in future
+      // For now, returning the whole object is fine as it's needed for the form
+      return integration;
+    }),
+
   create: protectedProcedure
     .input(ghostIntegrationSchema)
     .mutation(async ({ ctx, input }) => {

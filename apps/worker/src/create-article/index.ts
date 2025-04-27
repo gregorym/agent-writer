@@ -2,17 +2,22 @@ import Boss from "pg-boss";
 dotenv.config(); // Ensure environment variables are loaded
 
 import * as dotenv from "dotenv";
+import { Image } from "mdast"; // Import Image type for specific node check
 import concurrentConsumer from "../utils/concurrent-consumer";
 import { generateArticle, generateImage } from "../utils/llm";
 import { prisma } from "../utils/prisma";
 import trackJob from "../utils/track-job";
 const { unified } = require("unified");
 const remarkParse = require("remark-parse");
+const remarkStringify = require("remark-stringify"); // Import remark-stringify
 const visit = require("unist-util-visit");
 
 const CONCURRENCY = 5;
 const INTERVAL = 10;
-export async function processAMQP(boss: Boss): Promise<void> {
+// Adjust return type to match concurrentConsumer
+export async function processAMQP(
+  boss: Boss
+): Promise<{ shutdown: () => Promise<void> }> {
   return concurrentConsumer(
     boss,
     "new-article",
@@ -44,36 +49,39 @@ export async function execute(job: any): Promise<void> {
   - Article Detils: ${article.topic}
   `;
 
-  let markdown = await generateArticle(prompt);
-  const images = await extractImagesFromMarkdown(markdown);
+  let initialMarkdown = article.markdown ?? (await generateArticle(prompt));
+  const tree = unified().use(remarkParse).parse(initialMarkdown);
 
-  for (const image of images) {
-    const { alt } = image;
-    const newImage = await generateImage(alt);
-  }
+  const imagePromises: Promise<void>[] = [];
+
+  visit(tree, "image", (node: Image) => {
+    if (!node.url) {
+      const altText = node.alt || "";
+      imagePromises.push(
+        (async () => {
+          try {
+            const newImageUrl = await generateImage(altText);
+            node.url = newImageUrl; // Update the node's URL directly in the AST
+          } catch (error) {
+            console.error(
+              `Failed to generate image for alt text "${altText}":`,
+              error
+            );
+          }
+        })()
+      );
+    }
+  });
+
+  await Promise.all(imagePromises);
+  const updatedMarkdown = unified().use(remarkStringify).stringify(tree);
 
   await prisma?.article.update({
     where: {
       id: article.id,
     },
     data: {
-      markdown,
+      markdown: updatedMarkdown,
     },
   });
-}
-
-async function extractImagesFromMarkdown(markdown) {
-  const tree = unified().use(remarkParse).parse(markdown);
-
-  const images = [];
-
-  visit(tree, "image", (node) => {
-    images.push({
-      url: node.url,
-      alt: node.alt || "",
-      title: node.title || "",
-    });
-  });
-
-  return images;
 }
