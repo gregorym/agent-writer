@@ -67,20 +67,16 @@ export function EditArticleForm({
     },
   });
 
-  // Add delete mutation
+  const retryArticleMutation = trpc.articles.retry.useMutation({});
   const deleteArticleMutation = trpc.articles.delete.useMutation({
     onSuccess: () => {
       toast.success(
         `Article "${article.title || article.topic || "Untitled"}" deleted.`
       );
       utils.articles.all.invalidate({ websiteSlug }); // Invalidate list query on delete
-      // Navigate back to the website's article list or dashboard
       router.push(`/w/${websiteSlug}`);
-      // Optionally call onSuccess if needed for parent component cleanup
-      // onSuccess?.();
     },
     onError: (error) => {
-      // Handle specific errors from the backend check
       if (error.data?.code === "BAD_REQUEST") {
         toast.error(error.message); // Show the specific reason why deletion failed
       } else {
@@ -102,9 +98,12 @@ export function EditArticleForm({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateArticleMutation.mutate({
-      ...values,
       articleId: article.id, // Include article ID
       websiteSlug,
+      topic: values.topic,
+      title: values.title || undefined, // Convert null to undefined
+      markdown: values.markdown || undefined, // Convert null to undefined
+      scheduled_at: values.scheduled_at, // Date can be null
     });
   }
 
@@ -255,6 +254,17 @@ export function EditArticleForm({
         <div className="flex justify-between items-center pt-4">
           <Button type="submit" disabled={updateArticleMutation.isPending}>
             {updateArticleMutation.isPending ? "Saving..." : "Save Changes"}
+          </Button>
+          <Button
+            onClick={() => {
+              retryArticleMutation.mutate({
+                articleId: article.id,
+                websiteSlug,
+              });
+            }}
+            disabled={updateArticleMutation.isPending}
+          >
+            {retryArticleMutation.isPending ? "Saving..." : "Retry"}
           </Button>
 
           {/* Conditionally render the Delete button */}

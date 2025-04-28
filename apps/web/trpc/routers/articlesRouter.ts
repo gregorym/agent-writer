@@ -10,6 +10,7 @@ const articleCreateSchema = z.object({
   title: z.string().optional(),
   markdown: z.string().optional(),
   scheduled_at: z.date().optional().nullable(),
+  backlinks: z.array(z.string()).optional(), // Add backlinks schema
 });
 
 const articleUpdateSchema = z.object({
@@ -19,6 +20,7 @@ const articleUpdateSchema = z.object({
   title: z.string().optional(),
   markdown: z.string().optional(),
   scheduled_at: z.date().optional().nullable(),
+  backlinks: z.array(z.string()).optional(), // Add backlinks schema
 });
 
 const articleIdAndSlugSchema = z.object({
@@ -50,7 +52,8 @@ export const articlesRouter = router({
     .input(articleCreateSchema)
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
-      const { websiteSlug, topic, title, markdown, scheduled_at } = input;
+      const { websiteSlug, topic, title, markdown, scheduled_at, backlinks } =
+        input; // Destructure backlinks
 
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
@@ -89,24 +92,9 @@ export const articlesRouter = router({
             title,
             markdown,
             scheduled_at,
+            backlinks: backlinks ?? [], // Save backlinks, default to empty array if undefined
           },
         });
-
-        const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
-        await boss.start();
-        // Ensure queue name is unique per environment if needed, or use a single queue
-        const queueName = `new-article_${process.env.NODE_ENV || "development"}`;
-        await boss.createQueue(queueName); // Might not be needed if auto-creation is handled
-
-        const id = await boss.send(queueName, { id: newArticle.id });
-        await boss.stop();
-
-        if (id) {
-          await prisma.article.update({
-            where: { id: newArticle.id },
-            data: { job_id: id },
-          });
-        }
 
         return newArticle;
       } catch (error) {
@@ -123,6 +111,39 @@ export const articlesRouter = router({
       }
     }),
 
+  retry: protectedProcedure
+    .input(articleIdAndSlugSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { id: userId } = ctx.session.user;
+      const { articleId, websiteSlug } = input;
+      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const article = await prisma.article.findUnique({
+        where: { id: articleId, website_id: websiteId },
+      });
+
+      if (!article) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Article not found or does not belong to this website.",
+        });
+      }
+
+      const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
+      await boss.start();
+      // Ensure queue name is unique per environment if needed, or use a single queue
+      const queueName = `new-article_${process.env.NODE_ENV || "development"}`;
+      await boss.createQueue(queueName); // Might not be needed if auto-creation is handled
+
+      const id = await boss.send(queueName, { id: article.id });
+      await boss.stop();
+
+      if (id) {
+        await prisma.article.update({
+          where: { id: article.id },
+          data: { job_id: id },
+        });
+      }
+    }),
   update: protectedProcedure
     .input(articleUpdateSchema)
     .mutation(async ({ ctx, input }) => {
@@ -131,10 +152,16 @@ export const articlesRouter = router({
 
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
+      // Ensure backlinks is set to an empty array if undefined in the input
+      const dataToUpdate = {
+        ...updateData,
+        backlinks: updateData.backlinks ?? undefined, // Prisma handles undefined correctly for optional fields
+      };
+
       try {
         const updatedArticle = await prisma.article.update({
           where: { id: articleId, website_id: websiteId }, // Ensure article belongs to the website
-          data: updateData,
+          data: dataToUpdate, // Use the potentially modified data
         });
         return updatedArticle;
       } catch (error: any) {
@@ -240,8 +267,8 @@ export const articlesRouter = router({
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
       const articles = await prisma.article.findMany({
-        where: { website_id: websiteId },
-        orderBy: { scheduled_at: "desc" },
+        where: { website_id: websiteId }, // Corrected: Removed trailing comma if any, ensured correct syntax
+        orderBy: { scheduled_at: "desc" }, // Added comma before orderBy
       });
       return articles;
     }),

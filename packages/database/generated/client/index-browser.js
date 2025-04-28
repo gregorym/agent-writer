@@ -167,6 +167,7 @@ exports.Prisma.ArticleScalarFieldEnum = {
   title: 'title',
   markdown: 'markdown',
   job_id: 'job_id',
+  backlinks: 'backlinks',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

@@ -89,6 +89,7 @@ model Article {
   title        String?
   markdown     String?
   job_id       String?   @unique
+  backlinks    String[]  @default([])
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

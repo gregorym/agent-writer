@@ -6008,6 +6008,7 @@ export namespace Prisma {
     title: number
     markdown: number
     job_id: number
+    backlinks: number
     created_at: number
     updated_at: number
     _all: number
@@ -6056,6 +6057,7 @@ export namespace Prisma {
     title?: true
     markdown?: true
     job_id?: true
+    backlinks?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -6155,6 +6157,7 @@ export namespace Prisma {
     title: string | null
     markdown: string | null
     job_id: string | null
+    backlinks: string[]
     created_at: Date
     updated_at: Date
     _count: ArticleCountAggregateOutputType | null
@@ -6186,6 +6189,7 @@ export namespace Prisma {
     title?: boolean
     markdown?: boolean
     job_id?: boolean
+    backlinks?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -6199,6 +6203,7 @@ export namespace Prisma {
     title?: boolean
     markdown?: boolean
     job_id?: boolean
+    backlinks?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -6212,6 +6217,7 @@ export namespace Prisma {
     title?: boolean
     markdown?: boolean
     job_id?: boolean
+    backlinks?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -6225,11 +6231,12 @@ export namespace Prisma {
     title?: boolean
     markdown?: boolean
     job_id?: boolean
+    backlinks?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "topic" | "title" | "markdown" | "job_id" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "topic" | "title" | "markdown" | "job_id" | "backlinks" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
   export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }
@@ -6253,6 +6260,7 @@ export namespace Prisma {
       title: string | null
       markdown: string | null
       job_id: string | null
+      backlinks: string[]
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["article"]>
@@ -6686,6 +6694,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Article", 'String'>
     readonly markdown: FieldRef<"Article", 'String'>
     readonly job_id: FieldRef<"Article", 'String'>
+    readonly backlinks: FieldRef<"Article", 'String[]'>
     readonly created_at: FieldRef<"Article", 'DateTime'>
     readonly updated_at: FieldRef<"Article", 'DateTime'>
   }
@@ -8287,6 +8296,7 @@ export namespace Prisma {
     title: 'title',
     markdown: 'markdown',
     job_id: 'job_id',
+    backlinks: 'backlinks',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -8698,6 +8708,7 @@ export namespace Prisma {
     title?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
     job_id?: StringNullableFilter<"Article"> | string | null
+    backlinks?: StringNullableListFilter<"Article">
     created_at?: DateTimeFilter<"Article"> | Date | string
     updated_at?: DateTimeFilter<"Article"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -8711,6 +8722,7 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
     job_id?: SortOrderInput | SortOrder
+    backlinks?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     website?: WebsiteOrderByWithRelationInput
@@ -8727,6 +8739,7 @@ export namespace Prisma {
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
+    backlinks?: StringNullableListFilter<"Article">
     created_at?: DateTimeFilter<"Article"> | Date | string
     updated_at?: DateTimeFilter<"Article"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -8740,6 +8753,7 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
     job_id?: SortOrderInput | SortOrder
+    backlinks?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: ArticleCountOrderByAggregateInput
@@ -8760,6 +8774,7 @@ export namespace Prisma {
     title?: StringNullableWithAggregatesFilter<"Article"> | string | null
     markdown?: StringNullableWithAggregatesFilter<"Article"> | string | null
     job_id?: StringNullableWithAggregatesFilter<"Article"> | string | null
+    backlinks?: StringNullableListFilter<"Article">
     created_at?: DateTimeWithAggregatesFilter<"Article"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Article"> | Date | string
   }
@@ -9137,6 +9152,7 @@ export namespace Prisma {
     title?: string | null
     markdown?: string | null
     job_id?: string | null
+    backlinks?: ArticleCreatebacklinksInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
     website: WebsiteCreateNestedOneWithoutArticlesInput
@@ -9150,6 +9166,7 @@ export namespace Prisma {
     title?: string | null
     markdown?: string | null
     job_id?: string | null
+    backlinks?: ArticleCreatebacklinksInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -9160,6 +9177,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    backlinks?: ArticleUpdatebacklinksInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     website?: WebsiteUpdateOneRequiredWithoutArticlesNestedInput
@@ -9173,6 +9191,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    backlinks?: ArticleUpdatebacklinksInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9185,6 +9204,7 @@ export namespace Prisma {
     title?: string | null
     markdown?: string | null
     job_id?: string | null
+    backlinks?: ArticleCreatebacklinksInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -9195,6 +9215,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    backlinks?: ArticleUpdatebacklinksInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9207,6 +9228,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    backlinks?: ArticleUpdatebacklinksInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9623,6 +9645,14 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type WebsiteScalarRelationFilter = {
     is?: WebsiteWhereInput
     isNot?: WebsiteWhereInput
@@ -9636,6 +9666,7 @@ export namespace Prisma {
     title?: SortOrder
     markdown?: SortOrder
     job_id?: SortOrder
+    backlinks?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -9981,10 +10012,19 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSubscriptionsInput, UserUpdateWithoutSubscriptionsInput>, UserUncheckedUpdateWithoutSubscriptionsInput>
   }
 
+  export type ArticleCreatebacklinksInput = {
+    set: string[]
+  }
+
   export type WebsiteCreateNestedOneWithoutArticlesInput = {
     create?: XOR<WebsiteCreateWithoutArticlesInput, WebsiteUncheckedCreateWithoutArticlesInput>
     connectOrCreate?: WebsiteCreateOrConnectWithoutArticlesInput
     connect?: WebsiteWhereUniqueInput
+  }
+
+  export type ArticleUpdatebacklinksInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type WebsiteUpdateOneRequiredWithoutArticlesNestedInput = {
@@ -10458,6 +10498,7 @@ export namespace Prisma {
     title?: string | null
     markdown?: string | null
     job_id?: string | null
+    backlinks?: ArticleCreatebacklinksInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -10469,6 +10510,7 @@ export namespace Prisma {
     title?: string | null
     markdown?: string | null
     job_id?: string | null
+    backlinks?: ArticleCreatebacklinksInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -10563,6 +10605,7 @@ export namespace Prisma {
     title?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
     job_id?: StringNullableFilter<"Article"> | string | null
+    backlinks?: StringNullableListFilter<"Article">
     created_at?: DateTimeFilter<"Article"> | Date | string
     updated_at?: DateTimeFilter<"Article"> | Date | string
   }
@@ -10914,6 +10957,7 @@ export namespace Prisma {
     title?: string | null
     markdown?: string | null
     job_id?: string | null
+    backlinks?: ArticleCreatebacklinksInput | string[]
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -10924,6 +10968,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    backlinks?: ArticleUpdatebacklinksInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10935,6 +10980,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    backlinks?: ArticleUpdatebacklinksInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10946,6 +10992,7 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
+    backlinks?: ArticleUpdatebacklinksInput | string[]
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
