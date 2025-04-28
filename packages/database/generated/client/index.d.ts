@@ -5980,6 +5980,7 @@ export namespace Prisma {
     id: number | null
     website_id: number | null
     scheduled_at: Date | null
+    published_at: Date | null
     topic: string | null
     title: string | null
     markdown: string | null
@@ -5992,6 +5993,7 @@ export namespace Prisma {
     id: number | null
     website_id: number | null
     scheduled_at: Date | null
+    published_at: Date | null
     topic: string | null
     title: string | null
     markdown: string | null
@@ -6004,6 +6006,7 @@ export namespace Prisma {
     id: number
     website_id: number
     scheduled_at: number
+    published_at: number
     topic: number
     title: number
     markdown: number
@@ -6029,6 +6032,7 @@ export namespace Prisma {
     id?: true
     website_id?: true
     scheduled_at?: true
+    published_at?: true
     topic?: true
     title?: true
     markdown?: true
@@ -6041,6 +6045,7 @@ export namespace Prisma {
     id?: true
     website_id?: true
     scheduled_at?: true
+    published_at?: true
     topic?: true
     title?: true
     markdown?: true
@@ -6053,6 +6058,7 @@ export namespace Prisma {
     id?: true
     website_id?: true
     scheduled_at?: true
+    published_at?: true
     topic?: true
     title?: true
     markdown?: true
@@ -6153,6 +6159,7 @@ export namespace Prisma {
     id: number
     website_id: number
     scheduled_at: Date | null
+    published_at: Date | null
     topic: string | null
     title: string | null
     markdown: string | null
@@ -6185,6 +6192,7 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     scheduled_at?: boolean
+    published_at?: boolean
     topic?: boolean
     title?: boolean
     markdown?: boolean
@@ -6199,6 +6207,7 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     scheduled_at?: boolean
+    published_at?: boolean
     topic?: boolean
     title?: boolean
     markdown?: boolean
@@ -6213,6 +6222,7 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     scheduled_at?: boolean
+    published_at?: boolean
     topic?: boolean
     title?: boolean
     markdown?: boolean
@@ -6227,6 +6237,7 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     scheduled_at?: boolean
+    published_at?: boolean
     topic?: boolean
     title?: boolean
     markdown?: boolean
@@ -6236,7 +6247,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "topic" | "title" | "markdown" | "job_id" | "backlinks" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "published_at" | "topic" | "title" | "markdown" | "job_id" | "backlinks" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
   export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }
@@ -6256,6 +6267,7 @@ export namespace Prisma {
       id: number
       website_id: number
       scheduled_at: Date | null
+      published_at: Date | null
       topic: string | null
       title: string | null
       markdown: string | null
@@ -6690,6 +6702,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Article", 'Int'>
     readonly website_id: FieldRef<"Article", 'Int'>
     readonly scheduled_at: FieldRef<"Article", 'DateTime'>
+    readonly published_at: FieldRef<"Article", 'DateTime'>
     readonly topic: FieldRef<"Article", 'String'>
     readonly title: FieldRef<"Article", 'String'>
     readonly markdown: FieldRef<"Article", 'String'>
@@ -8292,6 +8305,7 @@ export namespace Prisma {
     id: 'id',
     website_id: 'website_id',
     scheduled_at: 'scheduled_at',
+    published_at: 'published_at',
     topic: 'topic',
     title: 'title',
     markdown: 'markdown',
@@ -8704,6 +8718,7 @@ export namespace Prisma {
     id?: IntFilter<"Article"> | number
     website_id?: IntFilter<"Article"> | number
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
+    published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
@@ -8718,6 +8733,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     scheduled_at?: SortOrderInput | SortOrder
+    published_at?: SortOrderInput | SortOrder
     topic?: SortOrderInput | SortOrder
     title?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
@@ -8736,6 +8752,7 @@ export namespace Prisma {
     NOT?: ArticleWhereInput | ArticleWhereInput[]
     website_id?: IntFilter<"Article"> | number
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
+    published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
@@ -8749,6 +8766,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     scheduled_at?: SortOrderInput | SortOrder
+    published_at?: SortOrderInput | SortOrder
     topic?: SortOrderInput | SortOrder
     title?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
@@ -8770,6 +8788,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Article"> | number
     website_id?: IntWithAggregatesFilter<"Article"> | number
     scheduled_at?: DateTimeNullableWithAggregatesFilter<"Article"> | Date | string | null
+    published_at?: DateTimeNullableWithAggregatesFilter<"Article"> | Date | string | null
     topic?: StringNullableWithAggregatesFilter<"Article"> | string | null
     title?: StringNullableWithAggregatesFilter<"Article"> | string | null
     markdown?: StringNullableWithAggregatesFilter<"Article"> | string | null
@@ -9148,6 +9167,7 @@ export namespace Prisma {
 
   export type ArticleCreateInput = {
     scheduled_at?: Date | string | null
+    published_at?: Date | string | null
     topic?: string | null
     title?: string | null
     markdown?: string | null
@@ -9162,6 +9182,7 @@ export namespace Prisma {
     id?: number
     website_id: number
     scheduled_at?: Date | string | null
+    published_at?: Date | string | null
     topic?: string | null
     title?: string | null
     markdown?: string | null
@@ -9173,6 +9194,7 @@ export namespace Prisma {
 
   export type ArticleUpdateInput = {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9187,6 +9209,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     website_id?: IntFieldUpdateOperationsInput | number
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9200,6 +9223,7 @@ export namespace Prisma {
     id?: number
     website_id: number
     scheduled_at?: Date | string | null
+    published_at?: Date | string | null
     topic?: string | null
     title?: string | null
     markdown?: string | null
@@ -9211,6 +9235,7 @@ export namespace Prisma {
 
   export type ArticleUpdateManyMutationInput = {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9224,6 +9249,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     website_id?: IntFieldUpdateOperationsInput | number
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -9662,6 +9688,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     scheduled_at?: SortOrder
+    published_at?: SortOrder
     topic?: SortOrder
     title?: SortOrder
     markdown?: SortOrder
@@ -9680,6 +9707,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     scheduled_at?: SortOrder
+    published_at?: SortOrder
     topic?: SortOrder
     title?: SortOrder
     markdown?: SortOrder
@@ -9692,6 +9720,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     scheduled_at?: SortOrder
+    published_at?: SortOrder
     topic?: SortOrder
     title?: SortOrder
     markdown?: SortOrder
@@ -10494,6 +10523,7 @@ export namespace Prisma {
 
   export type ArticleCreateWithoutWebsiteInput = {
     scheduled_at?: Date | string | null
+    published_at?: Date | string | null
     topic?: string | null
     title?: string | null
     markdown?: string | null
@@ -10506,6 +10536,7 @@ export namespace Prisma {
   export type ArticleUncheckedCreateWithoutWebsiteInput = {
     id?: number
     scheduled_at?: Date | string | null
+    published_at?: Date | string | null
     topic?: string | null
     title?: string | null
     markdown?: string | null
@@ -10601,6 +10632,7 @@ export namespace Prisma {
     id?: IntFilter<"Article"> | number
     website_id?: IntFilter<"Article"> | number
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
+    published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
@@ -10953,6 +10985,7 @@ export namespace Prisma {
   export type ArticleCreateManyWebsiteInput = {
     id?: number
     scheduled_at?: Date | string | null
+    published_at?: Date | string | null
     topic?: string | null
     title?: string | null
     markdown?: string | null
@@ -10964,6 +10997,7 @@ export namespace Prisma {
 
   export type ArticleUpdateWithoutWebsiteInput = {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10976,6 +11010,7 @@ export namespace Prisma {
   export type ArticleUncheckedUpdateWithoutWebsiteInput = {
     id?: IntFieldUpdateOperationsInput | number
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10988,6 +11023,7 @@ export namespace Prisma {
   export type ArticleUncheckedUpdateManyWithoutWebsiteInput = {
     id?: IntFieldUpdateOperationsInput | number
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null

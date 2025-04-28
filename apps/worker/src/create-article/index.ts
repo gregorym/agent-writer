@@ -13,7 +13,7 @@ import { generateArticle, generateImage } from "../utils/llm";
 import { prisma } from "../utils/prisma";
 import trackJob from "../utils/track-job";
 
-const CONCURRENCY = 5;
+const CONCURRENCY = 1;
 const INTERVAL = 10;
 // Adjust return type to match concurrentConsumer
 export async function processAMQP(

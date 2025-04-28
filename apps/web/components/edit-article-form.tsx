@@ -6,6 +6,7 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2, Trash2 } from "lucide-react"; // Import Trash2
 import { useRouter } from "next/navigation"; // Import useRouter
+import { useEffect, useState } from "react"; // Import useEffect and useState
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -59,7 +60,13 @@ export function EditArticleForm({
       );
       utils.articles.all.invalidate({ websiteSlug }); // Invalidate list query
       utils.articles.get.invalidate({ articleId: article.id, websiteSlug }); // Invalidate get query
-      form.reset(data); // Reset form with updated data
+      // Reset form with updated data, ensuring type compatibility
+      form.reset({
+        topic: data.topic ?? "", // Provide default empty string if null
+        title: data.title,
+        markdown: data.markdown,
+        scheduled_at: data.scheduled_at,
+      });
       onSuccess?.();
     },
     onError: (error) => {
@@ -95,6 +102,20 @@ export function EditArticleForm({
       scheduled_at: article.scheduled_at || null,
     },
   });
+
+  // Watch the markdown field to update word count dynamically
+  const markdownValue = form.watch("markdown");
+  const [wordCount, setWordCount] = useState(0);
+
+  useEffect(() => {
+    if (markdownValue) {
+      // Simple word count: split by whitespace and filter empty strings
+      const words = markdownValue.trim().split(/\s+/).filter(Boolean);
+      setWordCount(words.length);
+    } else {
+      setWordCount(0);
+    }
+  }, [markdownValue]); // Re-run effect when markdownValue changes
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateArticleMutation.mutate({
@@ -214,7 +235,12 @@ export function EditArticleForm({
             name="markdown"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Markdown Content</FormLabel>{" "}
+                <FormLabel>
+                  Markdown Content{" "}
+                  <span className="text-xs text-muted-foreground">
+                    ({wordCount} words)
+                  </span>
+                </FormLabel>{" "}
                 {/* Removed (Optional) */}
                 <div className="flex flex-col md:flex-row gap-4">
                   {/* Editor Column */}
@@ -256,15 +282,17 @@ export function EditArticleForm({
             {updateArticleMutation.isPending ? "Saving..." : "Save Changes"}
           </Button>
           <Button
+            type="button" // Ensure this is type button to prevent form submission
             onClick={() => {
               retryArticleMutation.mutate({
                 articleId: article.id,
                 websiteSlug,
               });
             }}
-            disabled={updateArticleMutation.isPending}
+            disabled={retryArticleMutation.isPending} // Disable based on its own mutation state
           >
-            {retryArticleMutation.isPending ? "Saving..." : "Retry"}
+            {retryArticleMutation.isPending ? "Retrying..." : "Retry"}{" "}
+            {/* Update loading text */}
           </Button>
 
           {/* Conditionally render the Delete button */}

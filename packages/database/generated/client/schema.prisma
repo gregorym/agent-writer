@@ -63,8 +63,8 @@ model Website {
 model Subscription {
   id                     Int       @id @default(autoincrement())
   user_id                String
-  stripe_subscription_id String    @unique // Stripe subscription ID
-  status                 String // e.g., active, canceled, past_due, trialing
+  stripe_subscription_id String    @unique
+  status                 String
   current_period_start   DateTime?
   current_period_end     DateTime?
   trial_start            DateTime?
@@ -83,8 +83,9 @@ model Subscription {
 
 model Article {
   id           Int       @id @default(autoincrement())
-  website_id   Int // Changed to Int to match Website.id type
-  scheduled_at DateTime? @db.Date // Use @db.Date for DATE type
+  website_id   Int
+  scheduled_at DateTime? @db.Date
+  published_at DateTime?
   topic        String?
   title        String?
   markdown     String?
@@ -102,7 +103,7 @@ model Article {
 
 model GhostIntegration {
   id         Int    @id @default(autoincrement())
-  website_id Int    @unique // Add unique constraint for one-to-one relation
+  website_id Int    @unique
   api_key    String
   api_url    String
 
