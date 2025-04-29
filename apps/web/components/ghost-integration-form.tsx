@@ -29,11 +29,9 @@ const formSchema = z.object({
 
 type GhostIntegrationFormValues = z.infer<typeof formSchema>;
 
-interface GhostIntegrationFormProps {
-  websiteId: string;
-}
+interface GhostIntegrationFormProps {}
 
-export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
+export function GhostIntegrationForm({}: GhostIntegrationFormProps) {
   const router = useRouter();
   const utils = trpc.useUtils();
   const params = useParams(); // Get raw params

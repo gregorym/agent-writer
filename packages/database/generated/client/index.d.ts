@@ -43,6 +43,11 @@ export type Article = $Result.DefaultSelection<Prisma.$ArticlePayload>
  * 
  */
 export type GhostIntegration = $Result.DefaultSelection<Prisma.$GhostIntegrationPayload>
+/**
+ * Model GithubIntegration
+ * 
+ */
+export type GithubIntegration = $Result.DefaultSelection<Prisma.$GithubIntegrationPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -228,6 +233,16 @@ export class PrismaClient<
     * ```
     */
   get ghostIntegration(): Prisma.GhostIntegrationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.githubIntegration`: Exposes CRUD operations for the **GithubIntegration** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GithubIntegrations
+    * const githubIntegrations = await prisma.githubIntegration.findMany()
+    * ```
+    */
+  get githubIntegration(): Prisma.GithubIntegrationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -286,8 +301,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.6.0
-   * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
+   * Prisma Client JS version: 6.7.0
+   * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
    */
   export type PrismaVersion = {
     client: string
@@ -673,7 +688,8 @@ export namespace Prisma {
     Website: 'Website',
     Subscription: 'Subscription',
     Article: 'Article',
-    GhostIntegration: 'GhostIntegration'
+    GhostIntegration: 'GhostIntegration',
+    GithubIntegration: 'GithubIntegration'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -692,7 +708,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "website" | "subscription" | "article" | "ghostIntegration"
+      modelProps: "user" | "session" | "website" | "subscription" | "article" | "ghostIntegration" | "githubIntegration"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1140,6 +1156,80 @@ export namespace Prisma {
           }
         }
       }
+      GithubIntegration: {
+        payload: Prisma.$GithubIntegrationPayload<ExtArgs>
+        fields: Prisma.GithubIntegrationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GithubIntegrationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GithubIntegrationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>
+          }
+          findFirst: {
+            args: Prisma.GithubIntegrationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GithubIntegrationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>
+          }
+          findMany: {
+            args: Prisma.GithubIntegrationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>[]
+          }
+          create: {
+            args: Prisma.GithubIntegrationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>
+          }
+          createMany: {
+            args: Prisma.GithubIntegrationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GithubIntegrationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>[]
+          }
+          delete: {
+            args: Prisma.GithubIntegrationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>
+          }
+          update: {
+            args: Prisma.GithubIntegrationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>
+          }
+          deleteMany: {
+            args: Prisma.GithubIntegrationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GithubIntegrationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GithubIntegrationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>[]
+          }
+          upsert: {
+            args: Prisma.GithubIntegrationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GithubIntegrationPayload>
+          }
+          aggregate: {
+            args: Prisma.GithubIntegrationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGithubIntegration>
+          }
+          groupBy: {
+            args: Prisma.GithubIntegrationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GithubIntegrationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GithubIntegrationCountArgs<ExtArgs>
+            result: $Utils.Optional<GithubIntegrationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1230,6 +1320,7 @@ export namespace Prisma {
     subscription?: SubscriptionOmit
     article?: ArticleOmit
     ghostIntegration?: GhostIntegrationOmit
+    githubIntegration?: GithubIntegrationOmit
   }
 
   /* Types for Logging */
@@ -1374,10 +1465,12 @@ export namespace Prisma {
 
   export type WebsiteCountOutputType = {
     articles: number
+    GithubIntegration: number
   }
 
   export type WebsiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     articles?: boolean | WebsiteCountOutputTypeCountArticlesArgs
+    GithubIntegration?: boolean | WebsiteCountOutputTypeCountGithubIntegrationArgs
   }
 
   // Custom InputTypes
@@ -1396,6 +1489,13 @@ export namespace Prisma {
    */
   export type WebsiteCountOutputTypeCountArticlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ArticleWhereInput
+  }
+
+  /**
+   * WebsiteCountOutputType without action
+   */
+  export type WebsiteCountOutputTypeCountGithubIntegrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GithubIntegrationWhereInput
   }
 
 
@@ -3807,6 +3907,7 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
     articles?: boolean | Website$articlesArgs<ExtArgs>
     ghostIntegration?: boolean | Website$ghostIntegrationArgs<ExtArgs>
+    GithubIntegration?: boolean | Website$GithubIntegrationArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["website"]>
 
@@ -3853,6 +3954,7 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
     articles?: boolean | Website$articlesArgs<ExtArgs>
     ghostIntegration?: boolean | Website$ghostIntegrationArgs<ExtArgs>
+    GithubIntegration?: boolean | Website$GithubIntegrationArgs<ExtArgs>
     _count?: boolean | WebsiteCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WebsiteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3868,6 +3970,7 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
       articles: Prisma.$ArticlePayload<ExtArgs>[]
       ghostIntegration: Prisma.$GhostIntegrationPayload<ExtArgs> | null
+      GithubIntegration: Prisma.$GithubIntegrationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4276,6 +4379,7 @@ export namespace Prisma {
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     articles<T extends Website$articlesArgs<ExtArgs> = {}>(args?: Subset<T, Website$articlesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ghostIntegration<T extends Website$ghostIntegrationArgs<ExtArgs> = {}>(args?: Subset<T, Website$ghostIntegrationArgs<ExtArgs>>): Prisma__GhostIntegrationClient<$Result.GetResult<Prisma.$GhostIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    GithubIntegration<T extends Website$GithubIntegrationArgs<ExtArgs> = {}>(args?: Subset<T, Website$GithubIntegrationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4750,6 +4854,30 @@ export namespace Prisma {
      */
     include?: GhostIntegrationInclude<ExtArgs> | null
     where?: GhostIntegrationWhereInput
+  }
+
+  /**
+   * Website.GithubIntegration
+   */
+  export type Website$GithubIntegrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    where?: GithubIntegrationWhereInput
+    orderBy?: GithubIntegrationOrderByWithRelationInput | GithubIntegrationOrderByWithRelationInput[]
+    cursor?: GithubIntegrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GithubIntegrationScalarFieldEnum | GithubIntegrationScalarFieldEnum[]
   }
 
   /**
@@ -8234,6 +8362,1102 @@ export namespace Prisma {
 
 
   /**
+   * Model GithubIntegration
+   */
+
+  export type AggregateGithubIntegration = {
+    _count: GithubIntegrationCountAggregateOutputType | null
+    _avg: GithubIntegrationAvgAggregateOutputType | null
+    _sum: GithubIntegrationSumAggregateOutputType | null
+    _min: GithubIntegrationMinAggregateOutputType | null
+    _max: GithubIntegrationMaxAggregateOutputType | null
+  }
+
+  export type GithubIntegrationAvgAggregateOutputType = {
+    id: number | null
+    website_id: number | null
+  }
+
+  export type GithubIntegrationSumAggregateOutputType = {
+    id: number | null
+    website_id: number | null
+  }
+
+  export type GithubIntegrationMinAggregateOutputType = {
+    id: number | null
+    website_id: number | null
+    api_key: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GithubIntegrationMaxAggregateOutputType = {
+    id: number | null
+    website_id: number | null
+    api_key: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GithubIntegrationCountAggregateOutputType = {
+    id: number
+    website_id: number
+    api_key: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type GithubIntegrationAvgAggregateInputType = {
+    id?: true
+    website_id?: true
+  }
+
+  export type GithubIntegrationSumAggregateInputType = {
+    id?: true
+    website_id?: true
+  }
+
+  export type GithubIntegrationMinAggregateInputType = {
+    id?: true
+    website_id?: true
+    api_key?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type GithubIntegrationMaxAggregateInputType = {
+    id?: true
+    website_id?: true
+    api_key?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type GithubIntegrationCountAggregateInputType = {
+    id?: true
+    website_id?: true
+    api_key?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type GithubIntegrationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GithubIntegration to aggregate.
+     */
+    where?: GithubIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GithubIntegrations to fetch.
+     */
+    orderBy?: GithubIntegrationOrderByWithRelationInput | GithubIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GithubIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GithubIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GithubIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GithubIntegrations
+    **/
+    _count?: true | GithubIntegrationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GithubIntegrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GithubIntegrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GithubIntegrationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GithubIntegrationMaxAggregateInputType
+  }
+
+  export type GetGithubIntegrationAggregateType<T extends GithubIntegrationAggregateArgs> = {
+        [P in keyof T & keyof AggregateGithubIntegration]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGithubIntegration[P]>
+      : GetScalarType<T[P], AggregateGithubIntegration[P]>
+  }
+
+
+
+
+  export type GithubIntegrationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GithubIntegrationWhereInput
+    orderBy?: GithubIntegrationOrderByWithAggregationInput | GithubIntegrationOrderByWithAggregationInput[]
+    by: GithubIntegrationScalarFieldEnum[] | GithubIntegrationScalarFieldEnum
+    having?: GithubIntegrationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GithubIntegrationCountAggregateInputType | true
+    _avg?: GithubIntegrationAvgAggregateInputType
+    _sum?: GithubIntegrationSumAggregateInputType
+    _min?: GithubIntegrationMinAggregateInputType
+    _max?: GithubIntegrationMaxAggregateInputType
+  }
+
+  export type GithubIntegrationGroupByOutputType = {
+    id: number
+    website_id: number
+    api_key: string
+    created_at: Date
+    updated_at: Date
+    _count: GithubIntegrationCountAggregateOutputType | null
+    _avg: GithubIntegrationAvgAggregateOutputType | null
+    _sum: GithubIntegrationSumAggregateOutputType | null
+    _min: GithubIntegrationMinAggregateOutputType | null
+    _max: GithubIntegrationMaxAggregateOutputType | null
+  }
+
+  type GetGithubIntegrationGroupByPayload<T extends GithubIntegrationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GithubIntegrationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GithubIntegrationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GithubIntegrationGroupByOutputType[P]>
+            : GetScalarType<T[P], GithubIntegrationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GithubIntegrationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["githubIntegration"]>
+
+  export type GithubIntegrationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["githubIntegration"]>
+
+  export type GithubIntegrationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["githubIntegration"]>
+
+  export type GithubIntegrationSelectScalar = {
+    id?: boolean
+    website_id?: boolean
+    api_key?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type GithubIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "api_key" | "created_at" | "updated_at", ExtArgs["result"]["githubIntegration"]>
+  export type GithubIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type GithubIntegrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+  export type GithubIntegrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    website?: boolean | WebsiteDefaultArgs<ExtArgs>
+  }
+
+  export type $GithubIntegrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GithubIntegration"
+    objects: {
+      website: Prisma.$WebsitePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      website_id: number
+      api_key: string
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["githubIntegration"]>
+    composites: {}
+  }
+
+  type GithubIntegrationGetPayload<S extends boolean | null | undefined | GithubIntegrationDefaultArgs> = $Result.GetResult<Prisma.$GithubIntegrationPayload, S>
+
+  type GithubIntegrationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GithubIntegrationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GithubIntegrationCountAggregateInputType | true
+    }
+
+  export interface GithubIntegrationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GithubIntegration'], meta: { name: 'GithubIntegration' } }
+    /**
+     * Find zero or one GithubIntegration that matches the filter.
+     * @param {GithubIntegrationFindUniqueArgs} args - Arguments to find a GithubIntegration
+     * @example
+     * // Get one GithubIntegration
+     * const githubIntegration = await prisma.githubIntegration.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GithubIntegrationFindUniqueArgs>(args: SelectSubset<T, GithubIntegrationFindUniqueArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GithubIntegration that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GithubIntegrationFindUniqueOrThrowArgs} args - Arguments to find a GithubIntegration
+     * @example
+     * // Get one GithubIntegration
+     * const githubIntegration = await prisma.githubIntegration.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GithubIntegrationFindUniqueOrThrowArgs>(args: SelectSubset<T, GithubIntegrationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GithubIntegration that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GithubIntegrationFindFirstArgs} args - Arguments to find a GithubIntegration
+     * @example
+     * // Get one GithubIntegration
+     * const githubIntegration = await prisma.githubIntegration.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GithubIntegrationFindFirstArgs>(args?: SelectSubset<T, GithubIntegrationFindFirstArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GithubIntegration that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GithubIntegrationFindFirstOrThrowArgs} args - Arguments to find a GithubIntegration
+     * @example
+     * // Get one GithubIntegration
+     * const githubIntegration = await prisma.githubIntegration.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GithubIntegrationFindFirstOrThrowArgs>(args?: SelectSubset<T, GithubIntegrationFindFirstOrThrowArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GithubIntegrations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GithubIntegrationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GithubIntegrations
+     * const githubIntegrations = await prisma.githubIntegration.findMany()
+     * 
+     * // Get first 10 GithubIntegrations
+     * const githubIntegrations = await prisma.githubIntegration.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const githubIntegrationWithIdOnly = await prisma.githubIntegration.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GithubIntegrationFindManyArgs>(args?: SelectSubset<T, GithubIntegrationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GithubIntegration.
+     * @param {GithubIntegrationCreateArgs} args - Arguments to create a GithubIntegration.
+     * @example
+     * // Create one GithubIntegration
+     * const GithubIntegration = await prisma.githubIntegration.create({
+     *   data: {
+     *     // ... data to create a GithubIntegration
+     *   }
+     * })
+     * 
+     */
+    create<T extends GithubIntegrationCreateArgs>(args: SelectSubset<T, GithubIntegrationCreateArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GithubIntegrations.
+     * @param {GithubIntegrationCreateManyArgs} args - Arguments to create many GithubIntegrations.
+     * @example
+     * // Create many GithubIntegrations
+     * const githubIntegration = await prisma.githubIntegration.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GithubIntegrationCreateManyArgs>(args?: SelectSubset<T, GithubIntegrationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GithubIntegrations and returns the data saved in the database.
+     * @param {GithubIntegrationCreateManyAndReturnArgs} args - Arguments to create many GithubIntegrations.
+     * @example
+     * // Create many GithubIntegrations
+     * const githubIntegration = await prisma.githubIntegration.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GithubIntegrations and only return the `id`
+     * const githubIntegrationWithIdOnly = await prisma.githubIntegration.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GithubIntegrationCreateManyAndReturnArgs>(args?: SelectSubset<T, GithubIntegrationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GithubIntegration.
+     * @param {GithubIntegrationDeleteArgs} args - Arguments to delete one GithubIntegration.
+     * @example
+     * // Delete one GithubIntegration
+     * const GithubIntegration = await prisma.githubIntegration.delete({
+     *   where: {
+     *     // ... filter to delete one GithubIntegration
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GithubIntegrationDeleteArgs>(args: SelectSubset<T, GithubIntegrationDeleteArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GithubIntegration.
+     * @param {GithubIntegrationUpdateArgs} args - Arguments to update one GithubIntegration.
+     * @example
+     * // Update one GithubIntegration
+     * const githubIntegration = await prisma.githubIntegration.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GithubIntegrationUpdateArgs>(args: SelectSubset<T, GithubIntegrationUpdateArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GithubIntegrations.
+     * @param {GithubIntegrationDeleteManyArgs} args - Arguments to filter GithubIntegrations to delete.
+     * @example
+     * // Delete a few GithubIntegrations
+     * const { count } = await prisma.githubIntegration.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GithubIntegrationDeleteManyArgs>(args?: SelectSubset<T, GithubIntegrationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GithubIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GithubIntegrationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GithubIntegrations
+     * const githubIntegration = await prisma.githubIntegration.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GithubIntegrationUpdateManyArgs>(args: SelectSubset<T, GithubIntegrationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GithubIntegrations and returns the data updated in the database.
+     * @param {GithubIntegrationUpdateManyAndReturnArgs} args - Arguments to update many GithubIntegrations.
+     * @example
+     * // Update many GithubIntegrations
+     * const githubIntegration = await prisma.githubIntegration.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GithubIntegrations and only return the `id`
+     * const githubIntegrationWithIdOnly = await prisma.githubIntegration.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GithubIntegrationUpdateManyAndReturnArgs>(args: SelectSubset<T, GithubIntegrationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GithubIntegration.
+     * @param {GithubIntegrationUpsertArgs} args - Arguments to update or create a GithubIntegration.
+     * @example
+     * // Update or create a GithubIntegration
+     * const githubIntegration = await prisma.githubIntegration.upsert({
+     *   create: {
+     *     // ... data to create a GithubIntegration
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GithubIntegration we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GithubIntegrationUpsertArgs>(args: SelectSubset<T, GithubIntegrationUpsertArgs<ExtArgs>>): Prisma__GithubIntegrationClient<$Result.GetResult<Prisma.$GithubIntegrationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GithubIntegrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GithubIntegrationCountArgs} args - Arguments to filter GithubIntegrations to count.
+     * @example
+     * // Count the number of GithubIntegrations
+     * const count = await prisma.githubIntegration.count({
+     *   where: {
+     *     // ... the filter for the GithubIntegrations we want to count
+     *   }
+     * })
+    **/
+    count<T extends GithubIntegrationCountArgs>(
+      args?: Subset<T, GithubIntegrationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GithubIntegrationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GithubIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GithubIntegrationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GithubIntegrationAggregateArgs>(args: Subset<T, GithubIntegrationAggregateArgs>): Prisma.PrismaPromise<GetGithubIntegrationAggregateType<T>>
+
+    /**
+     * Group by GithubIntegration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GithubIntegrationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GithubIntegrationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GithubIntegrationGroupByArgs['orderBy'] }
+        : { orderBy?: GithubIntegrationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GithubIntegrationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGithubIntegrationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GithubIntegration model
+   */
+  readonly fields: GithubIntegrationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GithubIntegration.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GithubIntegrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    website<T extends WebsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WebsiteDefaultArgs<ExtArgs>>): Prisma__WebsiteClient<$Result.GetResult<Prisma.$WebsitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GithubIntegration model
+   */
+  interface GithubIntegrationFieldRefs {
+    readonly id: FieldRef<"GithubIntegration", 'Int'>
+    readonly website_id: FieldRef<"GithubIntegration", 'Int'>
+    readonly api_key: FieldRef<"GithubIntegration", 'String'>
+    readonly created_at: FieldRef<"GithubIntegration", 'DateTime'>
+    readonly updated_at: FieldRef<"GithubIntegration", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GithubIntegration findUnique
+   */
+  export type GithubIntegrationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GithubIntegration to fetch.
+     */
+    where: GithubIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GithubIntegration findUniqueOrThrow
+   */
+  export type GithubIntegrationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GithubIntegration to fetch.
+     */
+    where: GithubIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GithubIntegration findFirst
+   */
+  export type GithubIntegrationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GithubIntegration to fetch.
+     */
+    where?: GithubIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GithubIntegrations to fetch.
+     */
+    orderBy?: GithubIntegrationOrderByWithRelationInput | GithubIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GithubIntegrations.
+     */
+    cursor?: GithubIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GithubIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GithubIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GithubIntegrations.
+     */
+    distinct?: GithubIntegrationScalarFieldEnum | GithubIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * GithubIntegration findFirstOrThrow
+   */
+  export type GithubIntegrationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GithubIntegration to fetch.
+     */
+    where?: GithubIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GithubIntegrations to fetch.
+     */
+    orderBy?: GithubIntegrationOrderByWithRelationInput | GithubIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GithubIntegrations.
+     */
+    cursor?: GithubIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GithubIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GithubIntegrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GithubIntegrations.
+     */
+    distinct?: GithubIntegrationScalarFieldEnum | GithubIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * GithubIntegration findMany
+   */
+  export type GithubIntegrationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter, which GithubIntegrations to fetch.
+     */
+    where?: GithubIntegrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GithubIntegrations to fetch.
+     */
+    orderBy?: GithubIntegrationOrderByWithRelationInput | GithubIntegrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GithubIntegrations.
+     */
+    cursor?: GithubIntegrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GithubIntegrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GithubIntegrations.
+     */
+    skip?: number
+    distinct?: GithubIntegrationScalarFieldEnum | GithubIntegrationScalarFieldEnum[]
+  }
+
+  /**
+   * GithubIntegration create
+   */
+  export type GithubIntegrationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GithubIntegration.
+     */
+    data: XOR<GithubIntegrationCreateInput, GithubIntegrationUncheckedCreateInput>
+  }
+
+  /**
+   * GithubIntegration createMany
+   */
+  export type GithubIntegrationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GithubIntegrations.
+     */
+    data: GithubIntegrationCreateManyInput | GithubIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GithubIntegration createManyAndReturn
+   */
+  export type GithubIntegrationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to create many GithubIntegrations.
+     */
+    data: GithubIntegrationCreateManyInput | GithubIntegrationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GithubIntegration update
+   */
+  export type GithubIntegrationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GithubIntegration.
+     */
+    data: XOR<GithubIntegrationUpdateInput, GithubIntegrationUncheckedUpdateInput>
+    /**
+     * Choose, which GithubIntegration to update.
+     */
+    where: GithubIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GithubIntegration updateMany
+   */
+  export type GithubIntegrationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GithubIntegrations.
+     */
+    data: XOR<GithubIntegrationUpdateManyMutationInput, GithubIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which GithubIntegrations to update
+     */
+    where?: GithubIntegrationWhereInput
+    /**
+     * Limit how many GithubIntegrations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GithubIntegration updateManyAndReturn
+   */
+  export type GithubIntegrationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * The data used to update GithubIntegrations.
+     */
+    data: XOR<GithubIntegrationUpdateManyMutationInput, GithubIntegrationUncheckedUpdateManyInput>
+    /**
+     * Filter which GithubIntegrations to update
+     */
+    where?: GithubIntegrationWhereInput
+    /**
+     * Limit how many GithubIntegrations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GithubIntegration upsert
+   */
+  export type GithubIntegrationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GithubIntegration to update in case it exists.
+     */
+    where: GithubIntegrationWhereUniqueInput
+    /**
+     * In case the GithubIntegration found by the `where` argument doesn't exist, create a new GithubIntegration with this data.
+     */
+    create: XOR<GithubIntegrationCreateInput, GithubIntegrationUncheckedCreateInput>
+    /**
+     * In case the GithubIntegration was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GithubIntegrationUpdateInput, GithubIntegrationUncheckedUpdateInput>
+  }
+
+  /**
+   * GithubIntegration delete
+   */
+  export type GithubIntegrationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+    /**
+     * Filter which GithubIntegration to delete.
+     */
+    where: GithubIntegrationWhereUniqueInput
+  }
+
+  /**
+   * GithubIntegration deleteMany
+   */
+  export type GithubIntegrationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GithubIntegrations to delete
+     */
+    where?: GithubIntegrationWhereInput
+    /**
+     * Limit how many GithubIntegrations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GithubIntegration without action
+   */
+  export type GithubIntegrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GithubIntegration
+     */
+    select?: GithubIntegrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GithubIntegration
+     */
+    omit?: GithubIntegrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GithubIntegrationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -8328,6 +9552,17 @@ export namespace Prisma {
   };
 
   export type GhostIntegrationScalarFieldEnum = (typeof GhostIntegrationScalarFieldEnum)[keyof typeof GhostIntegrationScalarFieldEnum]
+
+
+  export const GithubIntegrationScalarFieldEnum: {
+    id: 'id',
+    website_id: 'website_id',
+    api_key: 'api_key',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type GithubIntegrationScalarFieldEnum = (typeof GithubIntegrationScalarFieldEnum)[keyof typeof GithubIntegrationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8552,6 +9787,7 @@ export namespace Prisma {
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     articles?: ArticleListRelationFilter
     ghostIntegration?: XOR<GhostIntegrationNullableScalarRelationFilter, GhostIntegrationWhereInput> | null
+    GithubIntegration?: GithubIntegrationListRelationFilter
   }
 
   export type WebsiteOrderByWithRelationInput = {
@@ -8567,6 +9803,7 @@ export namespace Prisma {
     user?: UserOrderByWithRelationInput
     articles?: ArticleOrderByRelationAggregateInput
     ghostIntegration?: GhostIntegrationOrderByWithRelationInput
+    GithubIntegration?: GithubIntegrationOrderByRelationAggregateInput
   }
 
   export type WebsiteWhereUniqueInput = Prisma.AtLeast<{
@@ -8585,6 +9822,7 @@ export namespace Prisma {
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     articles?: ArticleListRelationFilter
     ghostIntegration?: XOR<GhostIntegrationNullableScalarRelationFilter, GhostIntegrationWhereInput> | null
+    GithubIntegration?: GithubIntegrationListRelationFilter
   }, "id" | "slug">
 
   export type WebsiteOrderByWithAggregationInput = {
@@ -8860,6 +10098,63 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"GhostIntegration"> | Date | string
   }
 
+  export type GithubIntegrationWhereInput = {
+    AND?: GithubIntegrationWhereInput | GithubIntegrationWhereInput[]
+    OR?: GithubIntegrationWhereInput[]
+    NOT?: GithubIntegrationWhereInput | GithubIntegrationWhereInput[]
+    id?: IntFilter<"GithubIntegration"> | number
+    website_id?: IntFilter<"GithubIntegration"> | number
+    api_key?: StringFilter<"GithubIntegration"> | string
+    created_at?: DateTimeFilter<"GithubIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"GithubIntegration"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }
+
+  export type GithubIntegrationOrderByWithRelationInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    website?: WebsiteOrderByWithRelationInput
+  }
+
+  export type GithubIntegrationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    website_id?: number
+    AND?: GithubIntegrationWhereInput | GithubIntegrationWhereInput[]
+    OR?: GithubIntegrationWhereInput[]
+    NOT?: GithubIntegrationWhereInput | GithubIntegrationWhereInput[]
+    api_key?: StringFilter<"GithubIntegration"> | string
+    created_at?: DateTimeFilter<"GithubIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"GithubIntegration"> | Date | string
+    website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
+  }, "id" | "website_id">
+
+  export type GithubIntegrationOrderByWithAggregationInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: GithubIntegrationCountOrderByAggregateInput
+    _avg?: GithubIntegrationAvgOrderByAggregateInput
+    _max?: GithubIntegrationMaxOrderByAggregateInput
+    _min?: GithubIntegrationMinOrderByAggregateInput
+    _sum?: GithubIntegrationSumOrderByAggregateInput
+  }
+
+  export type GithubIntegrationScalarWhereWithAggregatesInput = {
+    AND?: GithubIntegrationScalarWhereWithAggregatesInput | GithubIntegrationScalarWhereWithAggregatesInput[]
+    OR?: GithubIntegrationScalarWhereWithAggregatesInput[]
+    NOT?: GithubIntegrationScalarWhereWithAggregatesInput | GithubIntegrationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"GithubIntegration"> | number
+    website_id?: IntWithAggregatesFilter<"GithubIntegration"> | number
+    api_key?: StringWithAggregatesFilter<"GithubIntegration"> | string
+    created_at?: DateTimeWithAggregatesFilter<"GithubIntegration"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"GithubIntegration"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -8987,6 +10282,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutWebsitesInput
     articles?: ArticleCreateNestedManyWithoutWebsiteInput
     ghostIntegration?: GhostIntegrationCreateNestedOneWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateInput = {
@@ -9001,6 +10297,7 @@ export namespace Prisma {
     updated_at?: Date | string
     articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
     ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUpdateInput = {
@@ -9014,6 +10311,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
     articles?: ArticleUpdateManyWithoutWebsiteNestedInput
     ghostIntegration?: GhostIntegrationUpdateOneWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateInput = {
@@ -9028,6 +10326,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
     ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteCreateManyInput = {
@@ -9318,6 +10617,58 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GithubIntegrationCreateInput = {
+    api_key: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    website: WebsiteCreateNestedOneWithoutGithubIntegrationInput
+  }
+
+  export type GithubIntegrationUncheckedCreateInput = {
+    id?: number
+    website_id: number
+    api_key: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GithubIntegrationUpdateInput = {
+    api_key?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    website?: WebsiteUpdateOneRequiredWithoutGithubIntegrationNestedInput
+  }
+
+  export type GithubIntegrationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    website_id?: IntFieldUpdateOperationsInput | number
+    api_key?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GithubIntegrationCreateManyInput = {
+    id?: number
+    website_id: number
+    api_key: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GithubIntegrationUpdateManyMutationInput = {
+    api_key?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GithubIntegrationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    website_id?: IntFieldUpdateOperationsInput | number
+    api_key?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -9521,7 +10872,17 @@ export namespace Prisma {
     isNot?: GhostIntegrationWhereInput | null
   }
 
+  export type GithubIntegrationListRelationFilter = {
+    every?: GithubIntegrationWhereInput
+    some?: GithubIntegrationWhereInput
+    none?: GithubIntegrationWhereInput
+  }
+
   export type ArticleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GithubIntegrationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -9771,6 +11132,40 @@ export namespace Prisma {
     website_id?: SortOrder
   }
 
+  export type GithubIntegrationCountOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GithubIntegrationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+  }
+
+  export type GithubIntegrationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GithubIntegrationMinOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+    api_key?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GithubIntegrationSumOrderByAggregateInput = {
+    id?: SortOrder
+    website_id?: SortOrder
+  }
+
   export type SessionCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -9942,6 +11337,13 @@ export namespace Prisma {
     connect?: GhostIntegrationWhereUniqueInput
   }
 
+  export type GithubIntegrationCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<GithubIntegrationCreateWithoutWebsiteInput, GithubIntegrationUncheckedCreateWithoutWebsiteInput> | GithubIntegrationCreateWithoutWebsiteInput[] | GithubIntegrationUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: GithubIntegrationCreateOrConnectWithoutWebsiteInput | GithubIntegrationCreateOrConnectWithoutWebsiteInput[]
+    createMany?: GithubIntegrationCreateManyWebsiteInputEnvelope
+    connect?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+  }
+
   export type ArticleUncheckedCreateNestedManyWithoutWebsiteInput = {
     create?: XOR<ArticleCreateWithoutWebsiteInput, ArticleUncheckedCreateWithoutWebsiteInput> | ArticleCreateWithoutWebsiteInput[] | ArticleUncheckedCreateWithoutWebsiteInput[]
     connectOrCreate?: ArticleCreateOrConnectWithoutWebsiteInput | ArticleCreateOrConnectWithoutWebsiteInput[]
@@ -9953,6 +11355,13 @@ export namespace Prisma {
     create?: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
     connectOrCreate?: GhostIntegrationCreateOrConnectWithoutWebsiteInput
     connect?: GhostIntegrationWhereUniqueInput
+  }
+
+  export type GithubIntegrationUncheckedCreateNestedManyWithoutWebsiteInput = {
+    create?: XOR<GithubIntegrationCreateWithoutWebsiteInput, GithubIntegrationUncheckedCreateWithoutWebsiteInput> | GithubIntegrationCreateWithoutWebsiteInput[] | GithubIntegrationUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: GithubIntegrationCreateOrConnectWithoutWebsiteInput | GithubIntegrationCreateOrConnectWithoutWebsiteInput[]
+    createMany?: GithubIntegrationCreateManyWebsiteInputEnvelope
+    connect?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -9991,6 +11400,20 @@ export namespace Prisma {
     update?: XOR<XOR<GhostIntegrationUpdateToOneWithWhereWithoutWebsiteInput, GhostIntegrationUpdateWithoutWebsiteInput>, GhostIntegrationUncheckedUpdateWithoutWebsiteInput>
   }
 
+  export type GithubIntegrationUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<GithubIntegrationCreateWithoutWebsiteInput, GithubIntegrationUncheckedCreateWithoutWebsiteInput> | GithubIntegrationCreateWithoutWebsiteInput[] | GithubIntegrationUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: GithubIntegrationCreateOrConnectWithoutWebsiteInput | GithubIntegrationCreateOrConnectWithoutWebsiteInput[]
+    upsert?: GithubIntegrationUpsertWithWhereUniqueWithoutWebsiteInput | GithubIntegrationUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: GithubIntegrationCreateManyWebsiteInputEnvelope
+    set?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    disconnect?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    delete?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    connect?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    update?: GithubIntegrationUpdateWithWhereUniqueWithoutWebsiteInput | GithubIntegrationUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: GithubIntegrationUpdateManyWithWhereWithoutWebsiteInput | GithubIntegrationUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: GithubIntegrationScalarWhereInput | GithubIntegrationScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -10021,6 +11444,20 @@ export namespace Prisma {
     delete?: GhostIntegrationWhereInput | boolean
     connect?: GhostIntegrationWhereUniqueInput
     update?: XOR<XOR<GhostIntegrationUpdateToOneWithWhereWithoutWebsiteInput, GhostIntegrationUpdateWithoutWebsiteInput>, GhostIntegrationUncheckedUpdateWithoutWebsiteInput>
+  }
+
+  export type GithubIntegrationUncheckedUpdateManyWithoutWebsiteNestedInput = {
+    create?: XOR<GithubIntegrationCreateWithoutWebsiteInput, GithubIntegrationUncheckedCreateWithoutWebsiteInput> | GithubIntegrationCreateWithoutWebsiteInput[] | GithubIntegrationUncheckedCreateWithoutWebsiteInput[]
+    connectOrCreate?: GithubIntegrationCreateOrConnectWithoutWebsiteInput | GithubIntegrationCreateOrConnectWithoutWebsiteInput[]
+    upsert?: GithubIntegrationUpsertWithWhereUniqueWithoutWebsiteInput | GithubIntegrationUpsertWithWhereUniqueWithoutWebsiteInput[]
+    createMany?: GithubIntegrationCreateManyWebsiteInputEnvelope
+    set?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    disconnect?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    delete?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    connect?: GithubIntegrationWhereUniqueInput | GithubIntegrationWhereUniqueInput[]
+    update?: GithubIntegrationUpdateWithWhereUniqueWithoutWebsiteInput | GithubIntegrationUpdateWithWhereUniqueWithoutWebsiteInput[]
+    updateMany?: GithubIntegrationUpdateManyWithWhereWithoutWebsiteInput | GithubIntegrationUpdateManyWithWhereWithoutWebsiteInput[]
+    deleteMany?: GithubIntegrationScalarWhereInput | GithubIntegrationScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutSubscriptionsInput = {
@@ -10076,6 +11513,20 @@ export namespace Prisma {
     upsert?: WebsiteUpsertWithoutGhostIntegrationInput
     connect?: WebsiteWhereUniqueInput
     update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutGhostIntegrationInput, WebsiteUpdateWithoutGhostIntegrationInput>, WebsiteUncheckedUpdateWithoutGhostIntegrationInput>
+  }
+
+  export type WebsiteCreateNestedOneWithoutGithubIntegrationInput = {
+    create?: XOR<WebsiteCreateWithoutGithubIntegrationInput, WebsiteUncheckedCreateWithoutGithubIntegrationInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutGithubIntegrationInput
+    connect?: WebsiteWhereUniqueInput
+  }
+
+  export type WebsiteUpdateOneRequiredWithoutGithubIntegrationNestedInput = {
+    create?: XOR<WebsiteCreateWithoutGithubIntegrationInput, WebsiteUncheckedCreateWithoutGithubIntegrationInput>
+    connectOrCreate?: WebsiteCreateOrConnectWithoutGithubIntegrationInput
+    upsert?: WebsiteUpsertWithoutGithubIntegrationInput
+    connect?: WebsiteWhereUniqueInput
+    update?: XOR<XOR<WebsiteUpdateToOneWithWhereWithoutGithubIntegrationInput, WebsiteUpdateWithoutGithubIntegrationInput>, WebsiteUncheckedUpdateWithoutGithubIntegrationInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -10319,6 +11770,7 @@ export namespace Prisma {
     updated_at?: Date | string
     articles?: ArticleCreateNestedManyWithoutWebsiteInput
     ghostIntegration?: GhostIntegrationCreateNestedOneWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateWithoutUserInput = {
@@ -10332,6 +11784,7 @@ export namespace Prisma {
     updated_at?: Date | string
     articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
     ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutUserInput = {
@@ -10576,6 +12029,29 @@ export namespace Prisma {
     create: XOR<GhostIntegrationCreateWithoutWebsiteInput, GhostIntegrationUncheckedCreateWithoutWebsiteInput>
   }
 
+  export type GithubIntegrationCreateWithoutWebsiteInput = {
+    api_key: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GithubIntegrationUncheckedCreateWithoutWebsiteInput = {
+    id?: number
+    api_key: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GithubIntegrationCreateOrConnectWithoutWebsiteInput = {
+    where: GithubIntegrationWhereUniqueInput
+    create: XOR<GithubIntegrationCreateWithoutWebsiteInput, GithubIntegrationUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type GithubIntegrationCreateManyWebsiteInputEnvelope = {
+    data: GithubIntegrationCreateManyWebsiteInput | GithubIntegrationCreateManyWebsiteInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutWebsitesInput = {
     update: XOR<UserUpdateWithoutWebsitesInput, UserUncheckedUpdateWithoutWebsitesInput>
     create: XOR<UserCreateWithoutWebsitesInput, UserUncheckedCreateWithoutWebsitesInput>
@@ -10668,6 +12144,33 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GithubIntegrationUpsertWithWhereUniqueWithoutWebsiteInput = {
+    where: GithubIntegrationWhereUniqueInput
+    update: XOR<GithubIntegrationUpdateWithoutWebsiteInput, GithubIntegrationUncheckedUpdateWithoutWebsiteInput>
+    create: XOR<GithubIntegrationCreateWithoutWebsiteInput, GithubIntegrationUncheckedCreateWithoutWebsiteInput>
+  }
+
+  export type GithubIntegrationUpdateWithWhereUniqueWithoutWebsiteInput = {
+    where: GithubIntegrationWhereUniqueInput
+    data: XOR<GithubIntegrationUpdateWithoutWebsiteInput, GithubIntegrationUncheckedUpdateWithoutWebsiteInput>
+  }
+
+  export type GithubIntegrationUpdateManyWithWhereWithoutWebsiteInput = {
+    where: GithubIntegrationScalarWhereInput
+    data: XOR<GithubIntegrationUpdateManyMutationInput, GithubIntegrationUncheckedUpdateManyWithoutWebsiteInput>
+  }
+
+  export type GithubIntegrationScalarWhereInput = {
+    AND?: GithubIntegrationScalarWhereInput | GithubIntegrationScalarWhereInput[]
+    OR?: GithubIntegrationScalarWhereInput[]
+    NOT?: GithubIntegrationScalarWhereInput | GithubIntegrationScalarWhereInput[]
+    id?: IntFilter<"GithubIntegration"> | number
+    website_id?: IntFilter<"GithubIntegration"> | number
+    api_key?: StringFilter<"GithubIntegration"> | string
+    created_at?: DateTimeFilter<"GithubIntegration"> | Date | string
+    updated_at?: DateTimeFilter<"GithubIntegration"> | Date | string
+  }
+
   export type UserCreateWithoutSubscriptionsInput = {
     id?: string
     email: string
@@ -10738,6 +12241,7 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutWebsitesInput
     ghostIntegration?: GhostIntegrationCreateNestedOneWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateWithoutArticlesInput = {
@@ -10751,6 +12255,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutArticlesInput = {
@@ -10779,6 +12284,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
     ghostIntegration?: GhostIntegrationUpdateOneWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateWithoutArticlesInput = {
@@ -10792,6 +12298,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteCreateWithoutGhostIntegrationInput = {
@@ -10804,6 +12311,7 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutWebsitesInput
     articles?: ArticleCreateNestedManyWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteUncheckedCreateWithoutGhostIntegrationInput = {
@@ -10817,6 +12325,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
+    GithubIntegration?: GithubIntegrationUncheckedCreateNestedManyWithoutWebsiteInput
   }
 
   export type WebsiteCreateOrConnectWithoutGhostIntegrationInput = {
@@ -10845,6 +12354,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
     articles?: ArticleUpdateManyWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateWithoutGhostIntegrationInput = {
@@ -10858,6 +12368,77 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUncheckedUpdateManyWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteCreateWithoutGithubIntegrationInput = {
+    name: string
+    url: string
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutWebsitesInput
+    articles?: ArticleCreateNestedManyWithoutWebsiteInput
+    ghostIntegration?: GhostIntegrationCreateNestedOneWithoutWebsiteInput
+  }
+
+  export type WebsiteUncheckedCreateWithoutGithubIntegrationInput = {
+    id?: number
+    user_id: string
+    name: string
+    url: string
+    context?: string | null
+    slug: string
+    auto_publish?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
+    ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
+  }
+
+  export type WebsiteCreateOrConnectWithoutGithubIntegrationInput = {
+    where: WebsiteWhereUniqueInput
+    create: XOR<WebsiteCreateWithoutGithubIntegrationInput, WebsiteUncheckedCreateWithoutGithubIntegrationInput>
+  }
+
+  export type WebsiteUpsertWithoutGithubIntegrationInput = {
+    update: XOR<WebsiteUpdateWithoutGithubIntegrationInput, WebsiteUncheckedUpdateWithoutGithubIntegrationInput>
+    create: XOR<WebsiteCreateWithoutGithubIntegrationInput, WebsiteUncheckedCreateWithoutGithubIntegrationInput>
+    where?: WebsiteWhereInput
+  }
+
+  export type WebsiteUpdateToOneWithWhereWithoutGithubIntegrationInput = {
+    where?: WebsiteWhereInput
+    data: XOR<WebsiteUpdateWithoutGithubIntegrationInput, WebsiteUncheckedUpdateWithoutGithubIntegrationInput>
+  }
+
+  export type WebsiteUpdateWithoutGithubIntegrationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
+    articles?: ArticleUpdateManyWithoutWebsiteNestedInput
+    ghostIntegration?: GhostIntegrationUpdateOneWithoutWebsiteNestedInput
+  }
+
+  export type WebsiteUncheckedUpdateWithoutGithubIntegrationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    context?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
+    auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
+    ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -10956,6 +12537,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUpdateManyWithoutWebsiteNestedInput
     ghostIntegration?: GhostIntegrationUpdateOneWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateWithoutUserInput = {
@@ -10969,6 +12551,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
     ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
+    GithubIntegration?: GithubIntegrationUncheckedUpdateManyWithoutWebsiteNestedInput
   }
 
   export type WebsiteUncheckedUpdateManyWithoutUserInput = {
@@ -10991,6 +12574,13 @@ export namespace Prisma {
     markdown?: string | null
     job_id?: string | null
     backlinks?: ArticleCreatebacklinksInput | string[]
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GithubIntegrationCreateManyWebsiteInput = {
+    id?: number
+    api_key: string
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -11029,6 +12619,26 @@ export namespace Prisma {
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GithubIntegrationUpdateWithoutWebsiteInput = {
+    api_key?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GithubIntegrationUncheckedUpdateWithoutWebsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    api_key?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GithubIntegrationUncheckedUpdateManyWithoutWebsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    api_key?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -2,6 +2,7 @@
 
 import { AppSidebar } from "@/components/app-sidebar";
 import { GhostIntegrationForm } from "@/components/ghost-integration-form"; // We will create this next
+import { GithubIntegrationForm } from "@/components/github-integration-form"; // Import the new form
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,7 @@ export default function IntegrationsPage() {
   const params = useParams<{ slug: string }>();
   const websiteSlug = params.slug;
   const [isGhostOpen, setIsGhostOpen] = useState(false);
-  // Add states for other integrations later
+  const [isGithubOpen, setIsGithubOpen] = useState(false); // Add state for GitHub
 
   const {
     data: website,
@@ -94,21 +95,28 @@ export default function IntegrationsPage() {
                       </CollapsibleTrigger>
                     </div>
                     <CollapsibleContent className="space-y-2 p-4">
-                      <GhostIntegrationForm websiteId={website.id} />
+                      <GhostIntegrationForm />
                     </CollapsibleContent>
                   </Collapsible>
 
-                  {/* GitHub Integration (Placeholder) */}
-                  <Collapsible disabled>
-                    <div className="flex items-center justify-between space-x-4 rounded-md border px-4 py-2 opacity-50">
+                  {/* GitHub Integration */}
+                  <Collapsible
+                    open={isGithubOpen}
+                    onOpenChange={setIsGithubOpen}
+                  >
+                    <div className="flex items-center justify-between space-x-4 rounded-md border px-4 py-2">
                       <h4 className="text-sm font-semibold">
                         GitHub Integration
                       </h4>
-                      <Button variant="ghost" size="sm" disabled>
-                        Configure
-                      </Button>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          {isGithubOpen ? "Close" : "Configure"}
+                        </Button>
+                      </CollapsibleTrigger>
                     </div>
-                    {/* <CollapsibleContent>...</CollapsibleContent> */}
+                    <CollapsibleContent className="space-y-2 p-4">
+                      <GithubIntegrationForm />
+                    </CollapsibleContent>
                   </Collapsible>
 
                   {/* Google Search Console Integration (Placeholder) */}
