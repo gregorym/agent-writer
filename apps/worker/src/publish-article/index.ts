@@ -53,6 +53,15 @@ export async function execute(job: any): Promise<void> {
   if (ghost) {
     await publishToGhost(article, ghost);
   }
+
+  await prisma?.article.update({
+    where: {
+      id: article.id,
+    },
+    data: {
+      published_at: new Date(),
+    },
+  });
 }
 
 async function processAndUploadImage(
