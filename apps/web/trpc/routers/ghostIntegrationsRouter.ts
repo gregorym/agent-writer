@@ -3,65 +3,77 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
-const ghostIntegrationSchema = z.object({
-  websiteId: z.string(),
+// Helper function to verify website ownership
+const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
+  const website = await prisma.website.findUnique({
+    where: { slug: websiteSlug },
+    select: { id: true, user_id: true }, // Select only necessary fields
+  });
+
+  if (!website) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Website not found.",
+    });
+  }
+
+  if (website.user_id !== userId) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "You do not have permission to access this website's resources.",
+    });
+  }
+
+  return website; // Return website id for convenience
+};
+
+const ghostIntegrationInputBaseSchema = z.object({
+  websiteSlug: z.string(),
+});
+
+const ghostIntegrationCreateSchema = ghostIntegrationInputBaseSchema.extend({
   apiKey: z.string().min(1, "API Key cannot be empty"),
   apiUrl: z.string().url("Invalid API URL format"),
 });
 
-const ghostIntegrationUpdateSchema = z.object({
-  websiteId: z.string(),
+const ghostIntegrationUpdateSchema = ghostIntegrationInputBaseSchema.extend({
   apiKey: z.string().min(1, "API Key cannot be empty").optional(),
   apiUrl: z.string().url("Invalid API URL format").optional(),
 });
 
 export const ghostIntegrationsRouter = router({
   get: protectedProcedure
-    .input(z.object({ websiteId: z.string() }))
+    .input(ghostIntegrationInputBaseSchema)
     .query(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
-      const { websiteId } = input;
+      const { websiteSlug } = input;
 
-      // Verify user owns the website associated with the integration
+      // 1. Verify ownership first
+      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+
+      // 2. Fetch the integration
       const integration = await prisma.ghostIntegration.findUnique({
-        where: { website_id: websiteId },
-        include: { website: true },
+        where: { website_id: website.id },
+        // No need to include website again, we already verified ownership
       });
 
-      // It's okay if integration is null, means it hasn't been set up
-      if (integration && integration.website.user_id !== userId) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You do not have permission to view this integration.",
-        });
-      }
-
-      // Return only necessary fields, exclude sensitive data if needed in future
-      // For now, returning the whole object is fine as it's needed for the form
+      // Integration might not exist, which is fine for a 'get' operation
       return integration;
     }),
 
   create: protectedProcedure
-    .input(ghostIntegrationSchema)
+    .input(ghostIntegrationCreateSchema)
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
-      const { websiteId, apiKey, apiUrl } = input;
+      const { websiteSlug, apiKey, apiUrl } = input;
 
-      // Verify user owns the website
-      const website = await prisma.website.findUnique({
-        where: { id: websiteId, user_id: userId },
-      });
+      // 1. Verify ownership
+      const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
-      if (!website) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Website not found or you do not have permission.",
-        });
-      }
-
-      // Check if integration already exists
+      // 2. Check if integration already exists
       const existingIntegration = await prisma.ghostIntegration.findUnique({
-        where: { website_id: websiteId },
+        where: { website_id: website.id },
+        select: { id: true }, // Only need to know if it exists
       });
 
       if (existingIntegration) {
@@ -71,10 +83,11 @@ export const ghostIntegrationsRouter = router({
         });
       }
 
+      // 3. Create the integration
       try {
         const newIntegration = await prisma.ghostIntegration.create({
           data: {
-            website_id: websiteId,
+            website_id: website.id,
             api_key: apiKey,
             api_url: apiUrl,
           },
@@ -94,21 +107,12 @@ export const ghostIntegrationsRouter = router({
     .input(ghostIntegrationUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
-      const { websiteId, apiKey, apiUrl } = input;
+      const { websiteSlug, apiKey, apiUrl } = input;
 
-      // Verify user owns the website associated with the integration
-      const integration = await prisma.ghostIntegration.findUnique({
-        where: { website_id: websiteId },
-        include: { website: true },
-      });
+      // 1. Verify ownership
+      const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
-      if (!integration || integration.website.user_id !== userId) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Ghost integration not found or you do not have permission.",
-        });
-      }
-
+      // 2. Check if at least one field is provided for update
       if (!apiKey && !apiUrl) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -117,9 +121,23 @@ export const ghostIntegrationsRouter = router({
         });
       }
 
+      // 3. Check if integration exists before trying to update
+      const integration = await prisma.ghostIntegration.findUnique({
+        where: { website_id: website.id },
+        select: { id: true }, // Only need ID to confirm existence
+      });
+
+      if (!integration) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Ghost integration not found for this website.",
+        });
+      }
+
+      // 4. Update the integration
       try {
         const updatedIntegration = await prisma.ghostIntegration.update({
-          where: { website_id: websiteId },
+          where: { website_id: website.id },
           data: {
             ...(apiKey && { api_key: apiKey }),
             ...(apiUrl && { api_url: apiUrl }),
@@ -128,6 +146,7 @@ export const ghostIntegrationsRouter = router({
         return updatedIntegration;
       } catch (error) {
         console.error("Failed to update Ghost integration:", error);
+        // Could add more specific error handling, e.g., for unique constraint violations if any
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to update Ghost integration",
@@ -137,27 +156,33 @@ export const ghostIntegrationsRouter = router({
     }),
 
   delete: protectedProcedure
-    .input(z.object({ websiteId: z.string() }))
+    .input(ghostIntegrationInputBaseSchema) // Use base schema with websiteSlug
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
-      const { websiteId } = input;
+      const { websiteSlug } = input; // Use websiteSlug from input
 
-      // Verify user owns the website associated with the integration
+      // 1. Verify ownership
+      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+
+      // 2. Check if integration exists before trying to delete
       const integration = await prisma.ghostIntegration.findUnique({
-        where: { website_id: websiteId },
-        include: { website: true },
+        where: { website_id: website.id },
+        select: { id: true }, // Only need ID to confirm existence
       });
 
-      if (!integration || integration.website.user_id !== userId) {
+      if (!integration) {
+        // It's arguably okay to return success if it doesn't exist (idempotent delete)
+        // But throwing NOT_FOUND might be clearer for the client.
         throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Ghost integration not found or you do not have permission.",
+          code: "NOT_FOUND",
+          message: "Ghost integration not found for this website.",
         });
       }
 
+      // 3. Delete the integration
       try {
         await prisma.ghostIntegration.delete({
-          where: { website_id: websiteId },
+          where: { website_id: website.id },
         });
         return {
           success: true,

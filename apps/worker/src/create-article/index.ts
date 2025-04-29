@@ -3,6 +3,7 @@ dotenv.config(); // Ensure environment variables are loaded
 
 import * as dotenv from "dotenv";
 import { Image } from "mdast"; // Import Image type for specific node check
+import { toString } from "mdast-util-to-string";
 import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse"; // Changed from require
 import remarkStringify from "remark-stringify"; // Changed from require
@@ -97,6 +98,14 @@ Include the following backlinks in the article:
   });
 
   await Promise.all(imagePromises);
+
+  let title = "";
+  visit(tree, "heading", (node) => {
+    if (node.depth === 1 && !title) {
+      title = toString(node);
+    }
+  });
+
   const updatedMarkdown = unified().use(remarkStringify).stringify(tree);
 
   await prisma?.article.update({
@@ -104,6 +113,7 @@ Include the following backlinks in the article:
       id: article.id,
     },
     data: {
+      title: title,
       markdown: updatedMarkdown,
     },
   });

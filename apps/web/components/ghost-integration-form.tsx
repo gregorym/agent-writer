@@ -13,7 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation"; // Use next/navigation
+import { Eye, EyeOff } from "lucide-react"; // Import icons
+import { useParams, useRouter } from "next/navigation"; // Use next/navigation
+import { useEffect, useState } from "react"; // Import useState and useEffect
 import { useForm } from "react-hook-form";
 import { toast } from "sonner"; // Assuming you use sonner for toasts
 import { z } from "zod";
@@ -34,41 +36,45 @@ interface GhostIntegrationFormProps {
 export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
   const router = useRouter();
   const utils = trpc.useUtils();
+  const params = useParams(); // Get raw params
+  const [showApiKey, setShowApiKey] = useState(false);
 
-  // Fetch existing integration data
+  // Validate slug
+  const slug = typeof params.slug === "string" ? params.slug : undefined;
+
+  // Fetch existing integration data - disable query if slug is invalid
   const {
     data: integration,
     isLoading: isLoadingIntegration,
     error: integrationError,
   } = trpc.ghost.get.useQuery(
-    { websiteId },
-    {
-      staleTime: Infinity, // Avoid refetching immediately after mutation
-    }
+    { websiteSlug: slug! }, // Use validated slug, non-null assertion is safe here due to enabled flag
+    { enabled: !!slug } // Only run query if slug is a valid string
   );
 
   const form = useForm<GhostIntegrationFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: async () => {
-      // Fetch data once for default values
-      const fetchedIntegration = await utils.ghost.get.fetch({
-        websiteId,
-      });
-      return {
-        apiKey: fetchedIntegration?.api_key ?? "",
-        apiUrl: fetchedIntegration?.api_url ?? "",
-      };
-    },
-    // Re-initialize form when integration data changes (e.g., after create/update/delete)
-    values: integration
-      ? { apiKey: integration.api_key, apiUrl: integration.api_url }
-      : { apiKey: "", apiUrl: "" },
+    defaultValues: { apiKey: "", apiUrl: "" }, // Initialize with defaults
   });
+
+  // Update form values when integration data loads or changes
+  useEffect(() => {
+    if (integration) {
+      form.reset({
+        apiKey: integration.api_key,
+        apiUrl: integration.api_url,
+      });
+    } else {
+      form.reset({ apiKey: "", apiUrl: "" }); // Reset if no integration
+    }
+  }, [integration, form]);
 
   const createMutation = trpc.ghost.create.useMutation({
     onSuccess: async () => {
       toast.success("Ghost integration created successfully!");
-      await utils.ghost.get.invalidate({ websiteId });
+      if (slug) {
+        await utils.ghost.get.invalidate({ websiteSlug: slug });
+      }
       // Optionally reset form or navigate
     },
     onError: (error) => {
@@ -79,7 +85,9 @@ export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
   const updateMutation = trpc.ghost.update.useMutation({
     onSuccess: async () => {
       toast.success("Ghost integration updated successfully!");
-      await utils.ghost.get.invalidate({ websiteId });
+      if (slug) {
+        await utils.ghost.get.invalidate({ websiteSlug: slug });
+      }
     },
     onError: (error) => {
       toast.error(`Failed to update integration: ${error.message}`);
@@ -89,7 +97,9 @@ export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
   const deleteMutation = trpc.ghost.delete.useMutation({
     onSuccess: async () => {
       toast.success("Ghost integration deleted successfully!");
-      await utils.ghost.get.invalidate({ websiteId });
+      if (slug) {
+        await utils.ghost.get.invalidate({ websiteSlug: slug });
+      }
       form.reset({ apiKey: "", apiUrl: "" }); // Reset form after deletion
     },
     onError: (error) => {
@@ -98,17 +108,21 @@ export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
   });
 
   function onSubmit(values: GhostIntegrationFormValues) {
+    if (!slug) {
+      toast.error("Website slug is missing or invalid.");
+      return;
+    }
     if (integration) {
       // Update existing integration
       updateMutation.mutate({
-        websiteId,
+        websiteSlug: slug,
         apiKey: values.apiKey,
         apiUrl: values.apiUrl,
       });
     } else {
       // Create new integration
       createMutation.mutate({
-        websiteId,
+        websiteSlug: slug,
         apiKey: values.apiKey,
         apiUrl: values.apiUrl,
       });
@@ -116,13 +130,23 @@ export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
   }
 
   function handleDelete() {
+    if (!slug) {
+      toast.error("Website slug is missing or invalid.");
+      return;
+    }
     if (integration) {
-      deleteMutation.mutate({ websiteId });
+      deleteMutation.mutate({ websiteSlug: slug });
     } else {
       toast.info("No integration exists to delete.");
     }
   }
 
+  // Handle invalid slug case before rendering the form
+  if (!slug) {
+    return <p className="text-red-500">Invalid website identifier.</p>;
+  }
+
+  // Loading state based on query (only runs if slug is valid)
   if (isLoadingIntegration) {
     return (
       <div className="space-y-4">
@@ -133,6 +157,7 @@ export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
     );
   }
 
+  // Error state from query
   if (integrationError) {
     return (
       <p className="text-red-500">
@@ -175,14 +200,35 @@ export function GhostIntegrationForm({ websiteId }: GhostIntegrationFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Ghost Admin API Key</FormLabel>
-              <FormControl>
-                <Input
-                  type="password" // Use password type for keys
-                  placeholder="Enter your Ghost Admin API Key"
-                  {...field}
+              <div className="relative">
+                <FormControl>
+                  <Input
+                    type={showApiKey ? "text" : "password"} // Toggle input type
+                    placeholder="Enter your Ghost Admin API Key"
+                    {...field}
+                    disabled={isSubmitting}
+                    className="pr-10" // Add padding to make space for the button
+                    autoComplete="new-password" // Disable browser autocomplete
+                  />
+                </FormControl>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowApiKey(!showApiKey)}
                   disabled={isSubmitting}
-                />
-              </FormControl>
+                >
+                  {showApiKey ? (
+                    <EyeOff className="h-4 w-4" aria-hidden="true" />
+                  ) : (
+                    <Eye className="h-4 w-4" aria-hidden="true" />
+                  )}
+                  <span className="sr-only">
+                    {showApiKey ? "Hide API key" : "Show API key"}
+                  </span>
+                </Button>
+              </div>
               <FormDescription>
                 Find this in your Ghost Admin under Integrations &gt; Custom
                 Integrations.
