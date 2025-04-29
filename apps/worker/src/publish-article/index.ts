@@ -5,12 +5,14 @@ import GhostAdminAPI from "@tryghost/admin-api";
 import * as dotenv from "dotenv";
 import fs from "fs";
 import { marked } from "marked";
-import { Image } from "mdast"; // Import Image type for specific node handling
+import { Heading, Image } from "mdast";
 import os from "os";
 import path from "path";
 import remarkParse from "remark-parse";
-import remarkStringify from "remark-stringify"; // Import remark-stringify
+import remarkStringify from "remark-stringify";
 import { unified } from "unified";
+import { Node } from "unist";
+import { remove } from "unist-util-remove";
 import { visit } from "unist-util-visit";
 import concurrentConsumer from "../utils/concurrent-consumer";
 import { prisma } from "../utils/prisma";
@@ -53,11 +55,6 @@ export async function execute(job: any): Promise<void> {
   }
 }
 
-/**
- * Downloads an image from a URL, saves it temporarily, and uploads it to Ghost.
- * Returns the new Ghost image URL or null if processing fails.
- * Manages temporary file cleanup.
- */
 async function processAndUploadImage(
   originalUrl: string,
   api: GhostAdminAPI
@@ -72,7 +69,6 @@ async function processAndUploadImage(
     const contentType =
       response.headers.get("content-type") || "application/octet-stream";
 
-    // 2. Create temporary file path
     let filename = path.basename(new URL(originalUrl).pathname);
     const extension =
       path.extname(filename) || `.${contentType.split("/")[1] || "tmp"}`;
@@ -87,11 +83,11 @@ async function processAndUploadImage(
     );
 
     await fs.promises.writeFile(tempFilePath, Buffer.from(imageBuffer));
+
     const ghostImage = await api.images.upload({ file: tempFilePath });
-    return ghostImage.url; // Return the new URL
+    return ghostImage.url;
   } catch (error) {
-    console.error(`Failed to process image ${originalUrl}:`, error);
-    return null; // Indicate failure
+    return null;
   } finally {
     if (tempFilePath) {
       try {
@@ -101,13 +97,7 @@ async function processAndUploadImage(
   }
 }
 
-/**
- * Publishes an article to Ghost, handling image uploads and markdown conversion.
- */
-async function publishToGhost(
-  article: any, // Consider defining a stricter type for article
-  ghost: any // Consider defining a stricter type for ghost integration
-): Promise<void> {
+async function publishToGhost(article: any, ghost: any): Promise<void> {
   try {
     const api = new GhostAdminAPI({
       url: ghost.api_url,
@@ -115,15 +105,25 @@ async function publishToGhost(
       version: "v5.0",
     });
 
-    // 1. Setup Markdown processor
-    const processor = unified().use(remarkParse).use(remarkStringify); // Add stringify here
+    const processor = unified().use(remarkParse).use(remarkStringify);
 
-    // 2. Parse Markdown to AST
     const tree = processor.parse(article.markdown);
 
-    // 3. Process images within the AST
+    let h1Removed = false;
+    remove(tree, (node: Node) => {
+      if (
+        !h1Removed &&
+        node.type === "heading" &&
+        (node as Heading).depth === 1
+      ) {
+        h1Removed = true;
+        return true;
+      }
+      return false;
+    });
+
     const imagePromises: Promise<void>[] = [];
-    const processedUrls = new Set<string>(); // Track processed URLs to avoid duplicates
+    const processedUrls = new Set<string>();
 
     visit(tree, "image", (node: Image) => {
       const originalUrl = node.url;
@@ -134,19 +134,13 @@ async function publishToGhost(
           originalUrl.startsWith("https://")) &&
         !processedUrls.has(originalUrl)
       ) {
-        processedUrls.add(originalUrl); // Mark as being processed
+        processedUrls.add(originalUrl);
 
         imagePromises.push(
           (async () => {
             const newUrl = await processAndUploadImage(originalUrl, api);
             if (newUrl) {
-              // Update the node URL directly in the AST
               node.url = newUrl;
-              console.log(`Updated AST node for ${originalUrl} to ${newUrl}`);
-            } else {
-              console.warn(
-                `Keeping original URL for ${originalUrl} due to processing failure.`
-              );
             }
           })()
         );
@@ -156,6 +150,7 @@ async function publishToGhost(
     await Promise.all(imagePromises);
 
     const updatedMarkdown = processor.stringify(tree);
+
     const html = await marked(updatedMarkdown);
 
     await api.posts.add(
@@ -166,9 +161,7 @@ async function publishToGhost(
       },
       { source: "html" }
     );
-    console.log(`Successfully published article "${article.title}" to Ghost.`);
   } catch (error) {
-    console.error("Error publishing to Ghost:", error);
-    throw error; // Re-throw for job tracking
+    throw error;
   }
 }
