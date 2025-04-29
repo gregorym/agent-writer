@@ -11,6 +11,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // Import Select components
 import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react"; // Import icons
@@ -21,10 +28,14 @@ import { toast } from "sonner"; // Assuming you use sonner for toasts
 import { z } from "zod";
 import { Skeleton } from "./ui/skeleton";
 
-// Schema matching the router's create/update inputs
+// Define allowed statuses for the form
+const GhostIntegrationStatus = z.enum(["draft", "published", "scheduled"]);
+
+// Schema matching the router's create/update inputs, now including status
 const formSchema = z.object({
   apiKey: z.string().min(1, "API Key cannot be empty"),
   apiUrl: z.string().url("Invalid API URL format"),
+  status: GhostIntegrationStatus.optional(), // Add optional status to form schema
 });
 
 type GhostIntegrationFormValues = z.infer<typeof formSchema>;
@@ -52,7 +63,7 @@ export function GhostIntegrationForm({}: GhostIntegrationFormProps) {
 
   const form = useForm<GhostIntegrationFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { apiKey: "", apiUrl: "" }, // Initialize with defaults
+    defaultValues: { apiKey: "", apiUrl: "", status: "draft" }, // Initialize with defaults, including status
   });
 
   // Update form values when integration data loads or changes
@@ -61,9 +72,12 @@ export function GhostIntegrationForm({}: GhostIntegrationFormProps) {
       form.reset({
         apiKey: integration.api_key,
         apiUrl: integration.api_url,
+        status:
+          (integration.status as GhostIntegrationFormValues["status"]) ??
+          "draft", // Set status from integration or default
       });
     } else {
-      form.reset({ apiKey: "", apiUrl: "" }); // Reset if no integration
+      form.reset({ apiKey: "", apiUrl: "", status: "draft" }); // Reset if no integration
     }
   }, [integration, form]);
 
@@ -98,7 +112,7 @@ export function GhostIntegrationForm({}: GhostIntegrationFormProps) {
       if (slug) {
         await utils.ghost.get.invalidate({ websiteSlug: slug });
       }
-      form.reset({ apiKey: "", apiUrl: "" }); // Reset form after deletion
+      form.reset({ apiKey: "", apiUrl: "", status: "draft" }); // Reset form after deletion
     },
     onError: (error) => {
       toast.error(`Failed to delete integration: ${error.message}`);
@@ -111,18 +125,20 @@ export function GhostIntegrationForm({}: GhostIntegrationFormProps) {
       return;
     }
     if (integration) {
-      // Update existing integration
+      // Update existing integration, including status
       updateMutation.mutate({
         websiteSlug: slug,
         apiKey: values.apiKey,
         apiUrl: values.apiUrl,
+        status: values.status, // Pass status to update mutation
       });
     } else {
-      // Create new integration
+      // Create new integration (status is optional here, backend might set default)
       createMutation.mutate({
         websiteSlug: slug,
         apiKey: values.apiKey,
         apiUrl: values.apiUrl,
+        // status: values.status, // Decide if status should be sent on create
       });
     }
   }
@@ -235,6 +251,37 @@ export function GhostIntegrationForm({}: GhostIntegrationFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Default Post Status</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={isSubmitting || !integration} // Disable if no integration
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a default status" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="published">Published</SelectItem>
+                  <SelectItem value="scheduled">Scheduled</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                The default status for posts sent to Ghost.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="flex justify-between">
           <Button
             type="submit"

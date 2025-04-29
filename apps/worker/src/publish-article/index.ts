@@ -158,7 +158,7 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
     await api.posts.add(
       {
         title: article.title!,
-        status: "draft",
+        status: ghost.status,
         html,
         feature_image: featureImageUrl ?? undefined,
         feature_image_alt: undefined,

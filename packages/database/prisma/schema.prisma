@@ -108,6 +108,7 @@ model GhostIntegration {
   website_id Int      @unique
   api_key    String
   api_url    String
+  status     String? // Add the status field, make it optional for now
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

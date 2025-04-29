@@ -3,6 +3,10 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
+// Define allowed statuses
+const GhostIntegrationStatus = z.enum(["draft", "published", "scheduled"]);
+type GhostIntegrationStatusType = z.infer<typeof GhostIntegrationStatus>;
+
 // Helper function to verify website ownership
 const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
   const website = await prisma.website.findUnique({
@@ -34,11 +38,13 @@ const ghostIntegrationInputBaseSchema = z.object({
 const ghostIntegrationCreateSchema = ghostIntegrationInputBaseSchema.extend({
   apiKey: z.string().min(1, "API Key cannot be empty"),
   apiUrl: z.string().url("Invalid API URL format"),
+  // Status is not set on creation, defaults in DB or logic if needed
 });
 
 const ghostIntegrationUpdateSchema = ghostIntegrationInputBaseSchema.extend({
   apiKey: z.string().min(1, "API Key cannot be empty").optional(),
   apiUrl: z.string().url("Invalid API URL format").optional(),
+  status: GhostIntegrationStatus.optional(), // Allow updating status
 });
 
 export const ghostIntegrationsRouter = router({
@@ -51,10 +57,10 @@ export const ghostIntegrationsRouter = router({
       // 1. Verify ownership first
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
-      // 2. Fetch the integration
+      // 2. Fetch the integration including the status
       const integration = await prisma.ghostIntegration.findUnique({
         where: { website_id: website.id },
-        // No need to include website again, we already verified ownership
+        // Select status field
       });
 
       // Integration might not exist, which is fine for a 'get' operation
@@ -83,13 +89,14 @@ export const ghostIntegrationsRouter = router({
         });
       }
 
-      // 3. Create the integration
+      // 3. Create the integration (status will have default or be null)
       try {
         const newIntegration = await prisma.ghostIntegration.create({
           data: {
             website_id: website.id,
             api_key: apiKey,
             api_url: apiUrl,
+            // status: 'draft', // Optionally set a default status here if desired
           },
         });
         return newIntegration;
@@ -107,17 +114,18 @@ export const ghostIntegrationsRouter = router({
     .input(ghostIntegrationUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
-      const { websiteSlug, apiKey, apiUrl } = input;
+      const { websiteSlug, apiKey, apiUrl, status } = input; // Include status
 
       // 1. Verify ownership
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
       // 2. Check if at least one field is provided for update
-      if (!apiKey && !apiUrl) {
+      if (!apiKey && !apiUrl && !status) {
+        // Add status check
         throw new TRPCError({
           code: "BAD_REQUEST",
           message:
-            "At least one field (apiKey or apiUrl) must be provided for update.",
+            "At least one field (apiKey, apiUrl, or status) must be provided for update.",
         });
       }
 
@@ -141,6 +149,7 @@ export const ghostIntegrationsRouter = router({
           data: {
             ...(apiKey && { api_key: apiKey }),
             ...(apiUrl && { api_url: apiUrl }),
+            ...(status && { status: status }), // Update status if provided
           },
         });
         return updatedIntegration;

@@ -182,6 +182,7 @@ exports.Prisma.GhostIntegrationScalarFieldEnum = {
   website_id: 'website_id',
   api_key: 'api_key',
   api_url: 'api_url',
+  status: 'status',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

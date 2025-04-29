@@ -7292,6 +7292,7 @@ export namespace Prisma {
     website_id: number | null
     api_key: string | null
     api_url: string | null
+    status: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -7301,6 +7302,7 @@ export namespace Prisma {
     website_id: number | null
     api_key: string | null
     api_url: string | null
+    status: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -7310,6 +7312,7 @@ export namespace Prisma {
     website_id: number
     api_key: number
     api_url: number
+    status: number
     created_at: number
     updated_at: number
     _all: number
@@ -7331,6 +7334,7 @@ export namespace Prisma {
     website_id?: true
     api_key?: true
     api_url?: true
+    status?: true
     created_at?: true
     updated_at?: true
   }
@@ -7340,6 +7344,7 @@ export namespace Prisma {
     website_id?: true
     api_key?: true
     api_url?: true
+    status?: true
     created_at?: true
     updated_at?: true
   }
@@ -7349,6 +7354,7 @@ export namespace Prisma {
     website_id?: true
     api_key?: true
     api_url?: true
+    status?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -7445,6 +7451,7 @@ export namespace Prisma {
     website_id: number
     api_key: string
     api_url: string
+    status: string | null
     created_at: Date
     updated_at: Date
     _count: GhostIntegrationCountAggregateOutputType | null
@@ -7473,6 +7480,7 @@ export namespace Prisma {
     website_id?: boolean
     api_key?: boolean
     api_url?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -7483,6 +7491,7 @@ export namespace Prisma {
     website_id?: boolean
     api_key?: boolean
     api_url?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -7493,6 +7502,7 @@ export namespace Prisma {
     website_id?: boolean
     api_key?: boolean
     api_url?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -7503,11 +7513,12 @@ export namespace Prisma {
     website_id?: boolean
     api_key?: boolean
     api_url?: boolean
+    status?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type GhostIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "api_key" | "api_url" | "created_at" | "updated_at", ExtArgs["result"]["ghostIntegration"]>
+  export type GhostIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "api_key" | "api_url" | "status" | "created_at" | "updated_at", ExtArgs["result"]["ghostIntegration"]>
   export type GhostIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }
@@ -7528,6 +7539,7 @@ export namespace Prisma {
       website_id: number
       api_key: string
       api_url: string
+      status: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["ghostIntegration"]>
@@ -7958,6 +7970,7 @@ export namespace Prisma {
     readonly website_id: FieldRef<"GhostIntegration", 'Int'>
     readonly api_key: FieldRef<"GhostIntegration", 'String'>
     readonly api_url: FieldRef<"GhostIntegration", 'String'>
+    readonly status: FieldRef<"GhostIntegration", 'String'>
     readonly created_at: FieldRef<"GhostIntegration", 'DateTime'>
     readonly updated_at: FieldRef<"GhostIntegration", 'DateTime'>
   }
@@ -9574,6 +9587,7 @@ export namespace Prisma {
     website_id: 'website_id',
     api_key: 'api_key',
     api_url: 'api_url',
+    status: 'status',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -10077,6 +10091,7 @@ export namespace Prisma {
     website_id?: IntFilter<"GhostIntegration"> | number
     api_key?: StringFilter<"GhostIntegration"> | string
     api_url?: StringFilter<"GhostIntegration"> | string
+    status?: StringNullableFilter<"GhostIntegration"> | string | null
     created_at?: DateTimeFilter<"GhostIntegration"> | Date | string
     updated_at?: DateTimeFilter<"GhostIntegration"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -10087,6 +10102,7 @@ export namespace Prisma {
     website_id?: SortOrder
     api_key?: SortOrder
     api_url?: SortOrder
+    status?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     website?: WebsiteOrderByWithRelationInput
@@ -10100,6 +10116,7 @@ export namespace Prisma {
     NOT?: GhostIntegrationWhereInput | GhostIntegrationWhereInput[]
     api_key?: StringFilter<"GhostIntegration"> | string
     api_url?: StringFilter<"GhostIntegration"> | string
+    status?: StringNullableFilter<"GhostIntegration"> | string | null
     created_at?: DateTimeFilter<"GhostIntegration"> | Date | string
     updated_at?: DateTimeFilter<"GhostIntegration"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -10110,6 +10127,7 @@ export namespace Prisma {
     website_id?: SortOrder
     api_key?: SortOrder
     api_url?: SortOrder
+    status?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: GhostIntegrationCountOrderByAggregateInput
@@ -10127,6 +10145,7 @@ export namespace Prisma {
     website_id?: IntWithAggregatesFilter<"GhostIntegration"> | number
     api_key?: StringWithAggregatesFilter<"GhostIntegration"> | string
     api_url?: StringWithAggregatesFilter<"GhostIntegration"> | string
+    status?: StringNullableWithAggregatesFilter<"GhostIntegration"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"GhostIntegration"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"GhostIntegration"> | Date | string
   }
@@ -10606,6 +10625,7 @@ export namespace Prisma {
   export type GhostIntegrationCreateInput = {
     api_key: string
     api_url: string
+    status?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     website: WebsiteCreateNestedOneWithoutGhostIntegrationInput
@@ -10616,6 +10636,7 @@ export namespace Prisma {
     website_id: number
     api_key: string
     api_url: string
+    status?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -10623,6 +10644,7 @@ export namespace Prisma {
   export type GhostIntegrationUpdateInput = {
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     website?: WebsiteUpdateOneRequiredWithoutGhostIntegrationNestedInput
@@ -10633,6 +10655,7 @@ export namespace Prisma {
     website_id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10642,6 +10665,7 @@ export namespace Prisma {
     website_id: number
     api_key: string
     api_url: string
+    status?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -10649,6 +10673,7 @@ export namespace Prisma {
   export type GhostIntegrationUpdateManyMutationInput = {
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10658,6 +10683,7 @@ export namespace Prisma {
     website_id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11155,6 +11181,7 @@ export namespace Prisma {
     website_id?: SortOrder
     api_key?: SortOrder
     api_url?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -11169,6 +11196,7 @@ export namespace Prisma {
     website_id?: SortOrder
     api_key?: SortOrder
     api_url?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -11178,6 +11206,7 @@ export namespace Prisma {
     website_id?: SortOrder
     api_key?: SortOrder
     api_url?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -12072,6 +12101,7 @@ export namespace Prisma {
   export type GhostIntegrationCreateWithoutWebsiteInput = {
     api_key: string
     api_url: string
+    status?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -12080,6 +12110,7 @@ export namespace Prisma {
     id?: number
     api_key: string
     api_url: string
+    status?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -12195,6 +12226,7 @@ export namespace Prisma {
   export type GhostIntegrationUpdateWithoutWebsiteInput = {
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12203,6 +12235,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
     api_url?: StringFieldUpdateOperationsInput | string
+    status?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
