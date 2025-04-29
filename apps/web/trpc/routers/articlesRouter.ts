@@ -165,14 +165,6 @@ export const articlesRouter = router({
         });
         return updatedArticle;
       } catch (error: any) {
-        // Check if the error is because the record was not found
-        if (error.code === "P2025") {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Article not found or does not belong to this website.",
-          });
-        }
-        console.error("Failed to update article:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to update article",
@@ -221,13 +213,6 @@ export const articlesRouter = router({
         });
         return { success: true };
       } catch (error: any) {
-        // Check if the error is because the record was not found (shouldn't happen after the check above, but good practice)
-        if (error.code === "P2025") {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Article not found during deletion attempt.",
-          });
-        }
         console.error("Failed to delete article:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -271,5 +256,31 @@ export const articlesRouter = router({
         orderBy: { scheduled_at: "desc" }, // Added comma before orderBy
       });
       return articles;
+    }),
+  publish: protectedProcedure
+    .input(articleIdAndSlugSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { id: userId } = ctx.session.user;
+      const { articleId, websiteSlug } = input;
+
+      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+
+      const article = await prisma.article.findUnique({
+        where: { id: articleId, website_id: websiteId }, // Ensure article belongs to the website
+      });
+
+      if (!article) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Article not found or does not belong to this website.",
+        });
+      }
+      const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
+      await boss.start();
+      const queueName = `publish-article_${process.env.NODE_ENV || "development"}`;
+      await boss.createQueue(queueName);
+
+      await boss.send(queueName, { id: article.id });
+      await boss.stop();
     }),
 });

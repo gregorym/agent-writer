@@ -89,6 +89,7 @@ model Article {
   published_at DateTime? 
   topic        String?
   title        String?
+  description  String?
   markdown     String?
   job_id       String? @unique
   backlinks     String[] @default([])

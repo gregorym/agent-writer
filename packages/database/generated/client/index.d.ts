@@ -6111,6 +6111,7 @@ export namespace Prisma {
     published_at: Date | null
     topic: string | null
     title: string | null
+    description: string | null
     markdown: string | null
     job_id: string | null
     created_at: Date | null
@@ -6124,6 +6125,7 @@ export namespace Prisma {
     published_at: Date | null
     topic: string | null
     title: string | null
+    description: string | null
     markdown: string | null
     job_id: string | null
     created_at: Date | null
@@ -6137,6 +6139,7 @@ export namespace Prisma {
     published_at: number
     topic: number
     title: number
+    description: number
     markdown: number
     job_id: number
     backlinks: number
@@ -6163,6 +6166,7 @@ export namespace Prisma {
     published_at?: true
     topic?: true
     title?: true
+    description?: true
     markdown?: true
     job_id?: true
     created_at?: true
@@ -6176,6 +6180,7 @@ export namespace Prisma {
     published_at?: true
     topic?: true
     title?: true
+    description?: true
     markdown?: true
     job_id?: true
     created_at?: true
@@ -6189,6 +6194,7 @@ export namespace Prisma {
     published_at?: true
     topic?: true
     title?: true
+    description?: true
     markdown?: true
     job_id?: true
     backlinks?: true
@@ -6290,6 +6296,7 @@ export namespace Prisma {
     published_at: Date | null
     topic: string | null
     title: string | null
+    description: string | null
     markdown: string | null
     job_id: string | null
     backlinks: string[]
@@ -6323,6 +6330,7 @@ export namespace Prisma {
     published_at?: boolean
     topic?: boolean
     title?: boolean
+    description?: boolean
     markdown?: boolean
     job_id?: boolean
     backlinks?: boolean
@@ -6338,6 +6346,7 @@ export namespace Prisma {
     published_at?: boolean
     topic?: boolean
     title?: boolean
+    description?: boolean
     markdown?: boolean
     job_id?: boolean
     backlinks?: boolean
@@ -6353,6 +6362,7 @@ export namespace Prisma {
     published_at?: boolean
     topic?: boolean
     title?: boolean
+    description?: boolean
     markdown?: boolean
     job_id?: boolean
     backlinks?: boolean
@@ -6368,6 +6378,7 @@ export namespace Prisma {
     published_at?: boolean
     topic?: boolean
     title?: boolean
+    description?: boolean
     markdown?: boolean
     job_id?: boolean
     backlinks?: boolean
@@ -6375,7 +6386,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "published_at" | "topic" | "title" | "markdown" | "job_id" | "backlinks" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "published_at" | "topic" | "title" | "description" | "markdown" | "job_id" | "backlinks" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
   export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }
@@ -6398,6 +6409,7 @@ export namespace Prisma {
       published_at: Date | null
       topic: string | null
       title: string | null
+      description: string | null
       markdown: string | null
       job_id: string | null
       backlinks: string[]
@@ -6833,6 +6845,7 @@ export namespace Prisma {
     readonly published_at: FieldRef<"Article", 'DateTime'>
     readonly topic: FieldRef<"Article", 'String'>
     readonly title: FieldRef<"Article", 'String'>
+    readonly description: FieldRef<"Article", 'String'>
     readonly markdown: FieldRef<"Article", 'String'>
     readonly job_id: FieldRef<"Article", 'String'>
     readonly backlinks: FieldRef<"Article", 'String[]'>
@@ -8387,6 +8400,7 @@ export namespace Prisma {
     id: number | null
     website_id: number | null
     api_key: string | null
+    dir_path: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -8395,6 +8409,7 @@ export namespace Prisma {
     id: number | null
     website_id: number | null
     api_key: string | null
+    dir_path: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -8403,6 +8418,7 @@ export namespace Prisma {
     id: number
     website_id: number
     api_key: number
+    dir_path: number
     created_at: number
     updated_at: number
     _all: number
@@ -8423,6 +8439,7 @@ export namespace Prisma {
     id?: true
     website_id?: true
     api_key?: true
+    dir_path?: true
     created_at?: true
     updated_at?: true
   }
@@ -8431,6 +8448,7 @@ export namespace Prisma {
     id?: true
     website_id?: true
     api_key?: true
+    dir_path?: true
     created_at?: true
     updated_at?: true
   }
@@ -8439,6 +8457,7 @@ export namespace Prisma {
     id?: true
     website_id?: true
     api_key?: true
+    dir_path?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -8534,6 +8553,7 @@ export namespace Prisma {
     id: number
     website_id: number
     api_key: string
+    dir_path: string | null
     created_at: Date
     updated_at: Date
     _count: GithubIntegrationCountAggregateOutputType | null
@@ -8561,6 +8581,7 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     api_key?: boolean
+    dir_path?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -8570,6 +8591,7 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     api_key?: boolean
+    dir_path?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -8579,6 +8601,7 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     api_key?: boolean
+    dir_path?: boolean
     created_at?: boolean
     updated_at?: boolean
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
@@ -8588,11 +8611,12 @@ export namespace Prisma {
     id?: boolean
     website_id?: boolean
     api_key?: boolean
+    dir_path?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type GithubIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "api_key" | "created_at" | "updated_at", ExtArgs["result"]["githubIntegration"]>
+  export type GithubIntegrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "api_key" | "dir_path" | "created_at" | "updated_at", ExtArgs["result"]["githubIntegration"]>
   export type GithubIntegrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }
@@ -8612,6 +8636,7 @@ export namespace Prisma {
       id: number
       website_id: number
       api_key: string
+      dir_path: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["githubIntegration"]>
@@ -9041,6 +9066,7 @@ export namespace Prisma {
     readonly id: FieldRef<"GithubIntegration", 'Int'>
     readonly website_id: FieldRef<"GithubIntegration", 'Int'>
     readonly api_key: FieldRef<"GithubIntegration", 'String'>
+    readonly dir_path: FieldRef<"GithubIntegration", 'String'>
     readonly created_at: FieldRef<"GithubIntegration", 'DateTime'>
     readonly updated_at: FieldRef<"GithubIntegration", 'DateTime'>
   }
@@ -9532,6 +9558,7 @@ export namespace Prisma {
     published_at: 'published_at',
     topic: 'topic',
     title: 'title',
+    description: 'description',
     markdown: 'markdown',
     job_id: 'job_id',
     backlinks: 'backlinks',
@@ -9558,6 +9585,7 @@ export namespace Prisma {
     id: 'id',
     website_id: 'website_id',
     api_key: 'api_key',
+    dir_path: 'dir_path',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -9959,6 +9987,7 @@ export namespace Prisma {
     published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
+    description?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
     job_id?: StringNullableFilter<"Article"> | string | null
     backlinks?: StringNullableListFilter<"Article">
@@ -9974,6 +10003,7 @@ export namespace Prisma {
     published_at?: SortOrderInput | SortOrder
     topic?: SortOrderInput | SortOrder
     title?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
     job_id?: SortOrderInput | SortOrder
     backlinks?: SortOrder
@@ -9993,6 +10023,7 @@ export namespace Prisma {
     published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
+    description?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
     backlinks?: StringNullableListFilter<"Article">
     created_at?: DateTimeFilter<"Article"> | Date | string
@@ -10007,6 +10038,7 @@ export namespace Prisma {
     published_at?: SortOrderInput | SortOrder
     topic?: SortOrderInput | SortOrder
     title?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
     job_id?: SortOrderInput | SortOrder
     backlinks?: SortOrder
@@ -10029,6 +10061,7 @@ export namespace Prisma {
     published_at?: DateTimeNullableWithAggregatesFilter<"Article"> | Date | string | null
     topic?: StringNullableWithAggregatesFilter<"Article"> | string | null
     title?: StringNullableWithAggregatesFilter<"Article"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Article"> | string | null
     markdown?: StringNullableWithAggregatesFilter<"Article"> | string | null
     job_id?: StringNullableWithAggregatesFilter<"Article"> | string | null
     backlinks?: StringNullableListFilter<"Article">
@@ -10105,6 +10138,7 @@ export namespace Prisma {
     id?: IntFilter<"GithubIntegration"> | number
     website_id?: IntFilter<"GithubIntegration"> | number
     api_key?: StringFilter<"GithubIntegration"> | string
+    dir_path?: StringNullableFilter<"GithubIntegration"> | string | null
     created_at?: DateTimeFilter<"GithubIntegration"> | Date | string
     updated_at?: DateTimeFilter<"GithubIntegration"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -10114,6 +10148,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     api_key?: SortOrder
+    dir_path?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     website?: WebsiteOrderByWithRelationInput
@@ -10126,6 +10161,7 @@ export namespace Prisma {
     OR?: GithubIntegrationWhereInput[]
     NOT?: GithubIntegrationWhereInput | GithubIntegrationWhereInput[]
     api_key?: StringFilter<"GithubIntegration"> | string
+    dir_path?: StringNullableFilter<"GithubIntegration"> | string | null
     created_at?: DateTimeFilter<"GithubIntegration"> | Date | string
     updated_at?: DateTimeFilter<"GithubIntegration"> | Date | string
     website?: XOR<WebsiteScalarRelationFilter, WebsiteWhereInput>
@@ -10135,6 +10171,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     api_key?: SortOrder
+    dir_path?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: GithubIntegrationCountOrderByAggregateInput
@@ -10151,6 +10188,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"GithubIntegration"> | number
     website_id?: IntWithAggregatesFilter<"GithubIntegration"> | number
     api_key?: StringWithAggregatesFilter<"GithubIntegration"> | string
+    dir_path?: StringNullableWithAggregatesFilter<"GithubIntegration"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"GithubIntegration"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"GithubIntegration"> | Date | string
   }
@@ -10469,6 +10507,7 @@ export namespace Prisma {
     published_at?: Date | string | null
     topic?: string | null
     title?: string | null
+    description?: string | null
     markdown?: string | null
     job_id?: string | null
     backlinks?: ArticleCreatebacklinksInput | string[]
@@ -10484,6 +10523,7 @@ export namespace Prisma {
     published_at?: Date | string | null
     topic?: string | null
     title?: string | null
+    description?: string | null
     markdown?: string | null
     job_id?: string | null
     backlinks?: ArticleCreatebacklinksInput | string[]
@@ -10496,6 +10536,7 @@ export namespace Prisma {
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
@@ -10511,6 +10552,7 @@ export namespace Prisma {
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
@@ -10525,6 +10567,7 @@ export namespace Prisma {
     published_at?: Date | string | null
     topic?: string | null
     title?: string | null
+    description?: string | null
     markdown?: string | null
     job_id?: string | null
     backlinks?: ArticleCreatebacklinksInput | string[]
@@ -10537,6 +10580,7 @@ export namespace Prisma {
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
@@ -10551,6 +10595,7 @@ export namespace Prisma {
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
@@ -10619,6 +10664,7 @@ export namespace Prisma {
 
   export type GithubIntegrationCreateInput = {
     api_key: string
+    dir_path?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     website: WebsiteCreateNestedOneWithoutGithubIntegrationInput
@@ -10628,12 +10674,14 @@ export namespace Prisma {
     id?: number
     website_id: number
     api_key: string
+    dir_path?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
 
   export type GithubIntegrationUpdateInput = {
     api_key?: StringFieldUpdateOperationsInput | string
+    dir_path?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     website?: WebsiteUpdateOneRequiredWithoutGithubIntegrationNestedInput
@@ -10643,6 +10691,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     website_id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
+    dir_path?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10651,12 +10700,14 @@ export namespace Prisma {
     id?: number
     website_id: number
     api_key: string
+    dir_path?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
 
   export type GithubIntegrationUpdateManyMutationInput = {
     api_key?: StringFieldUpdateOperationsInput | string
+    dir_path?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10665,6 +10716,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     website_id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
+    dir_path?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11052,6 +11104,7 @@ export namespace Prisma {
     published_at?: SortOrder
     topic?: SortOrder
     title?: SortOrder
+    description?: SortOrder
     markdown?: SortOrder
     job_id?: SortOrder
     backlinks?: SortOrder
@@ -11071,6 +11124,7 @@ export namespace Prisma {
     published_at?: SortOrder
     topic?: SortOrder
     title?: SortOrder
+    description?: SortOrder
     markdown?: SortOrder
     job_id?: SortOrder
     created_at?: SortOrder
@@ -11084,6 +11138,7 @@ export namespace Prisma {
     published_at?: SortOrder
     topic?: SortOrder
     title?: SortOrder
+    description?: SortOrder
     markdown?: SortOrder
     job_id?: SortOrder
     created_at?: SortOrder
@@ -11136,6 +11191,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     api_key?: SortOrder
+    dir_path?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -11149,6 +11205,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     api_key?: SortOrder
+    dir_path?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -11157,6 +11214,7 @@ export namespace Prisma {
     id?: SortOrder
     website_id?: SortOrder
     api_key?: SortOrder
+    dir_path?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -11979,6 +12037,7 @@ export namespace Prisma {
     published_at?: Date | string | null
     topic?: string | null
     title?: string | null
+    description?: string | null
     markdown?: string | null
     job_id?: string | null
     backlinks?: ArticleCreatebacklinksInput | string[]
@@ -11992,6 +12051,7 @@ export namespace Prisma {
     published_at?: Date | string | null
     topic?: string | null
     title?: string | null
+    description?: string | null
     markdown?: string | null
     job_id?: string | null
     backlinks?: ArticleCreatebacklinksInput | string[]
@@ -12031,6 +12091,7 @@ export namespace Prisma {
 
   export type GithubIntegrationCreateWithoutWebsiteInput = {
     api_key: string
+    dir_path?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -12038,6 +12099,7 @@ export namespace Prisma {
   export type GithubIntegrationUncheckedCreateWithoutWebsiteInput = {
     id?: number
     api_key: string
+    dir_path?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -12111,6 +12173,7 @@ export namespace Prisma {
     published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
+    description?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
     job_id?: StringNullableFilter<"Article"> | string | null
     backlinks?: StringNullableListFilter<"Article">
@@ -12167,6 +12230,7 @@ export namespace Prisma {
     id?: IntFilter<"GithubIntegration"> | number
     website_id?: IntFilter<"GithubIntegration"> | number
     api_key?: StringFilter<"GithubIntegration"> | string
+    dir_path?: StringNullableFilter<"GithubIntegration"> | string | null
     created_at?: DateTimeFilter<"GithubIntegration"> | Date | string
     updated_at?: DateTimeFilter<"GithubIntegration"> | Date | string
   }
@@ -12571,6 +12635,7 @@ export namespace Prisma {
     published_at?: Date | string | null
     topic?: string | null
     title?: string | null
+    description?: string | null
     markdown?: string | null
     job_id?: string | null
     backlinks?: ArticleCreatebacklinksInput | string[]
@@ -12581,6 +12646,7 @@ export namespace Prisma {
   export type GithubIntegrationCreateManyWebsiteInput = {
     id?: number
     api_key: string
+    dir_path?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -12590,6 +12656,7 @@ export namespace Prisma {
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
@@ -12603,6 +12670,7 @@ export namespace Prisma {
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
@@ -12616,6 +12684,7 @@ export namespace Prisma {
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
     job_id?: NullableStringFieldUpdateOperationsInput | string | null
     backlinks?: ArticleUpdatebacklinksInput | string[]
@@ -12625,6 +12694,7 @@ export namespace Prisma {
 
   export type GithubIntegrationUpdateWithoutWebsiteInput = {
     api_key?: StringFieldUpdateOperationsInput | string
+    dir_path?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12632,6 +12702,7 @@ export namespace Prisma {
   export type GithubIntegrationUncheckedUpdateWithoutWebsiteInput = {
     id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
+    dir_path?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12639,6 +12710,7 @@ export namespace Prisma {
   export type GithubIntegrationUncheckedUpdateManyWithoutWebsiteInput = {
     id?: IntFieldUpdateOperationsInput | number
     api_key?: StringFieldUpdateOperationsInput | string
+    dir_path?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

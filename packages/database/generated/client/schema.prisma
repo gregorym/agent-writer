@@ -89,6 +89,7 @@ model Article {
   published_at DateTime?
   topic        String?
   title        String?
+  description  String?
   markdown     String?
   job_id       String?   @unique
   backlinks    String[]  @default([])
@@ -117,9 +118,10 @@ model GhostIntegration {
 }
 
 model GithubIntegration {
-  id         Int    @id @default(autoincrement())
-  website_id Int    @unique
+  id         Int     @id @default(autoincrement())
+  website_id Int     @unique
   api_key    String
+  dir_path   String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

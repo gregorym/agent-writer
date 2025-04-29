@@ -7,7 +7,8 @@ import {
   Download, // Import Download icon
   Loader2,
   MoreHorizontal,
-  RefreshCw, // Import RefreshCw icon
+  RefreshCw,
+  Send, // Import RefreshCw icon
 } from "lucide-react";
 import { UseFormReturn, useFieldArray } from "react-hook-form"; // Import useFieldArray
 import { z } from "zod";
@@ -66,29 +67,20 @@ interface ArticleSettingsSidebarProps {
   form: UseFormReturn<FormData>; // Pass the whole form object
   article: Article;
   websiteSlug: string;
-  updateMutation: ReturnType<typeof trpc.articles.update.useMutation>;
-  retryMutation: ReturnType<typeof trpc.articles.retry.useMutation>;
-  deleteMutation: ReturnType<typeof trpc.articles.delete.useMutation>;
-  handleDelete: () => void;
 }
 
 export function ArticleSettingsSidebar({
   form,
   article,
   websiteSlug,
-  updateMutation,
-  retryMutation,
-  deleteMutation, // Add deleteMutation prop
-  handleDelete, // Add handleDelete prop
 }: ArticleSettingsSidebarProps) {
-  // Use useFieldArray for backlinks
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "backlinks",
   });
-
-  // Remove the incorrect useEffect for parsing backlinks
-  // useEffect(() => { ... });
+  const retryMutation = trpc.articles.retry.useMutation();
+  const updateMutation = trpc.articles.update.useMutation();
+  const publishMutation = trpc.articles.publish.useMutation();
 
   return (
     <Sidebar
@@ -232,8 +224,28 @@ export function ArticleSettingsSidebar({
                 ) : (
                   <>
                     <RefreshCw className="mr-2 h-4 w-4" />{" "}
-                    {/* Add RefreshCw icon */}
                     <span>Retry Generation</span>
+                  </>
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  publishMutation.mutate({
+                    articleId: article.id,
+                    websiteSlug,
+                  });
+                }}
+                disabled={publishMutation.isPending}
+              >
+                {publishMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                    Publishing...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" />
+                    <span>Publish</span>
                   </>
                 )}
               </DropdownMenuItem>
@@ -248,7 +260,6 @@ export function ArticleSettingsSidebar({
                   const url = URL.createObjectURL(blob);
                   const link = document.createElement("a");
                   link.href = url;
-                  // Sanitize title for filename: replace spaces with underscores, convert to lowercase
                   const safeTitle = title.replace(/\s+/g, "_").toLowerCase();
                   link.download = `${safeTitle}.md`;
                   document.body.appendChild(link);
@@ -257,10 +268,9 @@ export function ArticleSettingsSidebar({
                   URL.revokeObjectURL(url);
                 }}
               >
-                <Download className="mr-2 h-4 w-4" /> {/* Add Download icon */}
+                <Download className="mr-2 h-4 w-4" />
                 <span>Download</span>
               </DropdownMenuItem>
-              {/* Add other options like Delete here if needed */}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

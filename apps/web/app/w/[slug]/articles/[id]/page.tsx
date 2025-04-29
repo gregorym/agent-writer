@@ -133,37 +133,6 @@ export default function EditArticlePage() {
     },
   });
 
-  const retryArticleMutation = trpc.articles.retry.useMutation({
-    onSuccess: () => {
-      // Correct: onSuccess likely receives void
-      if (!article) return;
-      toast.success(
-        `Retrying generation for "${article.topic || "Untitled"}".`
-      ); // Use article.topic
-      utils.articles.get.invalidate({ articleId: article.id, websiteSlug });
-    },
-    onError: (error) => {
-      toast.error(`Failed to retry generation: ${error.message}`);
-    },
-  });
-
-  const deleteArticleMutation = trpc.articles.delete.useMutation({
-    onSuccess: () => {
-      toast.success(
-        `Article "${article?.title || article?.topic || "Untitled"}" deleted.`
-      );
-      utils.articles.all.invalidate({ websiteSlug });
-      router.push(`/w/${websiteSlug}`);
-    },
-    onError: (error) => {
-      if (error.data?.code === "BAD_REQUEST") {
-        toast.error(error.message);
-      } else {
-        toast.error(`Failed to delete article: ${error.message}`);
-      }
-    },
-  });
-
   // --- Auto-save Logic ---
   const watchedFields = form.watch(); // Watch all fields
   const isSavingRef = useRef(false); // Ref to track if save is in progress
@@ -318,10 +287,6 @@ export default function EditArticlePage() {
             form={form} // Pass the form object
             article={article}
             websiteSlug={websiteSlug}
-            updateMutation={updateArticleMutation} // Pass mutations
-            retryMutation={retryArticleMutation}
-            deleteMutation={deleteArticleMutation}
-            handleDelete={handleDelete} // Pass delete handler
           />
         )}
         {/* Optionally show a loading state for the sidebar */}

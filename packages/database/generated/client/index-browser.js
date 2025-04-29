@@ -169,6 +169,7 @@ exports.Prisma.ArticleScalarFieldEnum = {
   published_at: 'published_at',
   topic: 'topic',
   title: 'title',
+  description: 'description',
   markdown: 'markdown',
   job_id: 'job_id',
   backlinks: 'backlinks',
@@ -189,6 +190,7 @@ exports.Prisma.GithubIntegrationScalarFieldEnum = {
   id: 'id',
   website_id: 'website_id',
   api_key: 'api_key',
+  dir_path: 'dir_path',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

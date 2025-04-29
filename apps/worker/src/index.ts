@@ -1,6 +1,7 @@
 import "dotenv/config";
 import PgBoss from "pg-boss";
 import * as CreateArticle from "./create-article";
+import * as PublishArticle from "./publish-article";
 import * as WebsiteContext from "./website-context";
 
 let isShuttingDown = false;
@@ -12,7 +13,7 @@ async function start() {
     boss.on("error", console.error);
     await boss.start();
 
-    const modules = [CreateArticle, WebsiteContext];
+    const modules = [CreateArticle, WebsiteContext, PublishArticle];
     for (const module of modules) {
       if (module.processAMQP) {
         await module.processAMQP(boss);
