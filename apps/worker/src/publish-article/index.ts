@@ -124,6 +124,7 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
 
     const imagePromises: Promise<void>[] = [];
     const processedUrls = new Set<string>();
+    let featureImageUrl: string | null = null; // Variable to store the first image URL
 
     visit(tree, "image", (node: Image) => {
       const originalUrl = node.url;
@@ -141,6 +142,9 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
             const newUrl = await processAndUploadImage(originalUrl, api);
             if (newUrl) {
               node.url = newUrl;
+              if (!featureImageUrl) {
+                featureImageUrl = newUrl;
+              }
             }
           })()
         );
@@ -148,9 +152,7 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
     });
 
     await Promise.all(imagePromises);
-
     const updatedMarkdown = processor.stringify(tree);
-
     const html = await marked(updatedMarkdown);
 
     await api.posts.add(
@@ -158,6 +160,9 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
         title: article.title!,
         status: "draft",
         html,
+        feature_image: featureImageUrl ?? undefined,
+        feature_image_alt: undefined,
+        feature_image_caption: undefined,
       },
       { source: "html" }
     );

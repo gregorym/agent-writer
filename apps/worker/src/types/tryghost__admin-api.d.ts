@@ -10,7 +10,9 @@ declare module "@tryghost/admin-api" {
     html?: string;
     markdown?: string;
     status?: "published" | "draft" | "scheduled";
-    // Add other post properties as needed
+    feature_image?: string;
+    feature_image_alt?: string;
+    feature_image_caption?: string;
   }
 
   interface GhostPostAddOptions {
