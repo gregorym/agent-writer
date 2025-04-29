@@ -79,7 +79,7 @@ export function ArticleMarkdownEditor({
                 </TabsContent>
                 <TabsContent value="preview">
                   {!!field.value && (
-                    <div className="mt-2 rounded-md border bg-muted p-4 min-h-[400px] md:min-h-[600px] overflow-auto">
+                    <div className="mt-2 rounded-md border p-8 min-h-[400px] md:min-h-[600px] overflow-auto bg-white">
                       <MarkdownPreview
                         source={field.value}
                         wrapperElement={{

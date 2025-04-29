@@ -2,7 +2,7 @@
 
 import { type Article } from "@bloggy/database";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2, Trash2 } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 
@@ -80,6 +80,7 @@ export function ArticleSettingsSidebar({
                   placeholder="Enter title (or leave blank)"
                   {...field}
                   value={field.value ?? ""}
+                  className="bg-white"
                 />
               </FormControl>
               <FormMessage />
@@ -141,6 +142,7 @@ export function ArticleSettingsSidebar({
                   placeholder="Describe the main topic..."
                   {...field}
                   value={field.value ?? ""}
+                  className="bg-white" // Add white background
                 />
               </FormControl>
               <FormMessage />
@@ -180,24 +182,6 @@ export function ArticleSettingsSidebar({
               </>
             ) : (
               "Retry Generation"
-            )}
-          </Button>
-
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
-            className="w-full"
-          >
-            {deleteMutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Deleting...
-              </>
-            ) : (
-              <>
-                <Trash2 className="mr-2 h-4 w-4" /> Delete Article
-              </>
             )}
           </Button>
         </div>

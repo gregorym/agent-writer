@@ -139,6 +139,7 @@ export function CreateArticleForm({
                   rows={3} // Set rows to 3
                   placeholder="Describe the main topic for the article..."
                   {...field}
+                  className="bg-white" // Add white background
                 />
               </FormControl>
               <FormMessage />
