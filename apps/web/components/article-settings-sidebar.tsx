@@ -2,12 +2,24 @@
 
 import { type Article } from "@bloggy/database";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import {
+  CalendarIcon,
+  Download, // Import Download icon
+  Loader2,
+  MoreHorizontal,
+  RefreshCw, // Import RefreshCw icon
+} from "lucide-react";
 import { UseFormReturn, useFieldArray } from "react-hook-form"; // Import useFieldArray
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // Import DropdownMenu components
 import {
   FormControl,
   FormField,
@@ -178,11 +190,14 @@ export function ArticleSettingsSidebar({
         />
       </SidebarContent>
       <SidebarFooter className="p-4 border-t">
-        <div className="flex flex-col space-y-2">
+        <div className="flex items-center space-x-2">
+          {" "}
+          {/* Use flex and space-x */}
           <Button
             type="submit"
             form="edit-article-form"
-            disabled={updateMutation.isPending || !form.formState.isDirty} // Re-add isDirty check for manual save
+            disabled={updateMutation.isPending || !form.formState.isDirty}
+            className="flex-grow" // Allow save button to grow
           >
             {updateMutation.isPending ? (
               <>
@@ -192,40 +207,62 @@ export function ArticleSettingsSidebar({
               "Save Changes"
             )}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              retryMutation.mutate({
-                articleId: article.id,
-                websiteSlug,
-              });
-            }}
-            disabled={retryMutation.isPending}
-          >
-            {retryMutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Retrying...
-              </>
-            ) : (
-              "Retry Generation"
-            )}
-          </Button>
-          {/* Add Delete Button */}
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={handleDelete} // Use the passed handleDelete
-            disabled={deleteMutation.isPending}
-          >
-            {deleteMutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Deleting...
-              </>
-            ) : (
-              "Delete Article"
-            )}
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" size="icon">
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="sr-only">More options</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => {
+                  retryMutation.mutate({
+                    articleId: article.id,
+                    websiteSlug,
+                  });
+                }}
+                disabled={retryMutation.isPending}
+              >
+                {retryMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                    Retrying...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4" />{" "}
+                    {/* Add RefreshCw icon */}
+                    <span>Retry Generation</span>
+                  </>
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  const markdownContent = form.getValues("markdown") || "";
+                  const title =
+                    form.getValues("title") || article.title || "untitled";
+                  const blob = new Blob([markdownContent], {
+                    type: "text/markdown",
+                  });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  // Sanitize title for filename: replace spaces with underscores, convert to lowercase
+                  const safeTitle = title.replace(/\s+/g, "_").toLowerCase();
+                  link.download = `${safeTitle}.md`;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(url);
+                }}
+              >
+                <Download className="mr-2 h-4 w-4" /> {/* Add Download icon */}
+                <span>Download</span>
+              </DropdownMenuItem>
+              {/* Add other options like Delete here if needed */}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </SidebarFooter>
     </Sidebar>
