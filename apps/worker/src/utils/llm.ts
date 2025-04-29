@@ -105,8 +105,8 @@ export async function generateImage(
   const part = response?.candidates[0].content.parts[0];
   if (part?.inlineData) {
     const inlineData = part.inlineData;
-    const mimeType = inlineData.mimeType || "image/png"; // Default to png if mimeType is missing
-    const fileExtension = mime.getExtension(mimeType); // Corrected usage
+    const mimeType = inlineData.mimeType || "image/png";
+    const fileExtension = mime.getExtension(mimeType);
     if (!fileExtension) {
       console.error(
         "Could not determine file extension for mime type:",

@@ -21,10 +21,11 @@ declare module "@tryghost/admin-api" {
   class GhostAdminAPI {
     constructor(options: GhostAdminAPIOptions);
     posts: {
-      add(post: GhostPost, options?: GhostPostAddOptions): Promise<any>; // Replace 'any' with a more specific type if known
-      // Add other post methods as needed (e.g., edit, browse, read, delete)
+      add(post: GhostPost, options?: GhostPostAddOptions): Promise<any>;
     };
-    // Add other API endpoints as needed (e.g., pages, tags, members)
+    images: {
+      upload({ file }: { file: string }): Promise<{ url: string }>;
+    };
   }
 
   export default GhostAdminAPI;
