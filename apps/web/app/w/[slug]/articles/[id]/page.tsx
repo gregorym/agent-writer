@@ -21,6 +21,14 @@ const formSchema = z.object({
   title: z.string().optional().nullable(),
   markdown: z.string().optional().nullable(),
   scheduled_at: z.date().optional().nullable(),
+  backlinks: z // Corrected backlinks schema
+    .array(
+      z.object({
+        url: z.string().url({ message: "Please enter a valid URL." }),
+        title: z.string().min(1, { message: "Title cannot be empty." }),
+      })
+    )
+    .optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -39,6 +47,26 @@ function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
 
   return debounced as (...args: Parameters<F>) => ReturnType<F>;
 }
+
+// Helper function to transform string array to object array
+const transformBacklinksToObject = (backlinks: string[] | null | undefined) => {
+  if (!backlinks) return [];
+  return backlinks.map((link) => {
+    const parts = link.split(" - ");
+    // Handle cases where split might not work as expected
+    const url = parts[0] || "";
+    const title = parts.slice(1).join(" - ") || ""; // Join remaining parts for title
+    return { url, title };
+  });
+};
+
+// Helper function to transform object array to string array
+const transformBacklinksToString = (
+  backlinks: { url: string; title: string }[] | null | undefined
+) => {
+  if (!backlinks) return [];
+  return backlinks.map((link) => `${link.url} - ${link.title}`);
+};
 
 export default function EditArticlePage() {
   const params = useParams<{ slug: string; id: string }>();
@@ -66,6 +94,7 @@ export default function EditArticlePage() {
       title: "",
       markdown: "",
       scheduled_at: null,
+      backlinks: [], // Initialize backlinks as an empty array
     },
   });
 
@@ -77,6 +106,8 @@ export default function EditArticlePage() {
         title: article.title || "",
         markdown: article.markdown || "",
         scheduled_at: article.scheduled_at || null,
+        // Transform backlinks from string[] to {url, title}[]
+        backlinks: transformBacklinksToObject(article.backlinks),
       });
     }
   }, [article, form.reset]);
@@ -91,9 +122,11 @@ export default function EditArticlePage() {
           title: data.title,
           markdown: data.markdown,
           scheduled_at: data.scheduled_at,
+          // Transform backlinks from string[] to {url, title}[] after successful update
+          backlinks: transformBacklinksToObject(data.backlinks),
         },
-        { keepValues: true }
-      ); // Keep potentially dirty values if user is still typing
+        { keepValues: true } // Keep potentially dirty values if user is still typing
+      );
     },
     onError: (error) => {
       toast.error(`Failed to save article: ${error.message}`);
@@ -141,20 +174,20 @@ export default function EditArticlePage() {
       if (!article || isSavingRef.current || !initialLoadDoneRef.current)
         return; // Don't save if no article, already saving, or initial load not done
 
-      // Check if data actually changed compared to the fetched article data
       const changed =
         data.topic !== (article.topic || "") ||
         data.title !== (article.title || "") ||
         data.markdown !== (article.markdown || "") ||
         (data.scheduled_at?.toISOString() ?? null) !==
-          (article.scheduled_at?.toISOString() ?? null);
+          (article.scheduled_at?.toISOString() ?? null) ||
+        // Compare transformed backlinks
+        JSON.stringify(transformBacklinksToString(data.backlinks)) !==
+          JSON.stringify(article.backlinks || []); // article.backlinks is already string[]
 
       if (!changed) {
-        // console.log("No changes detected, skipping auto-save.");
         return;
       }
 
-      // console.log("Auto-saving...", data);
       isSavingRef.current = true;
       updateArticleMutation.mutate(
         {
@@ -164,6 +197,8 @@ export default function EditArticlePage() {
           title: data.title || undefined,
           markdown: data.markdown || undefined,
           scheduled_at: data.scheduled_at,
+          // Transform backlinks from {url, title}[] to string[] before sending
+          backlinks: transformBacklinksToString(data.backlinks),
         },
         {
           onSettled: () => {
@@ -197,7 +232,7 @@ export default function EditArticlePage() {
   // Manual submit handler (can be triggered by sidebar button)
   function onSubmit(values: FormData) {
     if (!article) return;
-    // console.log("Manual save triggered", values);
+
     updateArticleMutation.mutate(
       {
         articleId: article.id,
@@ -206,6 +241,8 @@ export default function EditArticlePage() {
         title: values.title || undefined,
         markdown: values.markdown || undefined,
         scheduled_at: values.scheduled_at,
+        // Transform backlinks from {url, title}[] to string[] before sending
+        backlinks: transformBacklinksToString(values.backlinks),
       },
       {
         onSuccess: (data) => {
@@ -219,6 +256,8 @@ export default function EditArticlePage() {
             title: data.title,
             markdown: data.markdown,
             scheduled_at: data.scheduled_at,
+            // Transform backlinks from string[] to {url, title}[] after manual save
+            backlinks: transformBacklinksToObject(data.backlinks),
           });
         },
       }

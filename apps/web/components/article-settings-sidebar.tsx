@@ -3,7 +3,7 @@
 import { type Article } from "@bloggy/database";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn, useFieldArray } from "react-hook-form"; // Import useFieldArray
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -30,13 +30,22 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
+import { BacklinksInput } from "./backlinks-input"; // Import BacklinksInput
 
-// Schema remains the same
+// Schema updated to include backlinks
 const formSchema = z.object({
   topic: z.string().min(1, { message: "Topic cannot be empty." }),
   title: z.string().optional().nullable(),
   markdown: z.string().optional().nullable(),
   scheduled_at: z.date().optional().nullable(),
+  backlinks: z // Use the object schema
+    .array(
+      z.object({
+        url: z.string().url({ message: "Please enter a valid URL." }),
+        title: z.string().min(1, { message: "Title cannot be empty." }),
+      })
+    )
+    .optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -57,9 +66,18 @@ export function ArticleSettingsSidebar({
   websiteSlug,
   updateMutation,
   retryMutation,
-  deleteMutation,
-  handleDelete,
+  deleteMutation, // Add deleteMutation prop
+  handleDelete, // Add handleDelete prop
 }: ArticleSettingsSidebarProps) {
+  // Use useFieldArray for backlinks
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "backlinks",
+  });
+
+  // Remove the incorrect useEffect for parsing backlinks
+  // useEffect(() => { ... });
+
   return (
     <Sidebar
       collapsible="none"
@@ -149,6 +167,15 @@ export function ArticleSettingsSidebar({
             </FormItem>
           )}
         />
+
+        {/* Backlinks Section */}
+        <BacklinksInput
+          name="backlinks"
+          control={form.control}
+          fields={fields}
+          append={append}
+          remove={remove}
+        />
       </SidebarContent>
       <SidebarFooter className="p-4 border-t">
         <div className="flex flex-col space-y-2">
@@ -182,6 +209,21 @@ export function ArticleSettingsSidebar({
               </>
             ) : (
               "Retry Generation"
+            )}
+          </Button>
+          {/* Add Delete Button */}
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={handleDelete} // Use the passed handleDelete
+            disabled={deleteMutation.isPending}
+          >
+            {deleteMutation.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Deleting...
+              </>
+            ) : (
+              "Delete Article"
             )}
           </Button>
         </div>

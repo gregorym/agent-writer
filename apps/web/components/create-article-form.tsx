@@ -42,6 +42,14 @@ const formSchema = z.object({
     .optional(), // Added backlinks array
 });
 
+// Helper function to transform object array to string array
+const transformBacklinksToString = (
+  backlinks: { url: string; title: string }[] | null | undefined
+) => {
+  if (!backlinks) return [];
+  return backlinks.map((link) => `${link.url} - ${link.title}`);
+};
+
 interface CreateArticleFormProps {
   websiteSlug: string;
   onSuccess?: () => void;
@@ -92,9 +100,8 @@ export function CreateArticleForm({
   }, [website, append, fields.length]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Format backlinks before sending
-    const formattedBacklinks =
-      values.backlinks?.map((link) => `${link.url} - ${link.title}`) ?? [];
+    // Transform backlinks before sending
+    const formattedBacklinks = transformBacklinksToString(values.backlinks);
 
     try {
       const article = await createArticleMutation.mutateAsync({
@@ -139,7 +146,6 @@ export function CreateArticleForm({
                   rows={3} // Set rows to 3
                   placeholder="Describe the main topic for the article..."
                   {...field}
-                  className="bg-white" // Add white background
                 />
               </FormControl>
               <FormMessage />
