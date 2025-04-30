@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { prisma } from "./prisma";
 
 export const verifyWebsiteAccess = async (userId: string, slug: string) => {
@@ -5,5 +6,13 @@ export const verifyWebsiteAccess = async (userId: string, slug: string) => {
     where: { slug, user_id: userId },
     select: { id: true },
   });
-  return website?.id ? true : false;
+
+  if (!website) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Website not found or you do not have permission to access it.",
+    });
+  }
+
+  return website;
 };

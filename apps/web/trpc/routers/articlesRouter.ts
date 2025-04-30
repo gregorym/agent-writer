@@ -1,3 +1,4 @@
+import { verifyWebsiteAccess } from "@/lib/access";
 import { prisma } from "@/lib/prisma";
 import { TRPCError } from "@trpc/server";
 import PgBoss from "pg-boss";
@@ -32,20 +33,6 @@ const websiteSlugSchema = z.object({
   websiteSlug: z.string(),
 });
 
-const verifyWebsiteAccess = async (userId: string, slug: string) => {
-  const website = await prisma.website.findUnique({
-    where: { slug, user_id: userId },
-    select: { id: true },
-  });
-  if (!website) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Website not found or access denied.",
-    });
-  }
-  return website.id;
-};
-
 export const articlesRouter = router({
   create: protectedProcedure
     .input(articleCreateSchema)
@@ -54,7 +41,8 @@ export const articlesRouter = router({
       const { websiteSlug, topic, title, markdown, scheduled_at, backlinks } =
         input;
 
-      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const websiteId = website.id;
 
       if (scheduled_at) {
         const scheduledDate = new Date(scheduled_at);
@@ -112,7 +100,8 @@ export const articlesRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
       const { articleId, websiteSlug } = input;
-      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const websiteId = website.id;
       const article = await prisma.article.findUnique({
         where: { id: articleId, website_id: websiteId },
       });
@@ -146,7 +135,8 @@ export const articlesRouter = router({
       const { id: userId } = ctx.session.user;
       const { articleId, websiteSlug, ...updateData } = input;
 
-      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const websiteId = website.id;
 
       const dataToUpdate = {
         ...updateData,
@@ -174,7 +164,8 @@ export const articlesRouter = router({
       const { id: userId } = ctx.session.user;
       const { articleId, websiteSlug } = input;
 
-      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const websiteId = website.id;
 
       const article = await prisma.article.findUnique({
         where: { id: articleId, website_id: websiteId },
@@ -220,7 +211,8 @@ export const articlesRouter = router({
       const { id: userId } = ctx.session.user;
       const { articleId, websiteSlug } = input;
 
-      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const websiteId = website.id;
 
       const article = await prisma.article.findUnique({
         where: { id: articleId, website_id: websiteId },
@@ -241,7 +233,8 @@ export const articlesRouter = router({
       const { id: userId } = ctx.session.user;
       const { websiteSlug } = input;
 
-      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const websiteId = website.id;
 
       const articles = await prisma.article.findMany({
         where: { website_id: websiteId },
@@ -255,7 +248,8 @@ export const articlesRouter = router({
       const { id: userId } = ctx.session.user;
       const { articleId, websiteSlug } = input;
 
-      const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const websiteId = website.id;
 
       const article = await prisma.article.findUnique({
         where: { id: articleId, website_id: websiteId },

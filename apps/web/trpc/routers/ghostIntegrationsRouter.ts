@@ -1,3 +1,4 @@
+import { verifyWebsiteAccess } from "@/lib/access";
 import { prisma } from "@/lib/prisma";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -5,29 +6,6 @@ import { protectedProcedure, router } from "../trpc";
 
 const GhostIntegrationStatus = z.enum(["draft", "published", "scheduled"]);
 type GhostIntegrationStatusType = z.infer<typeof GhostIntegrationStatus>;
-
-const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
-  const website = await prisma.website.findUnique({
-    where: { slug: websiteSlug },
-    select: { id: true, user_id: true },
-  });
-
-  if (!website) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Website not found.",
-    });
-  }
-
-  if (website.user_id !== userId) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "You do not have permission to access this website's resources.",
-    });
-  }
-
-  return website;
-};
 
 const ghostIntegrationInputBaseSchema = z.object({
   websiteSlug: z.string(),
@@ -51,7 +29,7 @@ export const ghostIntegrationsRouter = router({
       const { id: userId } = ctx.session.user;
       const { websiteSlug } = input;
 
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
 
       const integration = await prisma.ghostIntegration.findUnique({
         where: { website_id: website.id },
@@ -66,7 +44,7 @@ export const ghostIntegrationsRouter = router({
       const { id: userId } = ctx.session.user;
       const { websiteSlug, apiKey, apiUrl } = input;
 
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
 
       const existingIntegration = await prisma.ghostIntegration.findUnique({
         where: { website_id: website.id },
@@ -104,7 +82,7 @@ export const ghostIntegrationsRouter = router({
       const { id: userId } = ctx.session.user;
       const { websiteSlug, apiKey, apiUrl, status } = input;
 
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
 
       if (!apiKey && !apiUrl && !status) {
         throw new TRPCError({
@@ -151,7 +129,7 @@ export const ghostIntegrationsRouter = router({
       const { id: userId } = ctx.session.user;
       const { websiteSlug } = input;
 
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
 
       const integration = await prisma.ghostIntegration.findUnique({
         where: { website_id: website.id },

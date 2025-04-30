@@ -1,31 +1,9 @@
+import { verifyWebsiteAccess } from "@/lib/access";
 import { prisma } from "@/lib/prisma";
 import { Octokit } from "@octokit/rest";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-
-const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
-  const website = await prisma.website.findUnique({
-    where: { slug: websiteSlug },
-    select: { id: true, user_id: true },
-  });
-
-  if (!website) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "Website not found.",
-    });
-  }
-
-  if (website.user_id !== userId) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "You do not have permission to access this website's resources.",
-    });
-  }
-
-  return website;
-};
 
 const getGithubRepos = async (apiKey: string): Promise<string[]> => {
   try {
@@ -70,7 +48,7 @@ export const githubIntegrationsRouter = router({
     .query(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
       const { websiteSlug } = input;
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
       const integration = await prisma.githubIntegration.findUnique({
         where: { website_id: website.id },
       });
@@ -82,7 +60,7 @@ export const githubIntegrationsRouter = router({
     .query(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
       const { websiteSlug } = input;
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
       const integration = await prisma.githubIntegration.findUnique({
         where: { website_id: website.id },
         select: { api_key: true },
@@ -102,7 +80,7 @@ export const githubIntegrationsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
       const { websiteSlug, apiKey } = input;
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
       const existingIntegration = await prisma.githubIntegration.findUnique({
         where: { website_id: website.id },
         select: { id: true },
@@ -145,7 +123,7 @@ export const githubIntegrationsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
       const { websiteSlug, apiKey, dirPath, repoName } = input;
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
 
       if (
         apiKey === undefined &&
@@ -264,7 +242,7 @@ export const githubIntegrationsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
       const { websiteSlug } = input;
-      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
 
       try {
         await prisma.githubIntegration.deleteMany({
