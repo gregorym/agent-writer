@@ -51,10 +51,10 @@ model Website {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user              User                @relation(fields: [user_id], references: [id])
+  user              User               @relation(fields: [user_id], references: [id])
   articles          Article[]
   ghostIntegration  GhostIntegration?
-  githubIntegration GithubIntegration[]
+  githubIntegration GithubIntegration?
 
   @@index([user_id])
   @@index([slug])

@@ -54,7 +54,7 @@ model Website {
   user User @relation(fields: [user_id], references: [id])
   articles Article[]
   ghostIntegration GhostIntegration? 
-  githubIntegration GithubIntegration[]
+  githubIntegration GithubIntegration? 
 
   @@index([user_id])
   @@index([slug])
