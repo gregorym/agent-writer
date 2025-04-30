@@ -4,7 +4,6 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
-// Helper function to verify website ownership
 const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
   const website = await prisma.website.findUnique({
     where: { slug: websiteSlug },
@@ -25,11 +24,9 @@ const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
     });
   }
 
-  // Return the full website object needed later, not just id
   return website;
 };
 
-// Helper function to get GitHub repositories
 const getGithubRepos = async (apiKey: string): Promise<string[]> => {
   try {
     const octokit = new Octokit({ auth: apiKey });
@@ -38,7 +35,6 @@ const getGithubRepos = async (apiKey: string): Promise<string[]> => {
     });
     return repos.data.map((repo) => repo.full_name);
   } catch (error: any) {
-    console.error("Failed to fetch GitHub repositories:", error);
     if (error.status === 401) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
@@ -72,7 +68,7 @@ export const githubIntegrationsRouter = router({
   get: protectedProcedure
     .input(githubIntegrationInputBaseSchema)
     .query(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id; // Correctly get userId
+      const userId = ctx.session.user.id;
       const { websiteSlug } = input;
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
       const integration = await prisma.githubIntegration.findUnique({
@@ -84,7 +80,7 @@ export const githubIntegrationsRouter = router({
   listRepos: protectedProcedure
     .input(githubIntegrationInputBaseSchema)
     .query(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id; // Correctly get userId
+      const userId = ctx.session.user.id;
       const { websiteSlug } = input;
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
       const integration = await prisma.githubIntegration.findUnique({
@@ -104,7 +100,7 @@ export const githubIntegrationsRouter = router({
   create: protectedProcedure
     .input(githubIntegrationCreateSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id; // Correctly get userId
+      const userId = ctx.session.user.id;
       const { websiteSlug, apiKey } = input;
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
       const existingIntegration = await prisma.githubIntegration.findUnique({
@@ -114,7 +110,7 @@ export const githubIntegrationsRouter = router({
       if (existingIntegration) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "GitHub integration already exists for this website.", // Corrected message
+          message: "GitHub integration already exists for this website.",
         });
       }
       const repoNames = await getGithubRepos(apiKey);
@@ -136,8 +132,6 @@ export const githubIntegrationsRouter = router({
         });
         return newIntegration;
       } catch (error: unknown) {
-        // Type catch error
-        console.error("Failed to create Github integration:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create Github integration",
@@ -149,7 +143,7 @@ export const githubIntegrationsRouter = router({
   update: protectedProcedure
     .input(githubIntegrationUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id; // Correctly get userId
+      const userId = ctx.session.user.id;
       const { websiteSlug, apiKey, dirPath, repoName } = input;
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
@@ -183,7 +177,7 @@ export const githubIntegrationsRouter = router({
 
       if (!keyToUse) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR", // Should have key if integration exists
+          code: "INTERNAL_SERVER_ERROR",
           message: "Cannot validate repository without an API key.",
         });
       }
@@ -191,7 +185,6 @@ export const githubIntegrationsRouter = router({
       try {
         accessibleRepos = await getGithubRepos(keyToUse);
       } catch (error: unknown) {
-        // Type catch error
         if (error instanceof TRPCError) throw error;
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
@@ -221,7 +214,6 @@ export const githubIntegrationsRouter = router({
           validatedRepoName = null;
         }
       } else {
-        // Neither apiKey nor repoName provided in update, keep existing
         validatedRepoName = currentIntegration.repo_name;
       }
 
@@ -232,12 +224,12 @@ export const githubIntegrationsRouter = router({
         updateData.api_key = apiKey;
         needsUpdate = true;
       }
-      // Use !== undefined to allow setting dirPath to null or empty string
+
       if (dirPath !== undefined) {
         updateData.dir_path = dirPath;
         needsUpdate = true;
       }
-      // Update repo_name if explicitly provided OR if API key change forced a change
+
       if (
         repoName !== undefined ||
         (apiKey && validatedRepoName !== currentIntegration.repo_name)
@@ -247,7 +239,6 @@ export const githubIntegrationsRouter = router({
       }
 
       if (!needsUpdate) {
-        // Fetch full data if no update needed, as we only selected partial data
         return await prisma.githubIntegration.findUnique({
           where: { id: currentIntegration.id },
         });
@@ -271,12 +262,11 @@ export const githubIntegrationsRouter = router({
   delete: protectedProcedure
     .input(githubIntegrationInputBaseSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id; // Correctly get userId
+      const userId = ctx.session.user.id;
       const { websiteSlug } = input;
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
       try {
-        // Use deleteMany to avoid error if not found (idempotent)
         await prisma.githubIntegration.deleteMany({
           where: { website_id: website.id },
         });
@@ -285,10 +275,7 @@ export const githubIntegrationsRouter = router({
           message: "Github integration deleted successfully.",
         };
       } catch (error: unknown) {
-        // Type catch error
-        console.error("Failed to delete Github integration:", error);
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          // Handle specific Prisma errors if needed
         }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

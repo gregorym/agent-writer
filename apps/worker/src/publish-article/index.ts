@@ -47,7 +47,7 @@ export async function execute(job: any): Promise<void> {
       website: {
         include: {
           ghostIntegration: true,
-          githubIntegration: true, // Include GithubIntegration
+          githubIntegration: true,
         },
       },
     },
@@ -144,7 +144,7 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
 
     const imagePromises: Promise<void>[] = [];
     const processedUrls = new Set<string>();
-    let featureImageUrl: string | null = null; // Variable to store the first image URL
+    let featureImageUrl: string | null = null;
 
     visit(tree, "image", (node: Image) => {
       const originalUrl = node.url;
@@ -204,24 +204,20 @@ async function publishToGithub(article: any, github: any): Promise<void> {
       );
     }
 
-    // 2. Check if the token can access the specified repository
     try {
       await octokit.repos.get({ owner, repo });
-      // If the above call succeeds, the token has access to the repo.
     } catch (error: any) {
       if (error.status === 404) {
         throw new Error(
           `Error: Cannot access repository '${owner}/${repo}'. Check repository name and token permissions.`
         );
       } else {
-        // Re-throw other errors (e.g., network issues, rate limits)
         throw new Error(
           `Error verifying repository access: ${error.message || error}`
         );
       }
     }
 
-    // --- Rest of the function remains the same ---
     const branchName = `feat/add-article-${slugify(article.title!, {
       lower: true,
       strict: true,
@@ -234,11 +230,9 @@ async function publishToGithub(article: any, github: any): Promise<void> {
     const prTitle = `Add article: ${article.title}`;
     const prBody = `Adds the new article \"${article.title}\".`;
 
-    // 2. Get the default branch
     const repoInfo = await octokit.repos.get({ owner, repo });
     const baseBranch = repoInfo.data.default_branch;
 
-    // 3. Get the SHA of the base branch
     const { data: refData } = await octokit.git.getRef({
       owner,
       repo,
@@ -246,7 +240,6 @@ async function publishToGithub(article: any, github: any): Promise<void> {
     });
     const baseSha = refData.object.sha;
 
-    // 4. Create a new branch
     await octokit.git.createRef({
       owner,
       repo,
@@ -254,7 +247,6 @@ async function publishToGithub(article: any, github: any): Promise<void> {
       sha: baseSha,
     });
 
-    // 5. Create the file content (MDX) with frontmatter
     const frontmatter = `---
 title: "${article.title}"
 description: "${article.description || ""}"
@@ -265,8 +257,6 @@ date: "${new Date(article.created_at).toISOString().split("T")[0]}"
     const fileContent = frontmatter + article.markdown;
     const contentEncoded = Buffer.from(fileContent).toString("base64");
 
-    // 6. Create the file on the new branch
-    // Check if file exists first to update instead of create if necessary
     let existingFileSha: string | undefined;
     try {
       const { data: existingFileData } = await octokit.repos.getContent({
@@ -275,8 +265,7 @@ date: "${new Date(article.created_at).toISOString().split("T")[0]}"
         path: filePath,
         ref: branchName,
       });
-      // Annoyingly, getContent returns an array if path is a directory,
-      // or a single object if it's a file. Type checking needed.
+
       if (
         !Array.isArray(existingFileData) &&
         existingFileData.type === "file"
@@ -285,9 +274,8 @@ date: "${new Date(article.created_at).toISOString().split("T")[0]}"
       }
     } catch (error: any) {
       if (error.status !== 404) {
-        throw error; // Re-throw errors other than "not found"
+        throw error;
       }
-      // File doesn't exist, proceed to create
     }
 
     await octokit.repos.createOrUpdateFileContents({
@@ -297,10 +285,9 @@ date: "${new Date(article.created_at).toISOString().split("T")[0]}"
       message: commitMessage,
       content: contentEncoded,
       branch: branchName,
-      sha: existingFileSha, // Provide SHA if updating
+      sha: existingFileSha,
     });
 
-    // 7. Create a pull request
     await octokit.pulls.create({
       owner,
       repo,
@@ -310,9 +297,6 @@ date: "${new Date(article.created_at).toISOString().split("T")[0]}"
       body: prBody,
     });
   } catch (error) {
-    // Add more specific error handling if needed
-    // Avoid console.log as per instructions
-    // Consider logging to a more persistent store or re-throwing
-    throw error; // Re-throw to allow job tracking to catch it
+    throw error;
   }
 }

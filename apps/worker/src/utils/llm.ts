@@ -76,7 +76,6 @@ export async function generateArticle(prompt: string) {
 export async function generateImage(
   prompt: string
 ): Promise<string | undefined> {
-  // Add return type
   const config = {
     responseModalities: ["image", "text"],
     responseMimeType: "text/plain",
@@ -112,24 +111,23 @@ export async function generateImage(
         "Could not determine file extension for mime type:",
         mimeType
       );
-      return undefined; // Return undefined if file extension cannot be determined
+      return undefined;
     }
     const fileName = `${Date.now()}.${fileExtension}`;
-    const s3Key = `images/${fileName}`; // Define S3 key
+    const s3Key = `images/${fileName}`;
     const buffer = Buffer.from(inlineData.data || "", "base64");
 
     try {
       const imageUrl = await uploadFileToS3(buffer, s3Key, mimeType);
       console.log(`Image uploaded to: ${imageUrl}`);
-      return imageUrl; // Return the S3 URL
+      return imageUrl;
     } catch (error) {
       console.error("Failed to upload image to S3:", error);
-      // Depending on requirements, you might want to throw the error
-      // throw new Error("Failed to upload image");
-      return undefined; // Or return undefined/null to indicate failure
+
+      return undefined;
     }
   }
 
   console.warn("No image data found in the response stream.");
-  return undefined; // Return undefined if no image was generated/uploaded
+  return undefined;
 }

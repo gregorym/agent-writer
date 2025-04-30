@@ -17,7 +17,6 @@ declare module "@tryghost/admin-api" {
 
   interface GhostPostAddOptions {
     source?: "html" | "markdown";
-    // Add other options as needed
   }
 
   class GhostAdminAPI {

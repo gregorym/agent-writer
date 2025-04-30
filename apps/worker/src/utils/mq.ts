@@ -32,7 +32,7 @@ export async function enqueue(
   delayMs: number = 0
 ) {
   const finalName = `${queueName}_${nodeEnv}`;
-  const channel = await getChannel(finalName); // Get the channel
+  const channel = await getChannel(finalName);
   const exchange = `delayed_${finalName}_exchange`;
 
   const id = generateUuid();

@@ -36,9 +36,6 @@ async function shutdown() {
 
   console.log("Shutdown initiated...");
 
-  // Call shutdown on each consumer concurrently
-  // await Promise.all(consumers.map((consumer) => consumer.shutdown()));
-
   await boss.stop();
 
   console.log("All consumers have finished processing.");

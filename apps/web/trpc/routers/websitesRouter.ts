@@ -7,13 +7,12 @@ import { protectedProcedure, router } from "../trpc";
 const websiteSchema = z.object({
   name: z.string().min(1, "Name cannot be empty"),
   url: z.string().url("Invalid URL format"),
-  topic: z.string().min(1, "Topic cannot be empty"), // Add topic field
+  topic: z.string().min(1, "Topic cannot be empty"),
 });
 
-// Add schema for updating, including the slug
 const updateWebsiteSchema = websiteSchema.extend({
   slug: z.string(),
-  topic: z.string().min(1, "Topic cannot be empty"), // Make topic required
+  topic: z.string().min(1, "Topic cannot be empty"),
 });
 
 export const websitesRouter = router({
@@ -23,6 +22,9 @@ export const websitesRouter = router({
       const { id: userId } = ctx.session.user;
       const { slug } = input;
       const website = await prisma.website.findUnique({
+        omit: {
+          id: true,
+        },
         where: { slug, user_id: userId },
         include: {
           ghostIntegration: {
@@ -50,6 +52,7 @@ export const websitesRouter = router({
     const { id: userId } = ctx.session.user;
 
     const websites = await prisma.website.findMany({
+      omit: { id: true },
       where: { user_id: userId },
       orderBy: { created_at: "desc" },
     });
@@ -57,13 +60,14 @@ export const websitesRouter = router({
   }),
 
   create: protectedProcedure
-    .input(websiteSchema) // Use the updated schema
+    .input(websiteSchema)
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
       const { name, url, topic } = input;
 
       try {
         const newWebsite = await prisma.website.create({
+          omit: { id: true },
           data: {
             user_id: userId,
             name,
@@ -75,16 +79,15 @@ export const websitesRouter = router({
 
         const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
         await boss.start();
-        // Ensure queue name is unique per environment if needed, or use a single queue
-        const queueName = `website-context_${process.env.NODE_ENV || "development"}`;
-        await boss.createQueue(queueName); // Might not be needed if auto-creation is handled
 
-        const id = await boss.send(queueName, { id: newWebsite.id });
+        const queueName = `website-context_${process.env.NODE_ENV || "development"}`;
+        await boss.createQueue(queueName);
+
+        await boss.send(queueName, { id: newWebsite.id });
         await boss.stop();
 
         return newWebsite;
       } catch (error) {
-        console.error("Failed to create website:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create website",
@@ -93,14 +96,12 @@ export const websitesRouter = router({
       }
     }),
 
-  // Add the update procedure
   update: protectedProcedure
     .input(updateWebsiteSchema)
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
       const { slug, name, url, topic } = input;
 
-      // Verify the user owns the website
       const existingWebsite = await prisma.website.findUnique({
         where: { slug, user_id: userId },
       });
@@ -115,8 +116,9 @@ export const websitesRouter = router({
 
       try {
         const updatedWebsite = await prisma.website.update({
+          omit: { id: true },
           where: {
-            id: existingWebsite.id, // Use the actual ID for update
+            id: existingWebsite.id,
           },
           data: {
             name,
@@ -126,7 +128,6 @@ export const websitesRouter = router({
         });
         return updatedWebsite;
       } catch (error) {
-        console.error("Failed to update website:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to update website",
@@ -135,17 +136,15 @@ export const websitesRouter = router({
       }
     }),
 
-  // Add the delete procedure
   delete: protectedProcedure
     .input(z.object({ slug: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
       const { slug } = input;
 
-      // Verify the user owns the website
       const existingWebsite = await prisma.website.findUnique({
         where: { slug, user_id: userId },
-        select: { id: true }, // Only select the ID
+        select: { id: true },
       });
 
       if (!existingWebsite) {
@@ -157,14 +156,11 @@ export const websitesRouter = router({
       }
 
       try {
-        // Use a transaction to delete articles and the website
         const deletedData = await prisma.$transaction(async (tx) => {
-          // Delete associated articles first
           await tx.article.deleteMany({
             where: { website_id: existingWebsite.id },
           });
 
-          // Then delete the website
           const deletedWebsite = await tx.website.delete({
             where: {
               id: existingWebsite.id,
@@ -175,7 +171,6 @@ export const websitesRouter = router({
 
         return { success: true, deletedWebsiteId: deletedData.id };
       } catch (error) {
-        console.error("Failed to delete website and its articles:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to delete website",

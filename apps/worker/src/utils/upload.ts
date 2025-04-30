@@ -1,5 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { Buffer } from "buffer"; // Import Buffer
+import { Buffer } from "buffer";
 
 const s3Client = new S3Client({
   region: "us-east-1",
@@ -27,7 +27,7 @@ async function getCID(s3Key: string): Promise<string | undefined> {
       return undefined;
     }
     const ipfsData = await response.json();
-    // @ts-ignore - Assuming the structure is correct, add proper typing if possible
+
     const cid = ipfsData?.results?.[0]?.pin?.cid;
     return cid;
   } catch (error) {
@@ -54,5 +54,3 @@ export async function uploadFileToS3(
   }
   return `https://ipfs.io/ipfs/${cid}`;
 }
-
-// Removed the default export of getCID as it's now a local helper function

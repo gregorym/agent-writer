@@ -10,7 +10,7 @@ const articleCreateSchema = z.object({
   title: z.string().optional(),
   markdown: z.string().optional(),
   scheduled_at: z.date().optional().nullable(),
-  backlinks: z.array(z.string()).optional(), // Add backlinks schema
+  backlinks: z.array(z.string()).optional(),
 });
 
 const articleUpdateSchema = z.object({
@@ -20,7 +20,7 @@ const articleUpdateSchema = z.object({
   title: z.string().optional(),
   markdown: z.string().optional(),
   scheduled_at: z.date().optional().nullable(),
-  backlinks: z.array(z.string()).optional(), // Add backlinks schema
+  backlinks: z.array(z.string()).optional(),
 });
 
 const articleIdAndSlugSchema = z.object({
@@ -32,11 +32,10 @@ const websiteSlugSchema = z.object({
   websiteSlug: z.string(),
 });
 
-// Helper function to verify website ownership and existence
 const verifyWebsiteAccess = async (userId: string, slug: string) => {
   const website = await prisma.website.findUnique({
     where: { slug, user_id: userId },
-    select: { id: true }, // Only select the ID for efficiency
+    select: { id: true },
   });
   if (!website) {
     throw new TRPCError({
@@ -53,17 +52,16 @@ export const articlesRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
       const { websiteSlug, topic, title, markdown, scheduled_at, backlinks } =
-        input; // Destructure backlinks
+        input;
 
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
-      // Check if an article is already scheduled for the same day
       if (scheduled_at) {
         const scheduledDate = new Date(scheduled_at);
-        scheduledDate.setUTCHours(0, 0, 0, 0); // Start of the day in UTC
+        scheduledDate.setUTCHours(0, 0, 0, 0);
 
         const nextDay = new Date(scheduledDate);
-        nextDay.setUTCDate(scheduledDate.getUTCDate() + 1); // Start of the next day
+        nextDay.setUTCDate(scheduledDate.getUTCDate() + 1);
 
         const existingScheduledArticle = await prisma.article.findFirst({
           where: {
@@ -73,7 +71,7 @@ export const articlesRouter = router({
               lt: nextDay,
             },
           },
-          select: { id: true }, // Only need to check for existence
+          select: { id: true },
         });
 
         if (existingScheduledArticle) {
@@ -92,14 +90,12 @@ export const articlesRouter = router({
             title,
             markdown,
             scheduled_at,
-            backlinks: backlinks ?? [], // Save backlinks, default to empty array if undefined
+            backlinks: backlinks ?? [],
           },
         });
 
         return newArticle;
       } catch (error) {
-        console.error("Failed to create article:", error);
-        // Avoid re-throwing if it's the CONFLICT error we already handled
         if (error instanceof TRPCError && error.code === "CONFLICT") {
           throw error;
         }
@@ -130,9 +126,9 @@ export const articlesRouter = router({
 
       const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
       await boss.start();
-      // Ensure queue name is unique per environment if needed, or use a single queue
+
       const queueName = `new-article_${process.env.NODE_ENV || "development"}`;
-      await boss.createQueue(queueName); // Might not be needed if auto-creation is handled
+      await boss.createQueue(queueName);
 
       const id = await boss.send(queueName, { id: article.id });
       await boss.stop();
@@ -152,16 +148,15 @@ export const articlesRouter = router({
 
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
-      // Ensure backlinks is set to an empty array if undefined in the input
       const dataToUpdate = {
         ...updateData,
-        backlinks: updateData.backlinks ?? undefined, // Prisma handles undefined correctly for optional fields
+        backlinks: updateData.backlinks ?? undefined,
       };
 
       try {
         const updatedArticle = await prisma.article.update({
-          where: { id: articleId, website_id: websiteId }, // Ensure article belongs to the website
-          data: dataToUpdate, // Use the potentially modified data
+          where: { id: articleId, website_id: websiteId },
+          data: dataToUpdate,
         });
         return updatedArticle;
       } catch (error: any) {
@@ -181,7 +176,6 @@ export const articlesRouter = router({
 
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
-      // Fetch the article to check its properties
       const article = await prisma.article.findUnique({
         where: { id: articleId, website_id: websiteId },
       });
@@ -193,7 +187,6 @@ export const articlesRouter = router({
         });
       }
 
-      // Check conditions for deletion
       const canDelete =
         !article.markdown &&
         article.scheduled_at &&
@@ -213,7 +206,6 @@ export const articlesRouter = router({
         });
         return { success: true };
       } catch (error: any) {
-        console.error("Failed to delete article:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to delete article",
@@ -231,7 +223,7 @@ export const articlesRouter = router({
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
       const article = await prisma.article.findUnique({
-        where: { id: articleId, website_id: websiteId }, // Ensure article belongs to the website
+        where: { id: articleId, website_id: websiteId },
       });
 
       if (!article) {
@@ -252,8 +244,8 @@ export const articlesRouter = router({
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
       const articles = await prisma.article.findMany({
-        where: { website_id: websiteId }, // Corrected: Removed trailing comma if any, ensured correct syntax
-        orderBy: { scheduled_at: "desc" }, // Added comma before orderBy
+        where: { website_id: websiteId },
+        orderBy: { scheduled_at: "desc" },
       });
       return articles;
     }),
@@ -266,7 +258,7 @@ export const articlesRouter = router({
       const websiteId = await verifyWebsiteAccess(userId, websiteSlug);
 
       const article = await prisma.article.findUnique({
-        where: { id: articleId, website_id: websiteId }, // Ensure article belongs to the website
+        where: { id: articleId, website_id: websiteId },
       });
 
       if (!article) {

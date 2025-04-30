@@ -8,7 +8,6 @@ export default async function getCID(s3Key: string) {
     }
   ).then((res) => res.json());
 
-  // @ts-ignore
   const cid = ipfsData?.results?.[0]?.pin?.cid;
   return cid;
 }

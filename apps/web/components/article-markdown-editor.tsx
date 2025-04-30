@@ -12,10 +12,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Import Tabs components
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 
-// Define the expected form schema shape locally or import if shared
 const formSchema = z.object({
   topic: z.string().min(1),
   title: z.string().optional().nullable(),
@@ -27,7 +26,7 @@ type FormData = z.infer<typeof formSchema>;
 
 interface ArticleMarkdownEditorProps {
   control: Control<FormData>;
-  initialMarkdown: string | null | undefined; // Pass initial value for placeholder/preview
+  initialMarkdown: string | null | undefined;
 }
 
 export function ArticleMarkdownEditor({
@@ -43,7 +42,7 @@ export function ArticleMarkdownEditor({
     setWordCount(words.length);
   }, [markdownValue]);
 
-  const displayMarkdown = initialMarkdown ?? ""; // Use initial value if form value is null/undefined initially
+  const displayMarkdown = initialMarkdown ?? "";
 
   return (
     <div className="flex-1 space-y-4">
@@ -72,8 +71,8 @@ export function ArticleMarkdownEditor({
                       rows={20}
                       placeholder="Enter the article content in Markdown..."
                       {...field}
-                      value={field.value ?? ""} // Ensure value is controlled
-                      className="min-h-[400px] md:min-h-[600px] mt-2" // Added mt-2 for spacing
+                      value={field.value ?? ""}
+                      className="min-h-[400px] md:min-h-[600px] mt-2"
                     />
                   </FormControl>
                 </TabsContent>
@@ -99,7 +98,6 @@ export function ArticleMarkdownEditor({
           )}
         />
       ) : (
-        /* Show placeholder if no markdown initially */
         <div className="flex items-center justify-center h-[600px] border rounded-md bg-muted text-muted-foreground">
           Article content is being generated or hasn't been created yet.
         </div>

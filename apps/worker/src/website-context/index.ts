@@ -1,5 +1,5 @@
 import Boss from "pg-boss";
-dotenv.config(); // Ensure environment variables are loaded
+dotenv.config();
 
 import * as dotenv from "dotenv";
 import concurrentConsumer from "../utils/concurrent-consumer";
@@ -51,7 +51,6 @@ export async function execute(job: any): Promise<void> {
   ).then((x) => x.json());
   if (!reps) return;
 
-  // @ts-ignore
   const markdown = reps?.data?.markdown;
   if (!markdown) return;
 

@@ -2,12 +2,10 @@ import Boss from "pg-boss";
 
 const nodeEnv = process.env.NODE_ENV || "development";
 
-// Define the expected shape of the job data if possible, otherwise use 'any'
-// type JobData = { /* ... properties of your job data ... */ };
 type JobData = any;
 
 export default async function concurrentConsumer(
-  boss: Boss, // Changed from amqp.Connection to Boss instance
+  boss: Boss,
   queueName: string,
   maxConcurrentJobs: number,
   pollingIntervalSeconds: number = 10,
@@ -16,7 +14,6 @@ export default async function concurrentConsumer(
   const finalQueueName = `${queueName}_${nodeEnv}`;
   await boss.createQueue(finalQueueName);
 
-  // Configure worker options
   const workOptions: Boss.WorkOptions = {
     pollingIntervalSeconds,
   };

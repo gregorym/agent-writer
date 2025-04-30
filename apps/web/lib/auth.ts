@@ -1,4 +1,3 @@
-// src/auth.ts
 import { prisma } from "@/lib/prisma";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { Google } from "arctic";
@@ -15,7 +14,6 @@ export const lucia = new Lucia(adapter, {
   },
   getUserAttributes: (attributes) => {
     return {
-      // we don't need to expose the password hash!
       email: attributes.email,
     };
   },
@@ -28,7 +26,6 @@ export const google = new Google(
     "http://localhost:3000/api/auth/callback/google"
 );
 
-// IMPORTANT!
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
@@ -38,5 +35,3 @@ declare module "lucia" {
     };
   }
 }
-
-// Create the Prisma adapter with the correct parameters for v3

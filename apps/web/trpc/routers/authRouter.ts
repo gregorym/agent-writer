@@ -17,7 +17,6 @@ export const authRouter = router({
     .mutation(async ({ input }) => {
       const { email, password } = input;
 
-      // Check if email already exists
       const existingUser = await prisma.user.findUnique({
         where: { email },
       });
@@ -29,7 +28,6 @@ export const authRouter = router({
         });
       }
 
-      // Hash password
       const passwordHash = await argon2.hash(password, {
         memoryCost: 19456,
         timeCost: 2,
@@ -37,11 +35,9 @@ export const authRouter = router({
         parallelism: 1,
       });
 
-      // Generate user ID
       const userId = generateIdFromEntropySize(10);
 
       try {
-        // Create new user
         const user = await prisma.user.create({
           data: {
             id: userId,
@@ -50,7 +46,6 @@ export const authRouter = router({
           },
         });
 
-        // Create session
         const session = await lucia.createSession(user.id, {});
 
         return {
@@ -61,7 +56,6 @@ export const authRouter = router({
           },
         };
       } catch (error) {
-        console.error(error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create user account",
@@ -75,7 +69,6 @@ export const authRouter = router({
     .mutation(async ({ input }) => {
       const { email, password } = input;
 
-      // Find user by email
       const user = await prisma.user.findUnique({
         where: { email },
         select: { id: true, email: true, password_hash: true },
@@ -88,7 +81,6 @@ export const authRouter = router({
         });
       }
 
-      // Verify password
       if (!user.password_hash) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
@@ -110,11 +102,9 @@ export const authRouter = router({
         });
       }
 
-      // Create session
       const session = await lucia.createSession(user.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
 
-      // Cannot set cookies directly in tRPC, must be handled by client
       return {
         sessionId: session.id,
         user: {
