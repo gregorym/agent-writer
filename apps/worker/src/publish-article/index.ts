@@ -1,6 +1,7 @@
 import Boss from "pg-boss";
 dotenv.config();
 
+import { Octokit } from "@octokit/rest";
 import GhostAdminAPI from "@tryghost/admin-api";
 import * as dotenv from "dotenv";
 import fs from "fs";
@@ -10,6 +11,7 @@ import os from "os";
 import path from "path";
 import remarkParse from "remark-parse";
 import remarkStringify from "remark-stringify";
+import slugify from "slugify";
 import { unified } from "unified";
 import { Node } from "unist";
 import { remove } from "unist-util-remove";
@@ -41,17 +43,26 @@ export async function execute(job: any): Promise<void> {
     where: {
       id: id,
     },
-  });
-
-  if (!article) return;
-
-  const ghost = await prisma?.ghostIntegration.findFirst({
-    where: {
-      website_id: article.website_id,
+    include: {
+      website: {
+        include: {
+          ghostIntegration: true,
+          githubIntegration: true, // Include GithubIntegration
+        },
+      },
     },
   });
-  if (ghost) {
-    await publishToGhost(article, ghost);
+
+  if (!article || !article.website) return;
+
+  const { ghostIntegration, GithubIntegration } = article.website;
+
+  if (ghostIntegration) {
+    await publishToGhost(article, ghostIntegration);
+  }
+
+  if (GithubIntegration) {
+    await publishToGithub(article, githubIntegration[0]);
   }
 
   await prisma?.article.update({
@@ -177,5 +188,131 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
     );
   } catch (error) {
     throw error;
+  }
+}
+
+async function publishToGithub(article: any, github: any): Promise<void> {
+  try {
+    const octokit = new Octokit({ auth: github.api_key });
+
+    const { data: userData } = await octokit.users.getAuthenticated();
+    const owner = userData.login;
+    const repo = github.repo_name;
+    if (!repo) {
+      throw new Error(
+        "Repository name is missing in GithubIntegration settings. Please add it in the website settings."
+      );
+    }
+
+    // 2. Check if the token can access the specified repository
+    try {
+      await octokit.repos.get({ owner, repo });
+      // If the above call succeeds, the token has access to the repo.
+    } catch (error: any) {
+      if (error.status === 404) {
+        throw new Error(
+          `Error: Cannot access repository '${owner}/${repo}'. Check repository name and token permissions.`
+        );
+      } else {
+        // Re-throw other errors (e.g., network issues, rate limits)
+        throw new Error(
+          `Error verifying repository access: ${error.message || error}`
+        );
+      }
+    }
+
+    // --- Rest of the function remains the same ---
+    const branchName = `feat/add-article-${slugify(article.title!, {
+      lower: true,
+      strict: true,
+    })}-${Date.now()}`;
+    const filePath = path.join(
+      github.dir_path || "",
+      `${slugify(article.title!, { lower: true, strict: true })}.mdx`
+    );
+    const commitMessage = `feat: add article \"${article.title}\"`;
+    const prTitle = `Add article: ${article.title}`;
+    const prBody = `Adds the new article \"${article.title}\".`;
+
+    // 2. Get the default branch
+    const repoInfo = await octokit.repos.get({ owner, repo });
+    const baseBranch = repoInfo.data.default_branch;
+
+    // 3. Get the SHA of the base branch
+    const { data: refData } = await octokit.git.getRef({
+      owner,
+      repo,
+      ref: `heads/${baseBranch}`,
+    });
+    const baseSha = refData.object.sha;
+
+    // 4. Create a new branch
+    await octokit.git.createRef({
+      owner,
+      repo,
+      ref: `refs/heads/${branchName}`,
+      sha: baseSha,
+    });
+
+    // 5. Create the file content (MDX) with frontmatter
+    const frontmatter = `---
+title: "${article.title}"
+description: "${article.description || ""}"
+date: "${new Date(article.created_at).toISOString().split("T")[0]}"
+---
+
+`;
+    const fileContent = frontmatter + article.markdown;
+    const contentEncoded = Buffer.from(fileContent).toString("base64");
+
+    // 6. Create the file on the new branch
+    // Check if file exists first to update instead of create if necessary
+    let existingFileSha: string | undefined;
+    try {
+      const { data: existingFileData } = await octokit.repos.getContent({
+        owner,
+        repo,
+        path: filePath,
+        ref: branchName,
+      });
+      // Annoyingly, getContent returns an array if path is a directory,
+      // or a single object if it's a file. Type checking needed.
+      if (
+        !Array.isArray(existingFileData) &&
+        existingFileData.type === "file"
+      ) {
+        existingFileSha = existingFileData.sha;
+      }
+    } catch (error: any) {
+      if (error.status !== 404) {
+        throw error; // Re-throw errors other than "not found"
+      }
+      // File doesn't exist, proceed to create
+    }
+
+    await octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path: filePath,
+      message: commitMessage,
+      content: contentEncoded,
+      branch: branchName,
+      sha: existingFileSha, // Provide SHA if updating
+    });
+
+    // 7. Create a pull request
+    await octokit.pulls.create({
+      owner,
+      repo,
+      title: prTitle,
+      head: branchName,
+      base: baseBranch,
+      body: prBody,
+    });
+  } catch (error) {
+    // Add more specific error handling if needed
+    // Avoid console.log as per instructions
+    // Consider logging to a more persistent store or re-throwing
+    throw error; // Re-throw to allow job tracking to catch it
   }
 }

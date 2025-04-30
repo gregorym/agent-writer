@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Octokit } from "@octokit/rest";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
@@ -7,7 +8,7 @@ import { protectedProcedure, router } from "../trpc";
 const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
   const website = await prisma.website.findUnique({
     where: { slug: websiteSlug },
-    select: { id: true, user_id: true }, // Select only necessary fields
+    select: { id: true, user_id: true },
   });
 
   if (!website) {
@@ -24,7 +25,33 @@ const verifyWebsiteOwnership = async (userId: string, websiteSlug: string) => {
     });
   }
 
-  return website; // Return website id for convenience
+  // Return the full website object needed later, not just id
+  return website;
+};
+
+// Helper function to get GitHub repositories
+const getGithubRepos = async (apiKey: string): Promise<string[]> => {
+  try {
+    const octokit = new Octokit({ auth: apiKey });
+    const repos = await octokit.repos.listForAuthenticatedUser({
+      per_page: 100,
+    });
+    return repos.data.map((repo) => repo.full_name);
+  } catch (error: any) {
+    console.error("Failed to fetch GitHub repositories:", error);
+    if (error.status === 401) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Invalid GitHub API Key.",
+        cause: error,
+      });
+    }
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Failed to fetch repositories from GitHub.",
+      cause: error,
+    });
+  }
 };
 
 const githubIntegrationInputBaseSchema = z.object({
@@ -37,67 +64,83 @@ const githubIntegrationCreateSchema = githubIntegrationInputBaseSchema.extend({
 
 const githubIntegrationUpdateSchema = githubIntegrationInputBaseSchema.extend({
   apiKey: z.string().min(1, "API Key cannot be empty").optional(),
-  dirPath: z.string().optional(),
+  dirPath: z.string().optional().nullable(),
+  repoName: z.string().optional().nullable(),
 });
 
 export const githubIntegrationsRouter = router({
   get: protectedProcedure
     .input(githubIntegrationInputBaseSchema)
     .query(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
+      const userId = ctx.session.user.id; // Correctly get userId
       const { websiteSlug } = input;
-
-      // 1. Verify ownership first
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
-
-      // 2. Fetch the integration
       const integration = await prisma.githubIntegration.findUnique({
         where: { website_id: website.id },
-        // No need to include website again, we already verified ownership
       });
-
-      // Integration might not exist, which is fine for a 'get' operation
       return integration;
+    }),
+
+  listRepos: protectedProcedure
+    .input(githubIntegrationInputBaseSchema)
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id; // Correctly get userId
+      const { websiteSlug } = input;
+      const website = await verifyWebsiteOwnership(userId, websiteSlug);
+      const integration = await prisma.githubIntegration.findUnique({
+        where: { website_id: website.id },
+        select: { api_key: true },
+      });
+      if (!integration || !integration.api_key) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "GitHub integration or API key not found for this website.",
+        });
+      }
+      const repoNames = await getGithubRepos(integration.api_key);
+      return repoNames;
     }),
 
   create: protectedProcedure
     .input(githubIntegrationCreateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      // Remove apiUrl from input destructuring
+      const userId = ctx.session.user.id; // Correctly get userId
       const { websiteSlug, apiKey } = input;
-
-      // 1. Verify ownership
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
-
-      // 2. Check if integration already exists
       const existingIntegration = await prisma.githubIntegration.findUnique({
         where: { website_id: website.id },
-        select: { id: true }, // Only need to know if it exists
+        select: { id: true },
       });
-
       if (existingIntegration) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Ghost integration already exists for this website.",
+          message: "GitHub integration already exists for this website.", // Corrected message
         });
       }
-
-      // 3. Create the integration (remove apiUrl)
+      const repoNames = await getGithubRepos(apiKey);
+      if (repoNames.length === 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "The provided API key does not have access to any repositories or no repositories were found.",
+        });
+      }
+      const firstRepoName = repoNames[0];
       try {
         const newIntegration = await prisma.githubIntegration.create({
           data: {
             website_id: website.id,
             api_key: apiKey,
-            // api_url: apiUrl, // Removed
+            repo_name: firstRepoName,
           },
         });
         return newIntegration;
-      } catch (error) {
-        console.error("Failed to create Github integration:", error); // Updated log message
+      } catch (error: unknown) {
+        // Type catch error
+        console.error("Failed to create Github integration:", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create Github integration", // Updated error message
+          message: "Failed to create Github integration",
           cause: error,
         });
       }
@@ -106,93 +149,150 @@ export const githubIntegrationsRouter = router({
   update: protectedProcedure
     .input(githubIntegrationUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { websiteSlug, apiKey, dirPath } = input;
-
-      // 1. Verify ownership
+      const userId = ctx.session.user.id; // Correctly get userId
+      const { websiteSlug, apiKey, dirPath, repoName } = input;
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
-      // 2. Check if at least one field is provided for update (only apiKey now)
-      // Remove check for apiUrl
-      if (!apiKey) {
+      if (
+        apiKey === undefined &&
+        dirPath === undefined &&
+        repoName === undefined
+      ) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "The apiKey field must be provided for update.", // Updated message
+          message:
+            "At least one field (apiKey, dirPath, repoName) must be provided for update.",
         });
       }
 
-      // 3. Check if integration exists before trying to update
-      const integration = await prisma.githubIntegration.findUnique({
+      const currentIntegration = await prisma.githubIntegration.findUnique({
         where: { website_id: website.id },
-        select: { id: true }, // Only need ID to confirm existence
+        select: { id: true, api_key: true, repo_name: true },
       });
 
-      if (!integration) {
+      if (!currentIntegration) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Ghost integration not found for this website.", // Corrected message
+          message: "Github integration not found for this website.",
         });
       }
 
-      // 4. Update the integration (remove apiUrl)
+      let validatedRepoName: string | null | undefined = repoName;
+      let accessibleRepos: string[] = [];
+      const keyToUse = apiKey || currentIntegration.api_key;
+
+      if (!keyToUse) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR", // Should have key if integration exists
+          message: "Cannot validate repository without an API key.",
+        });
+      }
+
+      try {
+        accessibleRepos = await getGithubRepos(keyToUse);
+      } catch (error: unknown) {
+        // Type catch error
+        if (error instanceof TRPCError) throw error;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to fetch repositories while validating update.",
+          cause: error,
+        });
+      }
+
+      if (repoName !== undefined) {
+        if (repoName === null) {
+          validatedRepoName = null;
+        } else if (!accessibleRepos.includes(repoName)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Repository '${repoName}' is not accessible with the provided/existing API key.`,
+          });
+        } else {
+          validatedRepoName = repoName;
+        }
+      } else if (apiKey) {
+        const currentRepoName = currentIntegration.repo_name;
+        if (currentRepoName && accessibleRepos.includes(currentRepoName)) {
+          validatedRepoName = currentRepoName;
+        } else if (accessibleRepos.length > 0) {
+          validatedRepoName = accessibleRepos[0];
+        } else {
+          validatedRepoName = null;
+        }
+      } else {
+        // Neither apiKey nor repoName provided in update, keep existing
+        validatedRepoName = currentIntegration.repo_name;
+      }
+
+      const updateData: Prisma.GithubIntegrationUpdateInput = {};
+      let needsUpdate = false;
+
+      if (apiKey !== undefined && apiKey !== currentIntegration.api_key) {
+        updateData.api_key = apiKey;
+        needsUpdate = true;
+      }
+      // Use !== undefined to allow setting dirPath to null or empty string
+      if (dirPath !== undefined) {
+        updateData.dir_path = dirPath;
+        needsUpdate = true;
+      }
+      // Update repo_name if explicitly provided OR if API key change forced a change
+      if (
+        repoName !== undefined ||
+        (apiKey && validatedRepoName !== currentIntegration.repo_name)
+      ) {
+        updateData.repo_name = validatedRepoName;
+        needsUpdate = true;
+      }
+
+      if (!needsUpdate) {
+        // Fetch full data if no update needed, as we only selected partial data
+        return await prisma.githubIntegration.findUnique({
+          where: { id: currentIntegration.id },
+        });
+      }
+
       try {
         const updatedIntegration = await prisma.githubIntegration.update({
           where: { website_id: website.id },
-          data: {
-            ...(apiKey && { api_key: apiKey }),
-            ...(dirPath && { dir_path: dirPath }),
-          },
+          data: updateData,
         });
         return updatedIntegration;
-      } catch (error) {
-        console.error("Failed to update Github integration:", error); // Updated log message
-        // Could add more specific error handling, e.g., for unique constraint violations if any
+      } catch (error: unknown) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to update Github integration", // Updated error message
+          message: "Failed to update Github integration",
           cause: error,
         });
       }
     }),
 
   delete: protectedProcedure
-    .input(githubIntegrationInputBaseSchema) // Use base schema with websiteSlug
+    .input(githubIntegrationInputBaseSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { websiteSlug } = input; // Use websiteSlug from input
-
-      // 1. Verify ownership
+      const userId = ctx.session.user.id; // Correctly get userId
+      const { websiteSlug } = input;
       const website = await verifyWebsiteOwnership(userId, websiteSlug);
 
-      // 2. Check if integration exists before trying to delete
-      const integration = await prisma.githubIntegration.findUnique({
-        where: { website_id: website.id },
-        select: { id: true }, // Only need ID to confirm existence
-      });
-
-      if (!integration) {
-        // It's arguably okay to return success if it doesn't exist (idempotent delete)
-        // But throwing NOT_FOUND might be clearer for the client.
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Github integration not found for this website.", // Corrected message
-        });
-      }
-
-      // 3. Delete the integration
       try {
-        await prisma.githubIntegration.delete({
+        // Use deleteMany to avoid error if not found (idempotent)
+        await prisma.githubIntegration.deleteMany({
           where: { website_id: website.id },
         });
         return {
           success: true,
-          message: "Github integration deleted successfully.", // Updated message
+          message: "Github integration deleted successfully.",
         };
-      } catch (error) {
-        console.error("Failed to delete Github integration:", error); // Updated log message
+      } catch (error: unknown) {
+        // Type catch error
+        console.error("Failed to delete Github integration:", error);
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          // Handle specific Prisma errors if needed
+        }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to delete Github integration", // Updated error message
+          message: "Failed to delete Github integration",
           cause: error,
         });
       }

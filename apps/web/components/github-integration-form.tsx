@@ -11,6 +11,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // Import Select components
 import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
@@ -21,10 +28,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Skeleton } from "./ui/skeleton";
 
-// Add dirPath to the schema, make it optional
+// Add repoName to the schema
 const formSchema = z.object({
   apiKey: z.string().min(1, "API Key cannot be empty"),
-  dirPath: z.string().optional(), // Add dirPath, make it optional
+  dirPath: z.string().optional().nullable(), // Allow null
+  repoName: z.string().optional().nullable(), // Add repoName, allow null/optional
 });
 
 type GithubIntegrationFormValues = z.infer<typeof formSchema>;
@@ -49,9 +57,16 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
     { enabled: !!slug }
   );
 
+  // Fetch repository list - only enable if integration exists and has an API key
+  const { data: repoList, isLoading: isLoadingRepos } =
+    trpc.github.listRepos.useQuery(
+      { websiteSlug: slug! },
+      { enabled: !!slug && !!integration?.api_key }
+    );
+
   const form = useForm<GithubIntegrationFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { apiKey: "", dirPath: "" }, // Initialize dirPath
+    defaultValues: { apiKey: "", dirPath: "", repoName: "" }, // Initialize repoName
   });
 
   // Update form values when integration data loads or changes
@@ -60,19 +75,23 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
       form.reset({
         apiKey: integration.api_key,
         dirPath: integration.dir_path ?? "", // Reset dirPath, default to empty string if null/undefined
+        repoName: integration.repo_name ?? "", // Reset repoName
       });
     } else {
-      form.reset({ apiKey: "", dirPath: "" }); // Reset dirPath
+      form.reset({ apiKey: "", dirPath: "", repoName: "" }); // Reset dirPath and repoName
     }
   }, [integration, form]);
 
   const createMutation = trpc.github.create.useMutation({
     // Use trpc.github
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       toast.success("GitHub integration created successfully!"); // Update message
       if (slug) {
         await utils.github.get.invalidate({ websiteSlug: slug }); // Invalidate github.get
+        await utils.github.listRepos.invalidate({ websiteSlug: slug }); // Invalidate repo list
       }
+      // Update form with the newly created repo name (which backend defaults)
+      form.setValue("repoName", data.repo_name);
     },
     onError: (error) => {
       toast.error(`Failed to create GitHub integration: ${error.message}`); // Update message
@@ -81,11 +100,17 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
 
   const updateMutation = trpc.github.update.useMutation({
     // Use trpc.github
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       toast.success("GitHub integration updated successfully!"); // Update message
       if (slug) {
         await utils.github.get.invalidate({ websiteSlug: slug }); // Invalidate github.get
+        // Invalidate repo list if API key might have changed
+        if (form.getValues("apiKey") !== integration?.api_key) {
+          await utils.github.listRepos.invalidate({ websiteSlug: slug });
+        }
       }
+      // Update form with the potentially updated repo name
+      form.setValue("repoName", data.repo_name);
     },
     onError: (error) => {
       toast.error(`Failed to update GitHub integration: ${error.message}`); // Update message
@@ -98,8 +123,9 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
       toast.success("GitHub integration deleted successfully!"); // Update message
       if (slug) {
         await utils.github.get.invalidate({ websiteSlug: slug }); // Invalidate github.get
+        await utils.github.listRepos.invalidate({ websiteSlug: slug }); // Invalidate repo list
       }
-      form.reset({ apiKey: "", dirPath: "" }); // Reset dirPath on delete
+      form.reset({ apiKey: "", dirPath: "", repoName: "" }); // Reset dirPath and repoName on delete
     },
     onError: (error) => {
       toast.error(`Failed to delete GitHub integration: ${error.message}`); // Update message
@@ -115,12 +141,13 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
       websiteSlug: slug,
       apiKey: values.apiKey,
       dirPath: values.dirPath || null, // Send null if empty string, adjust based on backend expectation
+      repoName: values.repoName || null, // Send null if empty/falsy
     };
     if (integration) {
-      // Update existing integration (include dirPath)
+      // Update existing integration (include dirPath and repoName)
       updateMutation.mutate(payload);
     } else {
-      // Create new integration (include dirPath)
+      // Create new integration (include dirPath and repoName)
       createMutation.mutate(payload);
     }
   }
@@ -144,7 +171,8 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
   if (isLoadingIntegration) {
     return (
       <div className="space-y-4">
-        {/* Add skeleton for dirPath */}
+        {/* Add skeleton for repoName */}
+        <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-1/4" />
@@ -208,6 +236,50 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
               <FormDescription>
                 Create a Fine-grained Personal Access Token with Repository
                 read/write access. {/* Update description */}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Repository Select FormField */}
+        <FormField
+          control={form.control}
+          name="repoName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Repository</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value ?? ""} // Handle null/undefined for Select value
+                disabled={!integration || isLoadingRepos || isSubmitting}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a repository" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {isLoadingRepos && (
+                    <SelectItem value="loading" disabled>
+                      Loading repositories...
+                    </SelectItem>
+                  )}
+                  {repoList && repoList.length > 0
+                    ? repoList.map((repo) => (
+                        <SelectItem key={repo} value={repo}>
+                          {repo}
+                        </SelectItem>
+                      ))
+                    : !isLoadingRepos && (
+                        <SelectItem value="norepos" disabled>
+                          No repositories found or accessible
+                        </SelectItem>
+                      )}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                The GitHub repository to store your articles in.
               </FormDescription>
               <FormMessage />
             </FormItem>

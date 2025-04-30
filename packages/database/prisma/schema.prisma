@@ -54,11 +54,11 @@ model Website {
   user User @relation(fields: [user_id], references: [id])
   articles Article[]
   ghostIntegration GhostIntegration? 
+  githubIntegration GithubIntegration[]
 
   @@index([user_id])
   @@index([slug])
   @@map("websites")
-  GithubIntegration GithubIntegration[]
 }
 
 model Subscription {
@@ -124,6 +124,7 @@ model GithubIntegration {
   website_id Int      @unique
   api_key    String
   dir_path   String?
+  repo_name  String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

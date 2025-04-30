@@ -192,6 +192,7 @@ exports.Prisma.GithubIntegrationScalarFieldEnum = {
   website_id: 'website_id',
   api_key: 'api_key',
   dir_path: 'dir_path',
+  repo_name: 'repo_name',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
