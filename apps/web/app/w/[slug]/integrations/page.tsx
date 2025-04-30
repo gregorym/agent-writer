@@ -85,8 +85,9 @@ export default function IntegrationsPage() {
                   {/* Ghost Integration */}
                   <Collapsible open={isGhostOpen} onOpenChange={setIsGhostOpen}>
                     <div className="flex items-center justify-between space-x-4 rounded-md border px-4 py-2">
-                      <h4 className="text-sm font-semibold">
+                      <h4 className="flex items-center gap-2 text-sm font-semibold">
                         Ghost Integration
+                        {website.ghostIntegration && <span>✅</span>}
                       </h4>
                       <CollapsibleTrigger asChild>
                         <Button variant="ghost" size="sm">
@@ -105,8 +106,9 @@ export default function IntegrationsPage() {
                     onOpenChange={setIsGithubOpen}
                   >
                     <div className="flex items-center justify-between space-x-4 rounded-md border px-4 py-2">
-                      <h4 className="text-sm font-semibold">
+                      <h4 className="flex items-center gap-2 text-sm font-semibold">
                         GitHub Integration
+                        {website.githubIntegration && <span>✅</span>}
                       </h4>
                       <CollapsibleTrigger asChild>
                         <Button variant="ghost" size="sm">

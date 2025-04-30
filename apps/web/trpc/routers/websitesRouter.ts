@@ -7,6 +7,7 @@ import { protectedProcedure, router } from "../trpc";
 const websiteSchema = z.object({
   name: z.string().min(1, "Name cannot be empty"),
   url: z.string().url("Invalid URL format"),
+  topic: z.string().min(1, "Topic cannot be empty"), // Add topic field
 });
 
 // Add schema for updating, including the slug
@@ -23,6 +24,18 @@ export const websitesRouter = router({
       const { slug } = input;
       const website = await prisma.website.findUnique({
         where: { slug, user_id: userId },
+        include: {
+          ghostIntegration: {
+            select: {
+              id: true,
+            },
+          },
+          githubIntegration: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
       if (!website) {
         throw new TRPCError({
