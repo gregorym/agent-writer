@@ -27,20 +27,33 @@ import { trpc } from "@/trpc/client";
 import { useEffect, useRef } from "react"; // Add useRef
 import { toast } from "sonner";
 import { BacklinksInput } from "./backlinks-input";
+import { Input } from "./ui/input";
 
 // Updated schema
-const formSchema = z.object({
-  topic: z.string().min(1, { message: "Topic cannot be empty." }), // Topic is now required
-  scheduled_at: z.date().optional().nullable(), // Added scheduled_at
-  backlinks: z
-    .array(
-      z.object({
-        url: z.string().url({ message: "Please enter a valid URL." }),
-        title: z.string().min(1, { message: "Title cannot be empty." }),
-      })
-    )
-    .optional(), // Added backlinks array
-});
+const formSchema = z
+  .object({
+    topic: z.string(), // Topic validation will be refined below
+    scheduled_at: z.date().optional().nullable(), // Added scheduled_at
+    keyword: z.string().optional(), // Added keyword
+    backlinks: z
+      .array(
+        z.object({
+          url: z.string().url({ message: "Please enter a valid URL." }),
+          title: z.string().min(1, { message: "Title cannot be empty." }),
+        })
+      )
+      .optional(), // Added backlinks array
+  })
+  .refine(
+    (data) => {
+      // If keyword is missing, topic must be provided
+      return data.keyword || data.topic.trim().length >= 1;
+    },
+    {
+      message: "Topic is required when keyword is not provided",
+      path: ["topic"],
+    }
+  );
 
 // Helper function to transform object array to string array
 const transformBacklinksToString = (
@@ -52,14 +65,18 @@ const transformBacklinksToString = (
 
 interface CreateArticleFormProps {
   websiteSlug: string;
+  keyword?: string;
   onSuccess?: () => void;
 }
 
 export function CreateArticleForm({
   websiteSlug,
   onSuccess,
+  keyword,
 }: CreateArticleFormProps) {
-  const { data: website } = trpc.websites.get.useQuery({ slug: websiteSlug });
+  const { data: website } = trpc.websites.get.useQuery({
+    slug: websiteSlug,
+  });
   const queueArticleMutation = trpc.articles.retry.useMutation({});
   const createArticleMutation = trpc.articles.create.useMutation({
     // onSuccess and onError removed
@@ -71,6 +88,7 @@ export function CreateArticleForm({
       topic: "",
       scheduled_at: null, // Default to null
       backlinks: [], // Default to empty array
+      keyword: keyword || undefined, // Default to undefined if keyword is not provided
     },
   });
 
@@ -109,6 +127,7 @@ export function CreateArticleForm({
         scheduled_at: values.scheduled_at,
         websiteSlug,
         backlinks: formattedBacklinks, // Send formatted backlinks
+        keyword: keyword || undefined, // Send keyword if provided
       });
 
       // Handle success logic here
@@ -152,6 +171,24 @@ export function CreateArticleForm({
             </FormItem>
           )}
         />
+        {keyword && (
+          <FormField
+            control={form.control}
+            name="keyword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Keywords</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Targeted keywords fro the article..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="scheduled_at"
@@ -171,7 +208,7 @@ export function CreateArticleForm({
                       {field.value ? (
                         format(field.value, "PPP")
                       ) : (
-                        <span>Pick a date</span>
+                        <span>Auto-select</span>
                       )}
                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>

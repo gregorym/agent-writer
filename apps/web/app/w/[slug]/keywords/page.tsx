@@ -44,6 +44,7 @@ export default function KeywordsPage() {
                 </TabsContent>
                 <TabsContent value="related">
                   <RelatedKeywords
+                    websiteSlug={websiteSlug}
                     locationName={website?.location_name}
                     languageName={website?.language_name}
                   />

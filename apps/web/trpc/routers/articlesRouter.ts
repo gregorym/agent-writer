@@ -10,6 +10,7 @@ const articleCreateSchema = z.object({
   topic: z.string().optional(),
   title: z.string().optional(),
   markdown: z.string().optional(),
+  keyword: z.string().optional(),
   scheduled_at: z.date().optional().nullable(),
   backlinks: z.array(z.string()).optional(),
 });
@@ -38,13 +39,14 @@ export const articlesRouter = router({
     .input(articleCreateSchema)
     .mutation(async ({ ctx, input }) => {
       const { id: userId } = ctx.session.user;
-      const { websiteSlug, topic, title, markdown, scheduled_at, backlinks } =
-        input;
+      let { websiteSlug, topic, title, markdown, scheduled_at, backlinks } =
+        input; // Use let for scheduled_at
 
       const website = await verifyWebsiteAccess(userId, websiteSlug);
       const websiteId = website.id;
 
       if (scheduled_at) {
+        // User provided a specific date, check for conflicts on that day
         const scheduledDate = new Date(scheduled_at);
         scheduledDate.setUTCHours(0, 0, 0, 0);
 
@@ -68,6 +70,43 @@ export const articlesRouter = router({
             message: "An article is already scheduled for this day.",
           });
         }
+      } else {
+        // User did not provide a date, find the next available day starting from tomorrow
+        const scheduledArticles = await prisma.article.findMany({
+          where: {
+            website_id: websiteId,
+            scheduled_at: {
+              not: null,
+            },
+          },
+          select: { scheduled_at: true },
+          orderBy: { scheduled_at: "asc" },
+        });
+
+        const scheduledDates = new Set(
+          scheduledArticles
+            .map((a) => {
+              if (!a.scheduled_at) return null;
+              const date = new Date(a.scheduled_at);
+              date.setUTCHours(0, 0, 0, 0);
+              return date.toISOString().split("T")[0]; // Store dates as YYYY-MM-DD strings
+            })
+            .filter((d): d is string => d !== null)
+        );
+
+        // Start searching from tomorrow
+        let nextAvailableDate = new Date();
+        nextAvailableDate.setUTCDate(nextAvailableDate.getUTCDate() + 1); // Start from tomorrow
+        nextAvailableDate.setUTCHours(0, 0, 0, 0);
+
+        while (
+          scheduledDates.has(
+            nextAvailableDate.toISOString().split("T")[0] || ""
+          )
+        ) {
+          nextAvailableDate.setUTCDate(nextAvailableDate.getUTCDate() + 1);
+        }
+        scheduled_at = nextAvailableDate; // Assign the found date
       }
 
       try {
@@ -77,8 +116,9 @@ export const articlesRouter = router({
             topic,
             title,
             markdown,
-            scheduled_at,
+            scheduled_at, // Use the potentially updated scheduled_at
             backlinks: backlinks ?? [],
+            keywords: input.keyword,
           },
         });
 
