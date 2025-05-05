@@ -34,166 +34,206 @@ const websiteSlugSchema = z.object({
   websiteSlug: z.string(),
 });
 
+const createBoss = () => new PgBoss(process.env.DATABASE_URL_POOLING!);
+const queueName = (action: "new-article" | "publish-article") =>
+  `${action}_${process.env.NODE_ENV ?? "development"}`;
+
+async function findNextScheduledDate(websiteId: number): Promise<Date> {
+  const entries = await prisma.article.findMany({
+    where: { website_id: websiteId, scheduled_at: { not: null } },
+    select: { scheduled_at: true },
+    orderBy: { scheduled_at: "asc" },
+  });
+  const occupied = new Set(
+    entries
+      .map((e) => e.scheduled_at!)
+      .map((d) => {
+        d.setUTCHours(0, 0, 0, 0);
+        return d.toISOString().split("T")[0];
+      })
+  );
+
+  const candidate = new Date();
+  candidate.setUTCDate(candidate.getUTCDate() + 1);
+  candidate.setUTCHours(9, 0, 0, 0);
+
+  while (occupied.has(candidate.toISOString().split("T")[0])) {
+    candidate.setUTCDate(candidate.getUTCDate() + 1);
+  }
+  return candidate;
+}
+
 export const articlesRouter = router({
   create: protectedProcedure
     .input(articleCreateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      let { websiteSlug, topic, title, markdown, scheduled_at, backlinks } =
-        input; // Use let for scheduled_at
-
-      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const userId = ctx.session.user.id;
+      const website = await verifyWebsiteAccess(userId, input.websiteSlug);
       const websiteId = website.id;
 
-      if (scheduled_at) {
-        // User provided a specific date, check for conflicts on that day
-        const scheduledDate = new Date(scheduled_at);
-        scheduledDate.setUTCHours(0, 0, 0, 0);
+      if (input.scheduled_at && input.scheduled_at <= new Date()) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Scheduled date must be in the future.",
+        });
+      }
 
-        const nextDay = new Date(scheduledDate);
-        nextDay.setUTCDate(scheduledDate.getUTCDate() + 1);
+      let scheduledAt = input.scheduled_at;
+      if (!scheduledAt) {
+        scheduledAt = await findNextScheduledDate(websiteId);
+      } else {
+        const dayStart = new Date(scheduledAt);
+        dayStart.setUTCHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayStart);
+        dayEnd.setUTCDate(dayStart.getUTCDate() + 1);
 
-        const existingScheduledArticle = await prisma.article.findFirst({
+        const conflict = await prisma.article.findFirst({
           where: {
             website_id: websiteId,
-            scheduled_at: {
-              gte: scheduledDate,
-              lt: nextDay,
-            },
+            scheduled_at: { gte: dayStart, lt: dayEnd },
           },
           select: { id: true },
         });
-
-        if (existingScheduledArticle) {
+        if (conflict) {
           throw new TRPCError({
             code: "CONFLICT",
             message: "An article is already scheduled for this day.",
           });
         }
-      } else {
-        // User did not provide a date, find the next available day starting from tomorrow
-        const scheduledArticles = await prisma.article.findMany({
-          where: {
-            website_id: websiteId,
-            scheduled_at: {
-              not: null,
-            },
-          },
-          select: { scheduled_at: true },
-          orderBy: { scheduled_at: "asc" },
-        });
-
-        const scheduledDates = new Set(
-          scheduledArticles
-            .map((a) => {
-              if (!a.scheduled_at) return null;
-              const date = new Date(a.scheduled_at);
-              date.setUTCHours(0, 0, 0, 0);
-              return date.toISOString().split("T")[0]; // Store dates as YYYY-MM-DD strings
-            })
-            .filter((d): d is string => d !== null)
-        );
-
-        // Start searching from tomorrow
-        let nextAvailableDate = new Date();
-        nextAvailableDate.setUTCDate(nextAvailableDate.getUTCDate() + 1); // Start from tomorrow
-        nextAvailableDate.setUTCHours(0, 0, 0, 0);
-
-        while (
-          scheduledDates.has(
-            nextAvailableDate.toISOString().split("T")[0] || ""
-          )
-        ) {
-          nextAvailableDate.setUTCDate(nextAvailableDate.getUTCDate() + 1);
-        }
-        scheduled_at = nextAvailableDate; // Assign the found date
       }
 
+      const boss = createBoss();
+      await boss.start();
+      await boss.createQueue(queueName("new-article"));
+
       try {
-        const newArticle = await prisma.article.create({
+        let article = await prisma.article.create({
           data: {
             website_id: websiteId,
-            topic,
-            title,
-            markdown,
-            scheduled_at, // Use the potentially updated scheduled_at
-            backlinks: backlinks ?? [],
+            topic: input.topic,
+            title: input.title,
+            markdown: input.markdown,
+            scheduled_at: scheduledAt,
+            backlinks: input.backlinks ?? [],
             keywords: input.keyword,
           },
         });
 
-        return newArticle;
-      } catch (error) {
-        if (error instanceof TRPCError && error.code === "CONFLICT") {
-          throw error;
+        if (scheduledAt > new Date()) {
+          const jobId = await boss.send(
+            queueName("new-article"),
+            { id: article.id },
+            { startAfter: scheduledAt }
+          );
+          if (jobId) {
+            article = await prisma.article.update({
+              where: { id: article.id },
+              data: { job_id: jobId },
+            });
+          }
         }
+
+        return article;
+      } catch (err: any) {
+        if (err instanceof TRPCError) throw err;
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create article",
-          cause: error,
+          message: "Failed to create or schedule article",
+          cause: err,
         });
+      } finally {
+        await boss.stop();
       }
     }),
 
-  retry: protectedProcedure
-    .input(articleIdAndSlugSchema)
+  update: protectedProcedure
+    .input(articleUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { articleId, websiteSlug } = input;
+      const userId = ctx.session.user.id;
+      const { articleId, websiteSlug, ...data } = input;
       const website = await verifyWebsiteAccess(userId, websiteSlug);
-      const websiteId = website.id;
-      const article = await prisma.article.findUnique({
-        where: { id: articleId, website_id: websiteId },
+      const current = await prisma.article.findUnique({
+        where: { id: articleId, website_id: website.id },
+        select: { job_id: true, scheduled_at: true },
       });
-
-      if (!article) {
+      if (!current) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Article not found or does not belong to this website.",
         });
       }
 
-      const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
-      await boss.start();
-
-      const queueName = `new-article_${process.env.NODE_ENV || "development"}`;
-      await boss.createQueue(queueName);
-
-      const id = await boss.send(queueName, { id: article.id });
-      await boss.stop();
-
-      if (id) {
-        await prisma.article.update({
-          where: { id: article.id },
-          data: { job_id: id },
+      if (data.scheduled_at && data.scheduled_at <= new Date()) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Scheduled date must be in the future.",
         });
       }
+
+      let newJobId = current.job_id;
+      if (
+        "scheduled_at" in data &&
+        data.scheduled_at?.toISOString() !== current.scheduled_at?.toISOString()
+      ) {
+        const boss = createBoss();
+        await boss.start();
+        await boss.createQueue(queueName("new-article"));
+
+        if (current.job_id) {
+          await boss
+            .cancel(queueName("new-article"), current.job_id)
+            .catch(() => {});
+          newJobId = null;
+        }
+
+        if (data.scheduled_at) {
+          newJobId = await boss.send(
+            queueName("new-article"),
+            { id: articleId },
+            { startAfter: data.scheduled_at }
+          );
+        }
+
+        await boss.stop();
+      }
+
+      return await prisma.article.update({
+        where: { id: articleId, website_id: website.id },
+        data: {
+          ...data,
+          backlinks: data.backlinks ?? undefined,
+          job_id: newJobId,
+        },
+      });
     }),
-  update: protectedProcedure
-    .input(articleUpdateSchema)
+
+  retry: protectedProcedure
+    .input(articleIdAndSlugSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { articleId, websiteSlug, ...updateData } = input;
-
-      const website = await verifyWebsiteAccess(userId, websiteSlug);
-      const websiteId = website.id;
-
-      const dataToUpdate = {
-        ...updateData,
-        backlinks: updateData.backlinks ?? undefined,
-      };
-
-      try {
-        const updatedArticle = await prisma.article.update({
-          where: { id: articleId, website_id: websiteId },
-          data: dataToUpdate,
-        });
-        return updatedArticle;
-      } catch (error: any) {
+      const userId = ctx.session.user.id;
+      const website = await verifyWebsiteAccess(userId, input.websiteSlug);
+      const article = await prisma.article.findUnique({
+        where: { id: input.articleId, website_id: website.id },
+      });
+      if (!article) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to update article",
-          cause: error,
+          code: "NOT_FOUND",
+          message: "Article not found.",
+        });
+      }
+
+      const boss = createBoss();
+      await boss.start();
+      await boss.createQueue(queueName("new-article"));
+      const jobId = await boss.send(queueName("new-article"), {
+        id: article.id,
+      });
+      await boss.stop();
+
+      if (jobId) {
+        await prisma.article.update({
+          where: { id: article.id },
+          data: { job_id: jobId },
         });
       }
     }),
@@ -201,67 +241,40 @@ export const articlesRouter = router({
   delete: protectedProcedure
     .input(articleIdAndSlugSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { articleId, websiteSlug } = input;
-
-      const website = await verifyWebsiteAccess(userId, websiteSlug);
-      const websiteId = website.id;
-
+      const userId = ctx.session.user.id;
+      const website = await verifyWebsiteAccess(userId, input.websiteSlug);
       const article = await prisma.article.findUnique({
-        where: { id: articleId, website_id: websiteId },
+        where: { id: input.articleId, website_id: website.id },
       });
-
-      if (!article) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Article not found or does not belong to this website.",
-        });
-      }
-
-      const canDelete =
-        !article.markdown &&
-        article.scheduled_at &&
-        article.scheduled_at > new Date();
-
-      if (!canDelete) {
+      if (
+        !article ||
+        article.markdown ||
+        !article.scheduled_at ||
+        article.scheduled_at <= new Date()
+      ) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message:
-            "Article cannot be deleted. It must have no content and be scheduled for the future.",
+          message: "Article cannot be deleted.",
         });
       }
-
-      try {
-        await prisma.article.delete({
-          where: { id: articleId, website_id: websiteId },
-        });
-        return { success: true };
-      } catch (error: any) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to delete article",
-          cause: error,
-        });
-      }
+      await prisma.article.delete({
+        where: { id: article.id, website_id: website.id },
+      });
+      return { success: true };
     }),
 
   get: protectedProcedure
     .input(articleIdAndSlugSchema)
     .query(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { articleId, websiteSlug } = input;
-
-      const website = await verifyWebsiteAccess(userId, websiteSlug);
-      const websiteId = website.id;
-
+      const userId = ctx.session.user.id;
+      const website = await verifyWebsiteAccess(userId, input.websiteSlug);
       const article = await prisma.article.findUnique({
-        where: { id: articleId, website_id: websiteId },
+        where: { id: input.articleId, website_id: website.id },
       });
-
       if (!article) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Article not found or does not belong to this website.",
+          message: "Article not found.",
         });
       }
       return article;
@@ -270,43 +283,32 @@ export const articlesRouter = router({
   all: protectedProcedure
     .input(websiteSlugSchema)
     .query(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { websiteSlug } = input;
-
-      const website = await verifyWebsiteAccess(userId, websiteSlug);
-      const websiteId = website.id;
-
-      const articles = await prisma.article.findMany({
-        where: { website_id: websiteId },
+      const userId = ctx.session.user.id;
+      const website = await verifyWebsiteAccess(userId, input.websiteSlug);
+      return prisma.article.findMany({
+        where: { website_id: website.id },
         orderBy: { scheduled_at: "desc" },
       });
-      return articles;
     }),
+
   publish: protectedProcedure
     .input(articleIdAndSlugSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id: userId } = ctx.session.user;
-      const { articleId, websiteSlug } = input;
-
-      const website = await verifyWebsiteAccess(userId, websiteSlug);
-      const websiteId = website.id;
-
+      const userId = ctx.session.user.id;
+      const website = await verifyWebsiteAccess(userId, input.websiteSlug);
       const article = await prisma.article.findUnique({
-        where: { id: articleId, website_id: websiteId },
+        where: { id: input.articleId, website_id: website.id },
       });
-
       if (!article) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Article not found or does not belong to this website.",
+          message: "Article not found.",
         });
       }
-      const boss = new PgBoss(process.env.DATABASE_URL_POOLING!);
+      const boss = createBoss();
       await boss.start();
-      const queueName = `publish-article_${process.env.NODE_ENV || "development"}`;
-      await boss.createQueue(queueName);
-
-      await boss.send(queueName, { id: article.id });
+      await boss.createQueue(queueName("publish-article"));
+      await boss.send(queueName("publish-article"), { id: article.id });
       await boss.stop();
     }),
 });
