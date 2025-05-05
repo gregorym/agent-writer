@@ -9,7 +9,14 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { trpc } from "@/trpc/client";
-import { Cable, ChevronsUpDown, ListTree, Plus, Settings } from "lucide-react";
+import {
+  BookA,
+  Cable,
+  ChevronsUpDown,
+  ListTree,
+  Plus,
+  Settings,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import { CreateWebsiteForm } from "./create-website-form"; // Import the new form component
 import {
@@ -68,9 +75,9 @@ export function NavMain() {
             </DropdownMenuLabel>
 
             <div className="w-full">
-              {websites?.map((website) => (
+              {(websites ?? []).map((website) => (
                 <Link
-                  key={website.id}
+                  key={website.slug}
                   href={`/w/${website.slug}/`}
                   className="group flex w-full cursor-pointer items-center gap-x-2 rounded-md p-2 text-neutral-700 transition-all duration-75 hover:bg-neutral-200/50 active:bg-neutral-200/80"
                 >
@@ -116,6 +123,14 @@ export function NavMain() {
               <SidebarMenuButton tooltip={"Integrations"}>
                 <Cable />
                 <span>Integrations</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <Link href={`/w/${slug}/keywords`} className="w-full">
+              <SidebarMenuButton tooltip={"Keywords"}>
+                <BookA />
+                <span>Keywords</span>
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>

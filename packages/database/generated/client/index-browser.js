@@ -143,6 +143,8 @@ exports.Prisma.WebsiteScalarFieldEnum = {
   context: 'context',
   slug: 'slug',
   auto_publish: 'auto_publish',
+  location_name: 'location_name',
+  language_name: 'language_name',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -168,6 +170,7 @@ exports.Prisma.ArticleScalarFieldEnum = {
   scheduled_at: 'scheduled_at',
   published_at: 'published_at',
   topic: 'topic',
+  keywords: 'keywords',
   title: 'title',
   description: 'description',
   markdown: 'markdown',

@@ -3693,6 +3693,8 @@ export namespace Prisma {
     context: string | null
     slug: string | null
     auto_publish: boolean | null
+    location_name: string | null
+    language_name: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -3705,6 +3707,8 @@ export namespace Prisma {
     context: string | null
     slug: string | null
     auto_publish: boolean | null
+    location_name: string | null
+    language_name: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -3717,6 +3721,8 @@ export namespace Prisma {
     context: number
     slug: number
     auto_publish: number
+    location_name: number
+    language_name: number
     created_at: number
     updated_at: number
     _all: number
@@ -3739,6 +3745,8 @@ export namespace Prisma {
     context?: true
     slug?: true
     auto_publish?: true
+    location_name?: true
+    language_name?: true
     created_at?: true
     updated_at?: true
   }
@@ -3751,6 +3759,8 @@ export namespace Prisma {
     context?: true
     slug?: true
     auto_publish?: true
+    location_name?: true
+    language_name?: true
     created_at?: true
     updated_at?: true
   }
@@ -3763,6 +3773,8 @@ export namespace Prisma {
     context?: true
     slug?: true
     auto_publish?: true
+    location_name?: true
+    language_name?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -3862,6 +3874,8 @@ export namespace Prisma {
     context: string | null
     slug: string
     auto_publish: boolean
+    location_name: string
+    language_name: string
     created_at: Date
     updated_at: Date
     _count: WebsiteCountAggregateOutputType | null
@@ -3893,6 +3907,8 @@ export namespace Prisma {
     context?: boolean
     slug?: boolean
     auto_publish?: boolean
+    location_name?: boolean
+    language_name?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3910,6 +3926,8 @@ export namespace Prisma {
     context?: boolean
     slug?: boolean
     auto_publish?: boolean
+    location_name?: boolean
+    language_name?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3923,6 +3941,8 @@ export namespace Prisma {
     context?: boolean
     slug?: boolean
     auto_publish?: boolean
+    location_name?: boolean
+    language_name?: boolean
     created_at?: boolean
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3936,11 +3956,13 @@ export namespace Prisma {
     context?: boolean
     slug?: boolean
     auto_publish?: boolean
+    location_name?: boolean
+    language_name?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
-  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "url" | "context" | "slug" | "auto_publish" | "created_at" | "updated_at", ExtArgs["result"]["website"]>
+  export type WebsiteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "url" | "context" | "slug" | "auto_publish" | "location_name" | "language_name" | "created_at" | "updated_at", ExtArgs["result"]["website"]>
   export type WebsiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     articles?: boolean | Website$articlesArgs<ExtArgs>
@@ -3971,6 +3993,8 @@ export namespace Prisma {
       context: string | null
       slug: string
       auto_publish: boolean
+      location_name: string
+      language_name: string
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["website"]>
@@ -4407,6 +4431,8 @@ export namespace Prisma {
     readonly context: FieldRef<"Website", 'String'>
     readonly slug: FieldRef<"Website", 'String'>
     readonly auto_publish: FieldRef<"Website", 'Boolean'>
+    readonly location_name: FieldRef<"Website", 'String'>
+    readonly language_name: FieldRef<"Website", 'String'>
     readonly created_at: FieldRef<"Website", 'DateTime'>
     readonly updated_at: FieldRef<"Website", 'DateTime'>
   }
@@ -6096,6 +6122,7 @@ export namespace Prisma {
     scheduled_at: Date | null
     published_at: Date | null
     topic: string | null
+    keywords: string | null
     title: string | null
     description: string | null
     markdown: string | null
@@ -6110,6 +6137,7 @@ export namespace Prisma {
     scheduled_at: Date | null
     published_at: Date | null
     topic: string | null
+    keywords: string | null
     title: string | null
     description: string | null
     markdown: string | null
@@ -6124,6 +6152,7 @@ export namespace Prisma {
     scheduled_at: number
     published_at: number
     topic: number
+    keywords: number
     title: number
     description: number
     markdown: number
@@ -6151,6 +6180,7 @@ export namespace Prisma {
     scheduled_at?: true
     published_at?: true
     topic?: true
+    keywords?: true
     title?: true
     description?: true
     markdown?: true
@@ -6165,6 +6195,7 @@ export namespace Prisma {
     scheduled_at?: true
     published_at?: true
     topic?: true
+    keywords?: true
     title?: true
     description?: true
     markdown?: true
@@ -6179,6 +6210,7 @@ export namespace Prisma {
     scheduled_at?: true
     published_at?: true
     topic?: true
+    keywords?: true
     title?: true
     description?: true
     markdown?: true
@@ -6281,6 +6313,7 @@ export namespace Prisma {
     scheduled_at: Date | null
     published_at: Date | null
     topic: string | null
+    keywords: string | null
     title: string | null
     description: string | null
     markdown: string | null
@@ -6315,6 +6348,7 @@ export namespace Prisma {
     scheduled_at?: boolean
     published_at?: boolean
     topic?: boolean
+    keywords?: boolean
     title?: boolean
     description?: boolean
     markdown?: boolean
@@ -6331,6 +6365,7 @@ export namespace Prisma {
     scheduled_at?: boolean
     published_at?: boolean
     topic?: boolean
+    keywords?: boolean
     title?: boolean
     description?: boolean
     markdown?: boolean
@@ -6347,6 +6382,7 @@ export namespace Prisma {
     scheduled_at?: boolean
     published_at?: boolean
     topic?: boolean
+    keywords?: boolean
     title?: boolean
     description?: boolean
     markdown?: boolean
@@ -6363,6 +6399,7 @@ export namespace Prisma {
     scheduled_at?: boolean
     published_at?: boolean
     topic?: boolean
+    keywords?: boolean
     title?: boolean
     description?: boolean
     markdown?: boolean
@@ -6372,7 +6409,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "published_at" | "topic" | "title" | "description" | "markdown" | "job_id" | "backlinks" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "website_id" | "scheduled_at" | "published_at" | "topic" | "keywords" | "title" | "description" | "markdown" | "job_id" | "backlinks" | "created_at" | "updated_at", ExtArgs["result"]["article"]>
   export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     website?: boolean | WebsiteDefaultArgs<ExtArgs>
   }
@@ -6394,6 +6431,7 @@ export namespace Prisma {
       scheduled_at: Date | null
       published_at: Date | null
       topic: string | null
+      keywords: string | null
       title: string | null
       description: string | null
       markdown: string | null
@@ -6830,6 +6868,7 @@ export namespace Prisma {
     readonly scheduled_at: FieldRef<"Article", 'DateTime'>
     readonly published_at: FieldRef<"Article", 'DateTime'>
     readonly topic: FieldRef<"Article", 'String'>
+    readonly keywords: FieldRef<"Article", 'String'>
     readonly title: FieldRef<"Article", 'String'>
     readonly description: FieldRef<"Article", 'String'>
     readonly markdown: FieldRef<"Article", 'String'>
@@ -9538,6 +9577,8 @@ export namespace Prisma {
     context: 'context',
     slug: 'slug',
     auto_publish: 'auto_publish',
+    location_name: 'location_name',
+    language_name: 'language_name',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -9569,6 +9610,7 @@ export namespace Prisma {
     scheduled_at: 'scheduled_at',
     published_at: 'published_at',
     topic: 'topic',
+    keywords: 'keywords',
     title: 'title',
     description: 'description',
     markdown: 'markdown',
@@ -9824,6 +9866,8 @@ export namespace Prisma {
     context?: StringNullableFilter<"Website"> | string | null
     slug?: StringFilter<"Website"> | string
     auto_publish?: BoolFilter<"Website"> | boolean
+    location_name?: StringFilter<"Website"> | string
+    language_name?: StringFilter<"Website"> | string
     created_at?: DateTimeFilter<"Website"> | Date | string
     updated_at?: DateTimeFilter<"Website"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -9840,6 +9884,8 @@ export namespace Prisma {
     context?: SortOrderInput | SortOrder
     slug?: SortOrder
     auto_publish?: SortOrder
+    location_name?: SortOrder
+    language_name?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -9859,6 +9905,8 @@ export namespace Prisma {
     url?: StringFilter<"Website"> | string
     context?: StringNullableFilter<"Website"> | string | null
     auto_publish?: BoolFilter<"Website"> | boolean
+    location_name?: StringFilter<"Website"> | string
+    language_name?: StringFilter<"Website"> | string
     created_at?: DateTimeFilter<"Website"> | Date | string
     updated_at?: DateTimeFilter<"Website"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -9875,6 +9923,8 @@ export namespace Prisma {
     context?: SortOrderInput | SortOrder
     slug?: SortOrder
     auto_publish?: SortOrder
+    location_name?: SortOrder
+    language_name?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: WebsiteCountOrderByAggregateInput
@@ -9895,6 +9945,8 @@ export namespace Prisma {
     context?: StringNullableWithAggregatesFilter<"Website"> | string | null
     slug?: StringWithAggregatesFilter<"Website"> | string
     auto_publish?: BoolWithAggregatesFilter<"Website"> | boolean
+    location_name?: StringWithAggregatesFilter<"Website"> | string
+    language_name?: StringWithAggregatesFilter<"Website"> | string
     created_at?: DateTimeWithAggregatesFilter<"Website"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Website"> | Date | string
   }
@@ -10000,6 +10052,7 @@ export namespace Prisma {
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
+    keywords?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
     description?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
@@ -10016,6 +10069,7 @@ export namespace Prisma {
     scheduled_at?: SortOrderInput | SortOrder
     published_at?: SortOrderInput | SortOrder
     topic?: SortOrderInput | SortOrder
+    keywords?: SortOrderInput | SortOrder
     title?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
@@ -10036,6 +10090,7 @@ export namespace Prisma {
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
+    keywords?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
     description?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
@@ -10051,6 +10106,7 @@ export namespace Prisma {
     scheduled_at?: SortOrderInput | SortOrder
     published_at?: SortOrderInput | SortOrder
     topic?: SortOrderInput | SortOrder
+    keywords?: SortOrderInput | SortOrder
     title?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     markdown?: SortOrderInput | SortOrder
@@ -10074,6 +10130,7 @@ export namespace Prisma {
     scheduled_at?: DateTimeNullableWithAggregatesFilter<"Article"> | Date | string | null
     published_at?: DateTimeNullableWithAggregatesFilter<"Article"> | Date | string | null
     topic?: StringNullableWithAggregatesFilter<"Article"> | string | null
+    keywords?: StringNullableWithAggregatesFilter<"Article"> | string | null
     title?: StringNullableWithAggregatesFilter<"Article"> | string | null
     description?: StringNullableWithAggregatesFilter<"Article"> | string | null
     markdown?: StringNullableWithAggregatesFilter<"Article"> | string | null
@@ -10339,6 +10396,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutWebsitesInput
@@ -10355,6 +10414,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
@@ -10368,6 +10429,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
@@ -10384,6 +10447,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
@@ -10399,6 +10464,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -10409,6 +10476,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10421,6 +10490,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10530,6 +10601,7 @@ export namespace Prisma {
     scheduled_at?: Date | string | null
     published_at?: Date | string | null
     topic?: string | null
+    keywords?: string | null
     title?: string | null
     description?: string | null
     markdown?: string | null
@@ -10546,6 +10618,7 @@ export namespace Prisma {
     scheduled_at?: Date | string | null
     published_at?: Date | string | null
     topic?: string | null
+    keywords?: string | null
     title?: string | null
     description?: string | null
     markdown?: string | null
@@ -10559,6 +10632,7 @@ export namespace Prisma {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10575,6 +10649,7 @@ export namespace Prisma {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10590,6 +10665,7 @@ export namespace Prisma {
     scheduled_at?: Date | string | null
     published_at?: Date | string | null
     topic?: string | null
+    keywords?: string | null
     title?: string | null
     description?: string | null
     markdown?: string | null
@@ -10603,6 +10679,7 @@ export namespace Prisma {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10618,6 +10695,7 @@ export namespace Prisma {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -10979,6 +11057,8 @@ export namespace Prisma {
     context?: SortOrder
     slug?: SortOrder
     auto_publish?: SortOrder
+    location_name?: SortOrder
+    language_name?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -10995,6 +11075,8 @@ export namespace Prisma {
     context?: SortOrder
     slug?: SortOrder
     auto_publish?: SortOrder
+    location_name?: SortOrder
+    language_name?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -11007,6 +11089,8 @@ export namespace Prisma {
     context?: SortOrder
     slug?: SortOrder
     auto_publish?: SortOrder
+    location_name?: SortOrder
+    language_name?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -11136,6 +11220,7 @@ export namespace Prisma {
     scheduled_at?: SortOrder
     published_at?: SortOrder
     topic?: SortOrder
+    keywords?: SortOrder
     title?: SortOrder
     description?: SortOrder
     markdown?: SortOrder
@@ -11156,6 +11241,7 @@ export namespace Prisma {
     scheduled_at?: SortOrder
     published_at?: SortOrder
     topic?: SortOrder
+    keywords?: SortOrder
     title?: SortOrder
     description?: SortOrder
     markdown?: SortOrder
@@ -11170,6 +11256,7 @@ export namespace Prisma {
     scheduled_at?: SortOrder
     published_at?: SortOrder
     topic?: SortOrder
+    keywords?: SortOrder
     title?: SortOrder
     description?: SortOrder
     markdown?: SortOrder
@@ -11853,6 +11940,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     articles?: ArticleCreateNestedManyWithoutWebsiteInput
@@ -11867,6 +11956,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
@@ -11970,6 +12061,8 @@ export namespace Prisma {
     context?: StringNullableFilter<"Website"> | string | null
     slug?: StringFilter<"Website"> | string
     auto_publish?: BoolFilter<"Website"> | boolean
+    location_name?: StringFilter<"Website"> | string
+    language_name?: StringFilter<"Website"> | string
     created_at?: DateTimeFilter<"Website"> | Date | string
     updated_at?: DateTimeFilter<"Website"> | Date | string
   }
@@ -12065,6 +12158,7 @@ export namespace Prisma {
     scheduled_at?: Date | string | null
     published_at?: Date | string | null
     topic?: string | null
+    keywords?: string | null
     title?: string | null
     description?: string | null
     markdown?: string | null
@@ -12079,6 +12173,7 @@ export namespace Prisma {
     scheduled_at?: Date | string | null
     published_at?: Date | string | null
     topic?: string | null
+    keywords?: string | null
     title?: string | null
     description?: string | null
     markdown?: string | null
@@ -12200,6 +12295,7 @@ export namespace Prisma {
     scheduled_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     published_at?: DateTimeNullableFilter<"Article"> | Date | string | null
     topic?: StringNullableFilter<"Article"> | string | null
+    keywords?: StringNullableFilter<"Article"> | string | null
     title?: StringNullableFilter<"Article"> | string | null
     description?: StringNullableFilter<"Article"> | string | null
     markdown?: StringNullableFilter<"Article"> | string | null
@@ -12331,6 +12427,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutWebsitesInput
@@ -12346,6 +12444,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     ghostIntegration?: GhostIntegrationUncheckedCreateNestedOneWithoutWebsiteInput
@@ -12374,6 +12474,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
@@ -12389,6 +12491,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     ghostIntegration?: GhostIntegrationUncheckedUpdateOneWithoutWebsiteNestedInput
@@ -12401,6 +12505,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutWebsitesInput
@@ -12416,6 +12522,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
@@ -12444,6 +12552,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
@@ -12459,6 +12569,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
@@ -12471,6 +12583,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutWebsitesInput
@@ -12486,6 +12600,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
     articles?: ArticleUncheckedCreateNestedManyWithoutWebsiteInput
@@ -12514,6 +12630,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWebsitesNestedInput
@@ -12529,6 +12647,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
@@ -12561,6 +12681,8 @@ export namespace Prisma {
     context?: string | null
     slug: string
     auto_publish?: boolean
+    location_name?: string
+    language_name?: string
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -12627,6 +12749,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUpdateManyWithoutWebsiteNestedInput
@@ -12641,6 +12765,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     articles?: ArticleUncheckedUpdateManyWithoutWebsiteNestedInput
@@ -12655,6 +12781,8 @@ export namespace Prisma {
     context?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: StringFieldUpdateOperationsInput | string
     auto_publish?: BoolFieldUpdateOperationsInput | boolean
+    location_name?: StringFieldUpdateOperationsInput | string
+    language_name?: StringFieldUpdateOperationsInput | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12664,6 +12792,7 @@ export namespace Prisma {
     scheduled_at?: Date | string | null
     published_at?: Date | string | null
     topic?: string | null
+    keywords?: string | null
     title?: string | null
     description?: string | null
     markdown?: string | null
@@ -12677,6 +12806,7 @@ export namespace Prisma {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12691,6 +12821,7 @@ export namespace Prisma {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12705,6 +12836,7 @@ export namespace Prisma {
     scheduled_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     topic?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     markdown?: NullableStringFieldUpdateOperationsInput | string | null

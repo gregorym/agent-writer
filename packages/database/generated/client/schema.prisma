@@ -40,13 +40,15 @@ model Session {
 }
 
 model Website {
-  id           Int     @id @default(autoincrement())
-  user_id      String
-  name         String
-  url          String
-  context      String?
-  slug         String  @unique
-  auto_publish Boolean @default(false)
+  id            Int     @id @default(autoincrement())
+  user_id       String
+  name          String
+  url           String
+  context       String?
+  slug          String  @unique
+  auto_publish  Boolean @default(false)
+  location_name String  @default("United States")
+  language_name String  @default("English")
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -88,6 +90,7 @@ model Article {
   scheduled_at DateTime? @db.Date
   published_at DateTime?
   topic        String?
+  keywords     String?
   title        String?
   description  String?
   markdown     String?
