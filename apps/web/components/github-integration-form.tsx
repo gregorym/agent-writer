@@ -17,7 +17,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Import Select components
+} from "@/components/ui/select";
 import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
@@ -28,11 +28,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Skeleton } from "./ui/skeleton";
 
-// Add repoName to the schema
 const formSchema = z.object({
   apiKey: z.string().min(1, "API Key cannot be empty"),
-  dirPath: z.string().optional().nullable(), // Allow null
-  repoName: z.string().optional().nullable(), // Add repoName, allow null/optional
+  dirPath: z.string().optional().nullable(),
+  repoName: z.string().optional().nullable(),
 });
 
 type GithubIntegrationFormValues = z.infer<typeof formSchema>;
@@ -46,18 +45,12 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
 
   const slug = typeof params.slug === "string" ? params.slug : undefined;
 
-  // Fetch existing GitHub integration data
   const {
     data: integration,
     isLoading: isLoadingIntegration,
     error: integrationError,
-  } = trpc.github.get.useQuery(
-    // Use trpc.github
-    { websiteSlug: slug! },
-    { enabled: !!slug }
-  );
+  } = trpc.github.get.useQuery({ websiteSlug: slug! }, { enabled: !!slug });
 
-  // Fetch repository list - only enable if integration exists and has an API key
   const { data: repoList, isLoading: isLoadingRepos } =
     trpc.github.listRepos.useQuery(
       { websiteSlug: slug! },
@@ -66,69 +59,62 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
 
   const form = useForm<GithubIntegrationFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { apiKey: "", dirPath: "", repoName: "" }, // Initialize repoName
+    defaultValues: { apiKey: "", dirPath: "", repoName: "" },
   });
 
-  // Update form values when integration data loads or changes
   useEffect(() => {
     if (integration) {
       form.reset({
         apiKey: integration.api_key,
-        dirPath: integration.dir_path ?? "", // Reset dirPath, default to empty string if null/undefined
-        repoName: integration.repo_name ?? "", // Reset repoName
+        dirPath: integration.dir_path ?? "",
+        repoName: integration.repo_name ?? "",
       });
     } else {
-      form.reset({ apiKey: "", dirPath: "", repoName: "" }); // Reset dirPath and repoName
+      form.reset({ apiKey: "", dirPath: "", repoName: "" });
     }
   }, [integration, form]);
 
   const createMutation = trpc.github.create.useMutation({
-    // Use trpc.github
     onSuccess: async (data) => {
-      toast.success("GitHub integration created successfully!"); // Update message
+      toast.success("GitHub integration created successfully!");
       if (slug) {
-        await utils.github.get.invalidate({ websiteSlug: slug }); // Invalidate github.get
-        await utils.github.listRepos.invalidate({ websiteSlug: slug }); // Invalidate repo list
+        await utils.github.get.invalidate({ websiteSlug: slug });
+        await utils.github.listRepos.invalidate({ websiteSlug: slug });
       }
-      // Update form with the newly created repo name (which backend defaults)
       form.setValue("repoName", data.repo_name);
     },
     onError: (error) => {
-      toast.error(`Failed to create GitHub integration: ${error.message}`); // Update message
+      toast.error(`Failed to create GitHub integration: ${error.message}`);
     },
   });
 
   const updateMutation = trpc.github.update.useMutation({
-    // Use trpc.github
     onSuccess: async (data) => {
-      toast.success("GitHub integration updated successfully!"); // Update message
+      toast.success("GitHub integration updated successfully!");
       if (slug) {
-        await utils.github.get.invalidate({ websiteSlug: slug }); // Invalidate github.get
-        // Invalidate repo list if API key might have changed
+        await utils.github.get.invalidate({ websiteSlug: slug });
         if (form.getValues("apiKey") !== integration?.api_key) {
           await utils.github.listRepos.invalidate({ websiteSlug: slug });
         }
       }
-      // Update form with the potentially updated repo name
       form.setValue("repoName", data.repo_name);
     },
     onError: (error) => {
-      toast.error(`Failed to update GitHub integration: ${error.message}`); // Update message
+      toast.error(`Failed to update GitHub integration: ${error.message}`);
     },
   });
 
   const deleteMutation = trpc.github.delete.useMutation({
-    // Use trpc.github
     onSuccess: async () => {
-      toast.success("GitHub integration deleted successfully!"); // Update message
+      toast.success("GitHub integration deleted successfully!");
       if (slug) {
-        await utils.github.get.invalidate({ websiteSlug: slug }); // Invalidate github.get
-        await utils.github.listRepos.invalidate({ websiteSlug: slug }); // Invalidate repo list
+        await utils.github.get.invalidate({ websiteSlug: slug });
+        await utils.github.listRepos.invalidate({ websiteSlug: slug });
       }
-      form.reset({ apiKey: "", dirPath: "", repoName: "" }); // Reset dirPath and repoName on delete
+      form.reset({ apiKey: "", dirPath: "", repoName: "" });
     },
     onError: (error) => {
-      toast.error(`Failed to delete GitHub integration: ${error.message}`); // Update message
+      toast.error(`Failed to delete GitHub integration: ${error.message}`);
     },
   });
 
@@ -140,14 +126,12 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
     const payload = {
       websiteSlug: slug,
       apiKey: values.apiKey,
-      dirPath: values.dirPath || null, // Send null if empty string, adjust based on backend expectation
-      repoName: values.repoName || null, // Send null if empty/falsy
+      dirPath: values.dirPath || null,
+      repoName: values.repoName || null,
     };
     if (integration) {
-      // Update existing integration (include dirPath and repoName)
       updateMutation.mutate(payload);
     } else {
-      // Create new integration (include dirPath and repoName)
       createMutation.mutate(payload);
     }
   }
@@ -160,7 +144,7 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
     if (integration) {
       deleteMutation.mutate({ websiteSlug: slug });
     } else {
-      toast.info("No GitHub integration exists to delete."); // Update message
+      toast.info("No GitHub integration exists to delete.");
     }
   }
 
@@ -171,7 +155,6 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
   if (isLoadingIntegration) {
     return (
       <div className="space-y-4">
-        {/* Add skeleton for repoName */}
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-full" />
@@ -183,8 +166,7 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
   if (integrationError) {
     return (
       <p className="text-red-500">
-        Error loading GitHub integration details: {integrationError.message}{" "}
-        {/* Update message */}
+        Error loading GitHub integration details: {integrationError.message}
       </p>
     );
   }
@@ -202,13 +184,12 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
           name="apiKey"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>GitHub Personal Access Token (PAT)</FormLabel>{" "}
-              {/* Update label */}
+              <FormLabel>GitHub Personal Access Token (PAT)</FormLabel>
               <div className="relative">
                 <FormControl>
                   <Input
                     type={showApiKey ? "text" : "password"}
-                    placeholder="Enter your GitHub PAT" // Update placeholder
+                    placeholder="Enter your GitHub PAT"
                     {...field}
                     disabled={isSubmitting}
                     className="pr-10"
@@ -235,14 +216,13 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
               </div>
               <FormDescription>
                 Create a Fine-grained Personal Access Token with Repository
-                read/write access. {/* Update description */}
+                read/write access.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* Repository Select FormField */}
         <FormField
           control={form.control}
           name="repoName"
@@ -251,7 +231,7 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
               <FormLabel>Repository</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                value={field.value ?? ""} // Handle null/undefined for Select value
+                value={field.value ?? ""}
                 disabled={!integration || isLoadingRepos || isSubmitting}
               >
                 <FormControl>
@@ -286,7 +266,6 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
           )}
         />
 
-        {/* Add FormField for dirPath */}
         <FormField
           control={form.control}
           name="dirPath"
@@ -297,7 +276,7 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
                 <Input
                   placeholder="e.g., content/posts or leave empty for root"
                   {...field}
-                  value={field.value ?? ""} // Ensure value is never null/undefined for input
+                  value={field.value ?? ""}
                   disabled={isSubmitting}
                 />
               </FormControl>

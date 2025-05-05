@@ -4,8 +4,15 @@ import {
   addKeywordToHistoryAtom,
   articleKeywordsForSlugAtom,
   keywordsForSlugAtom,
-} from "@/atoms"; // Import the atom
+} from "@/atoms";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -16,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
 import {
   ColumnDef,
@@ -26,20 +34,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useAtomValue, useSetAtom } from "jotai";
-import { ArrowUpDown, Check, Plus } from "lucide-react"; // Import Check icon
+import { ArrowUpDown, Check, Plus } from "lucide-react";
 import { useState } from "react";
-// Import Dialog components and CreateArticleForm
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
-import { CreateArticleForm } from "../create-article-form"; // Adjust path if needed
+import { CreateArticleForm } from "../create-article-form";
 
-// Assuming the related keywords endpoint returns the same data structure
 type KeywordData = {
   keyword: string;
   volume: number;
@@ -63,15 +61,14 @@ export function RelatedKeywords({
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sorting, setSorting] = useState<SortingState>([]);
-  // State for the create article dialog
   const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
-  const utils = trpc.useUtils(); // Get utils for potential invalidation
-  const addKeywordToHistory = useSetAtom(addKeywordToHistoryAtom); // Get the setter function
-  const getKeywordsForSlug = useAtomValue(keywordsForSlugAtom); // Get the getter function
-  const searchHistory = getKeywordsForSlug(websiteSlug); // Get history for this slug
-  const getUsedArticleKeywords = useAtomValue(articleKeywordsForSlugAtom); // Get the getter for used article keywords
-  const usedArticleKeywords = getUsedArticleKeywords(websiteSlug); // Get used keywords for this slug
+  const utils = trpc.useUtils();
+  const addKeywordToHistory = useSetAtom(addKeywordToHistoryAtom);
+  const getKeywordsForSlug = useAtomValue(keywordsForSlugAtom);
+  const searchHistory = getKeywordsForSlug(websiteSlug);
+  const getUsedArticleKeywords = useAtomValue(articleKeywordsForSlugAtom);
+  const usedArticleKeywords = getUsedArticleKeywords(websiteSlug);
 
   const { data: keywordsData, isLoading } = trpc.keywords.related.useQuery(
     {
@@ -85,7 +82,6 @@ export function RelatedKeywords({
   );
 
   const handleAnalyze = (searchKeyword: string = keyword) => {
-    // Accept optional keyword argument
     if (!searchKeyword) {
       setError("Please enter a keyword");
       return;
@@ -105,26 +101,22 @@ export function RelatedKeywords({
   };
 
   const handleReset = () => {
-    // ... existing handleReset code ...
     setIsAnalyzing(false);
     setKeyword("");
-    setSorting([]); // Reset sorting on reset
+    setSorting([]);
   };
 
   const handleHistoryClick = (historyKeyword: string) => {
-    handleAnalyze(historyKeyword); // Call handleAnalyze with the clicked keyword
+    handleAnalyze(historyKeyword);
   };
 
-  // Function to handle successful article creation from keyword
   const handleCreateSuccess = () => {
     setCreateDialogOpen(false);
     setSelectedKeyword(null);
-    // Invalidate articles query to refresh the list if needed
     utils.articles.all.invalidate({ websiteSlug });
   };
 
   const columns: ColumnDef<KeywordData>[] = [
-    // ... existing columns for keyword, volume, difficulty, intent, competition ...
     {
       accessorKey: "keyword",
       header: ({ column }) => {
@@ -231,21 +223,20 @@ export function RelatedKeywords({
       ),
     },
     {
-      id: "actions", // Use id for actions column
-      header: () => <div className="text-right">Action(s)</div>, // Simple header
+      id: "actions",
+      header: () => <div className="text-right">Action(s)</div>,
       cell: ({ row }) => {
         const keyword = row.original.keyword;
-        const isUsed = usedArticleKeywords.includes(keyword); // Check if keyword is used
+        const isUsed = usedArticleKeywords.includes(keyword);
 
         return (
           <div className="text-right">
-            {/* Wrap button in DialogTrigger */}
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
                 className="text-right"
-                onClick={() => setSelectedKeyword(keyword)} // Set keyword on click
-                title={"Create article with this keyword"} // Add title for clarity
+                onClick={() => setSelectedKeyword(keyword)}
+                title={"Create article with this keyword"}
               >
                 {isUsed && <Check className="h-4 w-4 mr-1" />}
                 {!isUsed && <Plus className="h-4 w-4" />}
@@ -258,7 +249,6 @@ export function RelatedKeywords({
   ];
 
   const table = useReactTable({
-    // ... existing table options ...
     data: keywordsData?.keywords || [],
     columns,
     onSortingChange: setSorting,
@@ -270,10 +260,8 @@ export function RelatedKeywords({
   });
 
   return (
-    // Wrap the relevant part with Dialog component
     <Dialog open={isCreateDialogOpen} onOpenChange={setCreateDialogOpen}>
       <div className="space-y-4">
-        {/* ... Input and Analyze/Reset buttons ... */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <Input
@@ -286,7 +274,7 @@ export function RelatedKeywords({
             />
             {!isAnalyzing ? (
               <Button
-                onClick={() => handleAnalyze()} // Call without args to use state keyword
+                onClick={() => handleAnalyze()}
                 disabled={!locationName || !languageName}
               >
                 Find Related Keywords
@@ -297,7 +285,6 @@ export function RelatedKeywords({
               </Button>
             )}
           </div>
-          {/* Display Search History */}
           {searchHistory.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2">
               <span className="text-sm text-muted-foreground mr-2">
@@ -323,7 +310,6 @@ export function RelatedKeywords({
 
         {isAnalyzing && (
           <div className="rounded-lg border">
-            {/* ... Loading Skeleton ... */}
             {isLoading && (
               <div className="p-4">
                 <div className="space-y-3">
@@ -336,7 +322,6 @@ export function RelatedKeywords({
 
             {!isLoading && keywordsData && (
               <Table>
-                {/* ... TableHeader ... */}
                 <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id}>

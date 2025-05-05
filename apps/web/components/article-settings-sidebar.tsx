@@ -4,13 +4,13 @@ import { type Article } from "@bloggy/database";
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  Download, // Import Download icon
+  Download,
   Loader2,
   MoreHorizontal,
   RefreshCw,
-  Send, // Import RefreshCw icon
+  Send,
 } from "lucide-react";
-import { UseFormReturn, useFieldArray } from "react-hook-form"; // Import useFieldArray
+import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // Import DropdownMenu components
+} from "@/components/ui/dropdown-menu";
 import {
   FormControl,
   FormField,
@@ -43,15 +43,14 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
-import { BacklinksInput } from "./backlinks-input"; // Import BacklinksInput
+import { BacklinksInput } from "./backlinks-input";
 
-// Schema updated to include backlinks
 const formSchema = z.object({
   topic: z.string().min(1, { message: "Topic cannot be empty." }),
   title: z.string().optional().nullable(),
   markdown: z.string().optional().nullable(),
   scheduled_at: z.date().optional().nullable(),
-  backlinks: z // Use the object schema
+  backlinks: z
     .array(
       z.object({
         url: z.string().url({ message: "Please enter a valid URL." }),
@@ -64,7 +63,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 interface ArticleSettingsSidebarProps {
-  form: UseFormReturn<FormData>; // Pass the whole form object
+  form: UseFormReturn<FormData>;
   article: Article;
   websiteSlug: string;
 }
@@ -164,7 +163,7 @@ export function ArticleSettingsSidebar({
                   placeholder="Describe the main topic..."
                   {...field}
                   value={field.value ?? ""}
-                  className="bg-white" // Add white background
+                  className="bg-white"
                 />
               </FormControl>
               <FormMessage />
@@ -172,7 +171,6 @@ export function ArticleSettingsSidebar({
           )}
         />
 
-        {/* Backlinks Section */}
         <BacklinksInput
           name="backlinks"
           control={form.control}
@@ -183,13 +181,11 @@ export function ArticleSettingsSidebar({
       </SidebarContent>
       <SidebarFooter className="p-4 border-t">
         <div className="flex items-center space-x-2">
-          {" "}
-          {/* Use flex and space-x */}
           <Button
             type="submit"
             form="edit-article-form"
             disabled={updateMutation.isPending || !form.formState.isDirty}
-            className="flex-grow" // Allow save button to grow
+            className="flex-grow"
           >
             {updateMutation.isPending ? (
               <>

@@ -10,10 +10,10 @@ import {
 } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { FileText, Plus } from "lucide-react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreateArticleForm } from "./create-article-form";
-import { Badge } from "./ui/badge"; // Import Badge
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -30,13 +30,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table"; // Import Table components
+} from "./ui/table";
 
 interface ArticlesListProps {
   websiteSlug: string;
 }
 
-// Define columns for the table
 const columns: ColumnDef<Article>[] = [
   {
     accessorKey: "title",
@@ -51,14 +50,13 @@ const columns: ColumnDef<Article>[] = [
     },
   },
   {
-    accessorKey: "status", // Placeholder for status
+    accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      // Determine status based on article properties (e.g., markdown content, scheduled_at)
       const article = row.original;
-      let statusText = "Draft"; // Default status
+      let statusText = "Draft";
       let badgeVariant: "default" | "secondary" | "outline" | "destructive" =
-        "secondary"; // Default variant
+        "secondary";
 
       if (
         article.markdown &&
@@ -66,26 +64,24 @@ const columns: ColumnDef<Article>[] = [
         new Date(article.scheduled_at) > new Date()
       ) {
         statusText = "Scheduled";
-        badgeVariant = "default"; // Blue-ish default
+        badgeVariant = "default";
       } else if (
         article.markdown &&
         article.published_at &&
         new Date(article.published_at) <= new Date()
       ) {
-        // Assuming published if markdown exists and date is past (needs Ghost check ideally)
         statusText = "Published";
-        badgeVariant = "default"; // Use default (often primary color) or create a green variant if needed
-        // If you have a specific green variant, use it here. For now, using default.
+        badgeVariant = "default";
       } else if (
         !article.markdown &&
         article.scheduled_at &&
         new Date(article.scheduled_at) > new Date()
       ) {
         statusText = "Pending Generation";
-        badgeVariant = "outline"; // Orange-ish outline
+        badgeVariant = "outline";
       } else if (!article.scheduled_at) {
         statusText = "Draft";
-        badgeVariant = "secondary"; // Greyish secondary
+        badgeVariant = "secondary";
       }
 
       return <Badge variant={badgeVariant}>{statusText}</Badge>;
@@ -107,7 +103,7 @@ const columns: ColumnDef<Article>[] = [
 
 export function ArticlesList({ websiteSlug }: ArticlesListProps) {
   const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
   const utils = trpc.useUtils();
   const {
     data: articles,
@@ -122,16 +118,15 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
   };
 
   const table = useReactTable({
-    data: articles ?? [], // Provide empty array if articles is undefined
+    data: articles ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   if (isLoading) {
-    // ... existing skeleton loading state ...
     return (
       <div className="space-y-4">
-        <Skeleton className="h-12 w-full" /> {/* Header skeleton */}
+        <Skeleton className="h-12 w-full" />
         <Skeleton className="h-16 w-full" />
         <Skeleton className="h-16 w-full" />
         <Skeleton className="h-16 w-full" />
@@ -140,14 +135,12 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
   }
 
   if (error) {
-    // ... existing error state ...
     return (
       <p className="text-red-500">Error loading articles: {error.message}</p>
     );
   }
 
   const renderHeader = () => (
-    // ... existing header with Create button ...
     <div className="flex items-center justify-between mb-4">
       <h2 className="text-xl font-semibold">Articles</h2>
       <Dialog open={isCreateDialogOpen} onOpenChange={setCreateDialogOpen}>
@@ -170,10 +163,9 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
   );
 
   if (!articles || articles.length === 0) {
-    // ... existing empty state ...
     return (
       <div>
-        {renderHeader()} {/* Render header even when empty */}
+        {renderHeader()}
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
             <FileText className="h-6 w-6 text-muted-foreground" />
@@ -189,7 +181,6 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
     );
   }
 
-  // Render the table
   return (
     <div>
       {renderHeader()}
@@ -221,8 +212,8 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() =>
                     router.push(`/w/${websiteSlug}/articles/${row.original.id}`)
-                  } // Navigate on click
-                  className="cursor-pointer" // Add cursor pointer
+                  }
+                  className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -241,7 +232,6 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
                   className="h-24 text-center"
                 >
                   No results.{" "}
-                  {/* This should ideally not be reached due to the check above */}
                 </TableCell>
               </TableRow>
             )}
