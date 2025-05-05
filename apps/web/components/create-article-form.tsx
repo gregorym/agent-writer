@@ -6,6 +6,7 @@ import { CalendarIcon } from "lucide-react"; // Import Calendar icon, PlusCircle
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { addArticleKeywordToHistoryAtom } from "@/atoms";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar"; // Import Calendar
 import {
@@ -24,6 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils"; // Import cn utility
 import { trpc } from "@/trpc/client";
+import { useSetAtom } from "jotai";
 import { useEffect, useRef } from "react"; // Add useRef
 import { toast } from "sonner";
 import { BacklinksInput } from "./backlinks-input";
@@ -77,10 +79,9 @@ export function CreateArticleForm({
   const { data: website } = trpc.websites.get.useQuery({
     slug: websiteSlug,
   });
-  const queueArticleMutation = trpc.articles.retry.useMutation({});
-  const createArticleMutation = trpc.articles.create.useMutation({
-    // onSuccess and onError removed
-  });
+  const queueArticleMutation = trpc.articles.retry.useMutation();
+  const createArticleMutation = trpc.articles.create.useMutation();
+  const addArticleKeyword = useSetAtom(addArticleKeywordToHistoryAtom);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -129,6 +130,13 @@ export function CreateArticleForm({
         backlinks: formattedBacklinks, // Send formatted backlinks
         keyword: keyword || undefined, // Send keyword if provided
       });
+
+      if (keyword) {
+        addArticleKeyword({
+          slug: websiteSlug,
+          keyword: keyword,
+        });
+      }
 
       // Handle success logic here
       toast.success(

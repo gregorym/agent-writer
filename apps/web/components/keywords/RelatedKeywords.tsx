@@ -1,6 +1,10 @@
 "use client";
 
-import { addKeywordToHistoryAtom, keywordsForSlugAtom } from "@/atoms"; // Import the atom
+import {
+  addKeywordToHistoryAtom,
+  articleKeywordsForSlugAtom,
+  keywordsForSlugAtom,
+} from "@/atoms"; // Import the atom
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,7 +26,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useAtomValue, useSetAtom } from "jotai";
-import { ArrowUpDown, Plus } from "lucide-react";
+import { ArrowUpDown, Check, Plus } from "lucide-react"; // Import Check icon
 import { useState } from "react";
 // Import Dialog components and CreateArticleForm
 import {
@@ -66,6 +70,8 @@ export function RelatedKeywords({
   const addKeywordToHistory = useSetAtom(addKeywordToHistoryAtom); // Get the setter function
   const getKeywordsForSlug = useAtomValue(keywordsForSlugAtom); // Get the getter function
   const searchHistory = getKeywordsForSlug(websiteSlug); // Get history for this slug
+  const getUsedArticleKeywords = useAtomValue(articleKeywordsForSlugAtom); // Get the getter for used article keywords
+  const usedArticleKeywords = getUsedArticleKeywords(websiteSlug); // Get used keywords for this slug
 
   const { data: keywordsData, isLoading } = trpc.keywords.related.useQuery(
     {
@@ -229,6 +235,8 @@ export function RelatedKeywords({
       header: () => <div className="text-right">Action(s)</div>, // Simple header
       cell: ({ row }) => {
         const keyword = row.original.keyword;
+        const isUsed = usedArticleKeywords.includes(keyword); // Check if keyword is used
+
         return (
           <div className="text-right">
             {/* Wrap button in DialogTrigger */}
@@ -237,8 +245,10 @@ export function RelatedKeywords({
                 variant="ghost"
                 className="text-right"
                 onClick={() => setSelectedKeyword(keyword)} // Set keyword on click
+                title={"Create article with this keyword"} // Add title for clarity
               >
-                <Plus className="h-4 w-4" />
+                {isUsed && <Check className="h-4 w-4 mr-1" />}
+                {!isUsed && <Plus className="h-4 w-4" />}
               </Button>
             </DialogTrigger>
           </div>
