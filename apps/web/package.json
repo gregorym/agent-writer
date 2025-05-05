@@ -58,7 +58,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.6.3",
-    "jotai": "^2.12.2",
+    "jotai": "^2.12.3",
     "lucia": "^3.2.2",
     "lucide-react": "^0.503.0",
     "mdast-util-to-string": "^4.0.0",

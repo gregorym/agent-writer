@@ -1,5 +1,6 @@
 "use client";
 
+import { addKeywordToHistoryAtom, keywordsForSlugAtom } from "@/atoms"; // Import the atom
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,6 +21,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useAtomValue, useSetAtom } from "jotai";
 import { ArrowUpDown, Plus } from "lucide-react";
 import { useState } from "react";
 // Import Dialog components and CreateArticleForm
@@ -60,6 +62,9 @@ export function RelatedKeywords({
   const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
   const utils = trpc.useUtils(); // Get utils for potential invalidation
+  const addKeywordToHistory = useSetAtom(addKeywordToHistoryAtom); // Get the setter function
+  const getKeywordsForSlug = useAtomValue(keywordsForSlugAtom); // Get the getter function
+  const searchHistory = getKeywordsForSlug(websiteSlug); // Get history for this slug
 
   const { data: keywordsData, isLoading } = trpc.keywords.related.useQuery(
     {
@@ -72,9 +77,9 @@ export function RelatedKeywords({
     }
   );
 
-  const handleAnalyze = () => {
-    // ... existing handleAnalyze code ...
-    if (!keyword) {
+  const handleAnalyze = (searchKeyword: string = keyword) => {
+    // Accept optional keyword argument
+    if (!searchKeyword) {
       setError("Please enter a keyword");
       return;
     }
@@ -85,6 +90,10 @@ export function RelatedKeywords({
     }
 
     setError(null);
+    if (!searchHistory.includes(searchKeyword)) {
+      addKeywordToHistory({ slug: websiteSlug, keyword: searchKeyword });
+    }
+    setKeyword(searchKeyword);
     setIsAnalyzing(true);
   };
 
@@ -93,6 +102,10 @@ export function RelatedKeywords({
     setIsAnalyzing(false);
     setKeyword("");
     setSorting([]); // Reset sorting on reset
+  };
+
+  const handleHistoryClick = (historyKeyword: string) => {
+    handleAnalyze(historyKeyword); // Call handleAnalyze with the clicked keyword
   };
 
   // Function to handle successful article creation from keyword
@@ -248,7 +261,7 @@ export function RelatedKeywords({
             />
             {!isAnalyzing ? (
               <Button
-                onClick={handleAnalyze}
+                onClick={() => handleAnalyze()} // Call without args to use state keyword
                 disabled={!locationName || !languageName}
               >
                 Find Related Keywords
@@ -259,6 +272,26 @@ export function RelatedKeywords({
               </Button>
             )}
           </div>
+          {/* Display Search History */}
+          {searchHistory.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-2">
+              <span className="text-sm text-muted-foreground mr-2">
+                History:
+              </span>
+              {searchHistory.map((histKeyword) => (
+                <Button
+                  key={histKeyword}
+                  variant="outline"
+                  size="sm"
+                  className="h-auto py-0.5 px-2 text-xs"
+                  onClick={() => handleHistoryClick(histKeyword)}
+                  disabled={isAnalyzing && isLoading}
+                >
+                  {histKeyword}
+                </Button>
+              ))}
+            </div>
+          )}
 
           {error && <p className="text-sm text-red-500">{error}</p>}
         </div>

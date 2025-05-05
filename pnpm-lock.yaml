@@ -162,7 +162,7 @@ importers:
         specifier: ^12.6.3
         version: 12.8.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       jotai:
-        specifier: ^2.12.2
+        specifier: ^2.12.3
         version: 2.12.3(@types/react@19.1.0)(react@19.1.0)
       lucia:
         specifier: ^3.2.2
