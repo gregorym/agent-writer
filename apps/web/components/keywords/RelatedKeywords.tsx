@@ -32,6 +32,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { CreateArticleForm } from "../create-article-form"; // Adjust path if needed
 
 // Assuming the related keywords endpoint returns the same data structure
@@ -170,7 +171,21 @@ export function RelatedKeywords({
       },
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue("difficulty"));
-        return <div className="text-right">{amount.toFixed(1)}</div>;
+        return (
+          <div
+            className={cn(
+              "w-fit p-1 rounded text-center ml-auto",
+              amount <= 10 && "bg-green-100 text-green-900",
+              amount > 10 && amount <= 30 && "bg-lime-200 text-lime-900",
+              amount > 30 && amount <= 50 && "bg-yellow-200 text-yellow-900",
+              amount > 50 && amount <= 70 && "bg-orange-300 text-orange-900",
+              amount > 70 && amount <= 90 && "bg-red-300 text-red-900",
+              amount > 90 && "bg-red-500 text-white"
+            )}
+          >
+            {amount}
+          </div>
+        );
       },
     },
     {
