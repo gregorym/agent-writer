@@ -48,7 +48,8 @@ export async function execute(job: any): Promise<void> {
   const prompt: string = `
   - Website: ${article.website.name} (${article.website.url})
   - Context: ${article.website.context}
-  - Article Detils: ${article.topic}
+  ${article.topic ? `- Article Details: ${article.topic}` : ""}
+  ${article.keywords ? `- SEO Keywords: ${article.keywords}` : ""}
 
 Include the following backlinks in the article:
   ${article.backlinks.map((link) => `- ${link}`).join("\n")}
