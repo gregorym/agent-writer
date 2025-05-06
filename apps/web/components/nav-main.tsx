@@ -119,14 +119,6 @@ export function NavMain() {
             </Link>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <Link href={`/w/${slug}/integrations`} className="w-full">
-              <SidebarMenuButton tooltip={"Integrations"}>
-                <Cable />
-                <span>Integrations</span>
-              </SidebarMenuButton>
-            </Link>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
             <Link href={`/w/${slug}/keywords`} className="w-full">
               <SidebarMenuButton tooltip={"Keywords"}>
                 <BookA />
@@ -134,6 +126,15 @@ export function NavMain() {
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <Link href={`/w/${slug}/integrations`} className="w-full">
+              <SidebarMenuButton tooltip={"Integrations"}>
+                <Cable />
+                <span>Integrations</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
+
           <SidebarMenuItem>
             <Link href={`/w/${slug}/settings`} className="w-full">
               <SidebarMenuButton tooltip={"Settings"}>
