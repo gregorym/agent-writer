@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Clock, FileText, Loader2, Pencil, Plus, Send } from "lucide-react";
+import { Check, Clock, FileText, Pencil, Plus, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreateArticleForm } from "./create-article-form";
@@ -64,9 +64,9 @@ const columns: ColumnDef<Article>[] = [
         article.scheduled_at &&
         new Date(article.scheduled_at) > new Date()
       ) {
-        statusText = "Scheduled";
+        statusText = "Ready to Publish";
         badgeVariant = "default";
-        Icon = Clock;
+        Icon = Check;
       } else if (
         article.markdown &&
         article.published_at &&
@@ -80,9 +80,9 @@ const columns: ColumnDef<Article>[] = [
         article.scheduled_at &&
         new Date(article.scheduled_at) > new Date()
       ) {
-        statusText = "Pending Generation";
+        statusText = "Scheduled";
         badgeVariant = "outline";
-        Icon = Loader2;
+        Icon = Clock;
       } else if (!article.scheduled_at) {
         statusText = "Draft";
         badgeVariant = "secondary";
