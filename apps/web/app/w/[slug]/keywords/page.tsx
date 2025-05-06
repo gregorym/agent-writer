@@ -1,6 +1,7 @@
 "use client";
 
 import { AppSidebar } from "@/components/app-sidebar";
+import { AIKeywords } from "@/components/keywords/AIKeywords";
 import { RelatedKeywords } from "@/components/keywords/RelatedKeywords";
 import { WebsiteKeywords } from "@/components/keywords/WebsiteKeywords";
 import { SiteHeader } from "@/components/site-header";
@@ -35,15 +36,24 @@ export default function KeywordsPage() {
                 <TabsList>
                   <TabsTrigger value="website">Website keywords</TabsTrigger>
                   <TabsTrigger value="related">Related keywords</TabsTrigger>
+                  <TabsTrigger value="ai">AI keywords</TabsTrigger>
                 </TabsList>
                 <TabsContent value="website">
                   <WebsiteKeywords
+                    websiteSlug={websiteSlug}
                     locationName={website?.location_name}
                     languageName={website?.language_name}
                   />
                 </TabsContent>
                 <TabsContent value="related">
                   <RelatedKeywords
+                    websiteSlug={websiteSlug}
+                    locationName={website?.location_name}
+                    languageName={website?.language_name}
+                  />
+                </TabsContent>
+                <TabsContent value="ai">
+                  <AIKeywords
                     websiteSlug={websiteSlug}
                     locationName={website?.location_name}
                     languageName={website?.language_name}

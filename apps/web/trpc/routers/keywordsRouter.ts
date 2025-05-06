@@ -55,7 +55,9 @@ export const keywordsRouter = router({
       const keywords = await keywordsByWebsiteLLM(
         all.url,
         all.name,
-        all.context ?? ""
+        all.context ?? "",
+        all.location_name,
+        all.language_name
       );
       return { keywords };
     }),

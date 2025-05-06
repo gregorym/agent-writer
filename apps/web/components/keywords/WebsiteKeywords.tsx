@@ -2,26 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { trpc } from "@/trpc/client";
 import {
   ColumnDef,
   SortingState,
-  flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
+import { KeywordsTable } from "./KeywordsTable";
 
 type KeywordData = {
   keyword: string;
@@ -34,11 +25,13 @@ type KeywordData = {
 interface WebsiteKeywordsProps {
   locationName: string | null | undefined;
   languageName: string | null | undefined;
+  websiteSlug: string;
 }
 
 export function WebsiteKeywords({
   locationName,
   languageName,
+  websiteSlug,
 }: WebsiteKeywordsProps) {
   const [url, setUrl] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -212,68 +205,11 @@ export function WebsiteKeywords({
       </div>
 
       {isAnalyzing && (
-        <div className="rounded-lg border">
-          {isLoading && (
-            <div className="p-4">
-              <div className="space-y-3">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-4 w-5/6" />
-              </div>
-            </div>
-          )}
-
-          {!isLoading && keywordsData && (
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          )}
-        </div>
+        <KeywordsTable
+          data={keywordsData?.keywords || []}
+          isLoading={isLoading}
+          websiteSlug={websiteSlug}
+        />
       )}
     </div>
   );

@@ -201,7 +201,9 @@ async function queryKeywordsFromLLM(
     contents,
   });
 
-  const list = JSON.parse(response.candidates[0].parts[0].text);
+  const { keywords } = JSON.parse(
+    response.candidates[0]?.content?.parts[0]?.text || '{"keywords":[]}'
+  ) as { keywords: string[] };
 
   const apiUrl =
     "https://api.dataforseo.com/v3/dataforseo_labs/google/keyword_overview/live";
@@ -217,7 +219,7 @@ async function queryKeywordsFromLLM(
 
   const requestBody = [
     {
-      keywords: list,
+      keywords,
       language_name: lang,
       location_name: location,
     },
@@ -291,13 +293,15 @@ export async function keywordSuggestions(
 export async function keywordsByWebsiteLLM(
   url: string,
   name: string,
-  description: string
+  description: string,
+  location: string,
+  lang: string
 ): Promise<string[]> {
   const FOUR_WEEK_IN_SECONDS = 7 * 24 * 60 * 60 * 4; // 4 week
 
   return unstable_cache(
-    () => queryKeywordsFromLLM(url, name, description),
-    [`keywords-for-site-llm-${url}-${name}-${description}`],
+    () => queryKeywordsFromLLM(url, name, description, location, lang),
+    [`keywords-for-site-llm-${url}-${name}-${description}-${location}-${lang}`],
     { revalidate: FOUR_WEEK_IN_SECONDS, tags: [`keywords-${url}`] }
   )();
 }
