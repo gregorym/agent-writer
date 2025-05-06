@@ -7,7 +7,7 @@ import { protectedProcedure, router } from "../trpc";
 const websiteSchema = z.object({
   name: z.string().min(1, "Name cannot be empty"),
   url: z.string().url("Invalid URL format"),
-  topic: z.string().min(1, "Topic cannot be empty"),
+  topic: z.string().optional(),
 });
 
 const updateWebsiteSchema = websiteSchema.extend({
@@ -67,7 +67,6 @@ export const websitesRouter = router({
 
       try {
         const newWebsite = await prisma.website.create({
-          omit: { id: true },
           data: {
             user_id: userId,
             name,
