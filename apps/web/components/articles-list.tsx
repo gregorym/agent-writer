@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { FileText, Plus } from "lucide-react";
+import { Clock, FileText, Loader2, Pencil, Plus, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreateArticleForm } from "./create-article-form";
@@ -57,6 +57,7 @@ const columns: ColumnDef<Article>[] = [
       let statusText = "Draft";
       let badgeVariant: "default" | "secondary" | "outline" | "destructive" =
         "secondary";
+      let Icon = Pencil;
 
       if (
         article.markdown &&
@@ -65,6 +66,7 @@ const columns: ColumnDef<Article>[] = [
       ) {
         statusText = "Scheduled";
         badgeVariant = "default";
+        Icon = Clock;
       } else if (
         article.markdown &&
         article.published_at &&
@@ -72,6 +74,7 @@ const columns: ColumnDef<Article>[] = [
       ) {
         statusText = "Published";
         badgeVariant = "default";
+        Icon = Send;
       } else if (
         !article.markdown &&
         article.scheduled_at &&
@@ -79,12 +82,19 @@ const columns: ColumnDef<Article>[] = [
       ) {
         statusText = "Pending Generation";
         badgeVariant = "outline";
+        Icon = Loader2;
       } else if (!article.scheduled_at) {
         statusText = "Draft";
         badgeVariant = "secondary";
+        Icon = Pencil;
       }
 
-      return <Badge variant={badgeVariant}>{statusText}</Badge>;
+      return (
+        <Badge variant={badgeVariant} className="flex items-center gap-1">
+          <Icon className="h-3 w-3" />
+          {statusText}
+        </Badge>
+      );
     },
   },
   {
