@@ -57,7 +57,11 @@ async function findNextScheduledDate(websiteId: number): Promise<Date> {
   candidate.setUTCDate(candidate.getUTCDate() + 1);
   candidate.setUTCHours(9, 0, 0, 0);
 
-  while (occupied.has(candidate.toISOString().split("T")[0])) {
+  while (
+    occupied.has(candidate.toISOString().split("T")[0]) ||
+    candidate.getUTCDay() === 0 ||
+    candidate.getUTCDay() === 6
+  ) {
     candidate.setUTCDate(candidate.getUTCDate() + 1);
   }
   return candidate;
