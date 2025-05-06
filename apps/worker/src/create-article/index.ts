@@ -66,8 +66,6 @@ Include the following backlinks in the article:
   const imagePromises: Promise<void>[] = [];
 
   visit(tree, "image", (node: Image) => {
-    console.log("Image node:", node);
-
     if (!node.url || !node.url.startsWith("http")) {
       const altText = node.alt || "";
       imagePromises.push(
