@@ -16,11 +16,7 @@ Bloggy AI Bot is an open-source application designed to automate blog content cr
 - **Keyword Analysis:**
   - Discover keywords relevant to a specific website URL.
   - Find related keywords based on a seed keyword.
-  - Utilizes DataForSEO API for keyword data (volume, difficulty, intent, competition).
 - **Website Management:** Add and manage multiple websites.
-- **User Authentication:** Secure user accounts and sessions using Lucia Auth.
-- **Background Job Processing:** Uses pg-boss and a worker service for handling asynchronous tasks like AI generation and publishing.
-- **(Experimental) GitHub App Integration:** Automatically generate blog posts from GitHub issues labeled 'blog'.
 
 ## 🔌 Integrations
 
