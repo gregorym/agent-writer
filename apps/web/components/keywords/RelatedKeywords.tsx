@@ -2,8 +2,8 @@
 
 import {
   addKeywordToHistoryAtom,
-  articleKeywordsForSlugAtom,
-  keywordsForSlugAtom,
+  articleKeywordHistoryAtom,
+  keywordHistoryAtom,
 } from "@/atoms";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -35,7 +34,7 @@ import {
 } from "@tanstack/react-table";
 import { useAtomValue, useSetAtom } from "jotai";
 import { ArrowUpDown, Check, Plus } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { CreateArticleForm } from "../create-article-form";
 
 type KeywordData = {
@@ -65,10 +64,10 @@ export function RelatedKeywords({
   const [selectedKeyword, setSelectedKeyword] = useState<string | null>(null);
   const utils = trpc.useUtils();
   const addKeywordToHistory = useSetAtom(addKeywordToHistoryAtom);
-  const getKeywordsForSlug = useAtomValue(keywordsForSlugAtom);
-  const searchHistory = getKeywordsForSlug(websiteSlug);
-  const getUsedArticleKeywords = useAtomValue(articleKeywordsForSlugAtom);
-  const usedArticleKeywords = getUsedArticleKeywords(websiteSlug);
+  const keywordHistory = useAtomValue(keywordHistoryAtom);
+  const searchHistory = keywordHistory[websiteSlug] || [];
+  const articleKeywordHistory = useAtomValue(articleKeywordHistoryAtom);
+  const usedArticleKeywords = articleKeywordHistory[websiteSlug] || [];
 
   const { data: keywordsData, isLoading } = trpc.keywords.related.useQuery(
     {
@@ -110,143 +109,157 @@ export function RelatedKeywords({
     handleAnalyze(historyKeyword);
   };
 
-  const handleCreateSuccess = () => {
+  const handleCreateSuccess = useCallback(() => {
     setCreateDialogOpen(false);
     setSelectedKeyword(null);
     utils.articles.all.invalidate({ websiteSlug });
-  };
+  }, [utils, websiteSlug]);
 
-  const columns: ColumnDef<KeywordData>[] = [
-    {
-      accessorKey: "keyword",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Keyword
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
+  const columns = useMemo<ColumnDef<KeywordData>[]>(
+    () => [
+      {
+        accessorKey: "keyword",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Keyword
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => (
+          <div className="font-medium">{row.getValue("keyword")}</div>
+        ),
       },
-      cell: ({ row }) => (
-        <div className="font-medium">{row.getValue("keyword")}</div>
-      ),
-    },
-    {
-      accessorKey: "volume",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-right w-full justify-end"
-          >
-            Search Volume
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
+      {
+        accessorKey: "volume",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+              className="text-right w-full justify-end"
+            >
+              Search Volume
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          const amount = parseFloat(row.getValue("volume"));
+          return <div className="text-right">{amount.toLocaleString()}</div>;
+        },
       },
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("volume"));
-        return <div className="text-right">{amount.toLocaleString()}</div>;
+      {
+        accessorKey: "difficulty",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+              className="text-right w-full justify-end"
+            >
+              Difficulty
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          const amount = parseFloat(row.getValue("difficulty"));
+          return (
+            <div
+              className={cn(
+                "w-fit p-1 rounded text-center ml-auto",
+                amount <= 10 && "bg-green-100 text-green-900",
+                amount > 10 && amount <= 30 && "bg-lime-200 text-lime-900",
+                amount > 30 && amount <= 50 && "bg-yellow-200 text-yellow-900",
+                amount > 50 && amount <= 70 && "bg-orange-300 text-orange-900",
+                amount > 70 && amount <= 90 && "bg-red-300 text-red-900",
+                amount > 90 && "bg-red-500 text-white"
+              )}
+            >
+              {amount}
+            </div>
+          );
+        },
       },
-    },
-    {
-      accessorKey: "difficulty",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-right w-full justify-end"
-          >
-            Difficulty
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
+      {
+        accessorKey: "intent",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+              className="text-right w-full justify-end"
+            >
+              Intent
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => (
+          <div className="text-right">{row.getValue("intent")}</div>
+        ),
       },
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("difficulty"));
-        return (
-          <div
-            className={cn(
-              "w-fit p-1 rounded text-center ml-auto",
-              amount <= 10 && "bg-green-100 text-green-900",
-              amount > 10 && amount <= 30 && "bg-lime-200 text-lime-900",
-              amount > 30 && amount <= 50 && "bg-yellow-200 text-yellow-900",
-              amount > 50 && amount <= 70 && "bg-orange-300 text-orange-900",
-              amount > 70 && amount <= 90 && "bg-red-300 text-red-900",
-              amount > 90 && "bg-red-500 text-white"
-            )}
-          >
-            {amount}
-          </div>
-        );
+      {
+        accessorKey: "competition",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+              className="text-right w-full justify-end"
+            >
+              Competition
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => (
+          <div className="text-right">{row.getValue("competition")}</div>
+        ),
       },
-    },
-    {
-      accessorKey: "intent",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-right w-full justify-end"
-          >
-            Intent
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-right">{row.getValue("intent")}</div>
-      ),
-    },
-    {
-      accessorKey: "competition",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-right w-full justify-end"
-          >
-            Competition
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-right">{row.getValue("competition")}</div>
-      ),
-    },
-    {
-      id: "actions",
-      header: () => <div className="text-right">Action(s)</div>,
-      cell: ({ row }) => {
-        const keyword = row.original.keyword;
-        const isUsed = usedArticleKeywords.includes(keyword);
+      {
+        id: "actions",
+        header: () => <div className="text-right">Action(s)</div>,
+        cell: ({ row }) => {
+          const keyword = row.original.keyword;
+          const isUsed = usedArticleKeywords.includes(keyword);
 
-        return (
-          <div className="text-right">
-            <DialogTrigger asChild>
+          return (
+            <div className="text-right">
               <Button
                 variant="ghost"
                 className="text-right"
-                onClick={() => setSelectedKeyword(keyword)}
+                onClick={() => {
+                  setSelectedKeyword(keyword);
+                  setCreateDialogOpen(true);
+                }}
                 title={"Create article with this keyword"}
               >
                 {isUsed && <Check className="h-4 w-4 mr-1" />}
                 {!isUsed && <Plus className="h-4 w-4" />}
               </Button>
-            </DialogTrigger>
-          </div>
-        );
+            </div>
+          );
+        },
       },
-    },
-  ];
+    ],
+    [usedArticleKeywords]
+  );
 
   const table = useReactTable({
     data: keywordsData?.keywords || [],
