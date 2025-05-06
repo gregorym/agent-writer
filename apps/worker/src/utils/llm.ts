@@ -99,18 +99,18 @@ export async function generateImage(
     contents,
   });
 
-  console.log("Response:", response);
+  const candidates = response?.candidates;
+  if (!candidates?.length) return undefined;
 
-  const part = response?.candidates[0].content.parts[0];
-  if (part?.inlineData) {
-    const inlineData = part.inlineData;
+  const parts = candidates[0]?.content?.parts;
+  if (!parts?.length) return undefined;
+
+  const imagePart = parts.find((part) => part?.inlineData);
+  if (imagePart?.inlineData) {
+    const inlineData = imagePart.inlineData;
     const mimeType = inlineData.mimeType || "image/png";
     const fileExtension = mime.getExtension(mimeType);
     if (!fileExtension) {
-      console.error(
-        "Could not determine file extension for mime type:",
-        mimeType
-      );
       return undefined;
     }
     const fileName = `${Date.now()}.${fileExtension}`;
@@ -119,11 +119,8 @@ export async function generateImage(
 
     try {
       const imageUrl = await uploadFileToS3(buffer, s3Key, mimeType);
-      console.log(`Image uploaded to: ${imageUrl}`);
       return imageUrl;
     } catch (error) {
-      console.error("Failed to upload image to S3:", error);
-
       return undefined;
     }
   }
