@@ -1,8 +1,8 @@
-# Bloggy AI Bot
+# Agent Writer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Bloggy AI Bot is an open-source application designed to automate blog content creation and publishing using AI. It helps users manage websites, perform keyword analysis, generate articles, and publish them to platforms like Ghost or GitHub repositories.
+Agent Writer is an open-source application designed to automate blog content creation and publishing using AI. It helps users manage websites, perform keyword analysis, generate articles, and publish them to platforms like Ghost or GitHub repositories.
 
 ## ✨ Features
 
