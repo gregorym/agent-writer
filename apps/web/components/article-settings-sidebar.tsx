@@ -81,6 +81,10 @@ export function ArticleSettingsSidebar({
   const updateMutation = trpc.articles.update.useMutation();
   const publishMutation = trpc.articles.publish.useMutation();
 
+  const canDownload = !!article.markdown;
+  const canPublish = !publishMutation.isPending && !article.published_at;
+  const canRetry = !retryMutation.isPending && !article.markdown;
+
   return (
     <Sidebar
       collapsible="none"
@@ -210,7 +214,7 @@ export function ArticleSettingsSidebar({
                     websiteSlug,
                   });
                 }}
-                disabled={retryMutation.isPending}
+                disabled={!canRetry}
               >
                 {retryMutation.isPending ? (
                   <>
@@ -225,13 +229,13 @@ export function ArticleSettingsSidebar({
                 )}
               </DropdownMenuItem>
               <DropdownMenuItem
+                disabled={!canPublish}
                 onClick={() => {
                   publishMutation.mutate({
                     articleId: article.id,
                     websiteSlug,
                   });
                 }}
-                disabled={publishMutation.isPending}
               >
                 {publishMutation.isPending ? (
                   <>
@@ -263,6 +267,7 @@ export function ArticleSettingsSidebar({
                   document.body.removeChild(link);
                   URL.revokeObjectURL(url);
                 }}
+                disabled={!canDownload}
               >
                 <Download className="mr-2 h-4 w-4" />
                 <span>Download</span>
