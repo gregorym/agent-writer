@@ -20,7 +20,7 @@ Agent Writer is an open-source application designed to automate blog content cre
 
 ## 🔌 Integrations
 
-Bloggy AI Bot supports publishing generated content directly to:
+Agent Writer supports publishing generated content directly to:
 
 - **Ghost:** Connect your Ghost blog via its Admin API key to publish articles automatically.
 - **GitHub:** Connect a GitHub repository (using a Personal Access Token or a dedicated GitHub App) to publish articles as MDX files via Pull Requests.

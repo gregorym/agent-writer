@@ -7,8 +7,8 @@ import Navbar from "@/components/home/navbar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bloggy - Home",
-  description: "Welcome to Bloggy.",
+  title: "Agent Writer - Home",
+  description: "Welcome to Agent Writer.",
 };
 
 export default function IndexPage() {

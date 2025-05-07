@@ -3,7 +3,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 
 export const metadata = {
-  title: "Bloggy",
+  title: "Agent Writer",
 };
 
 export default function RootLayout({

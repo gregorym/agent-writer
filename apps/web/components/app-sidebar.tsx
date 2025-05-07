@@ -33,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <PenTool className="size-4" />
                 </div>
 
-                <span className="text-base font-semibold">Bloggy</span>
+                <span className="text-base font-semibold">Agent Writer</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
