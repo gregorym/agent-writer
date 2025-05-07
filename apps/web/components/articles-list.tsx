@@ -159,7 +159,7 @@ export function ArticlesList({ websiteSlug }: ArticlesListProps) {
             <Plus className="mr-2 h-4 w-4" /> Create Article
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New Article</DialogTitle>
           </DialogHeader>
