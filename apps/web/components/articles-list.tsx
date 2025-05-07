@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Check, Clock, FileText, Pencil, Plus, Send } from "lucide-react";
+import { Check, CheckCheck, Clock, FileText, Pencil, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreateArticleForm } from "./create-article-form";
@@ -62,19 +62,16 @@ const columns: ColumnDef<Article>[] = [
       if (
         article.markdown &&
         article.scheduled_at &&
+        !article.published_at &&
         new Date(article.scheduled_at) > new Date()
       ) {
         statusText = "Ready to Publish";
         badgeVariant = "default";
         Icon = Check;
-      } else if (
-        article.markdown &&
-        article.published_at &&
-        new Date(article.published_at) <= new Date()
-      ) {
+      } else if (article.markdown && article.published_at) {
         statusText = "Published";
         badgeVariant = "default";
-        Icon = Send;
+        Icon = CheckCheck;
       } else if (
         !article.markdown &&
         article.scheduled_at &&

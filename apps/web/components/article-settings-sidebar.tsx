@@ -241,7 +241,7 @@ export function ArticleSettingsSidebar({
                 ) : (
                   <>
                     <Send className="mr-2 h-4 w-4" />
-                    <span>Publish</span>
+                    <span>Publish now</span>
                   </>
                 )}
               </DropdownMenuItem>

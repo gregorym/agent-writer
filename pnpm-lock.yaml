@@ -66,7 +66,7 @@ importers:
         specifier: ^21.1.1
         version: 21.1.1
       '@radix-ui/react-accordion':
-        specifier: ^1.2.4
+        specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-avatar':
         specifier: ^1.1.7
@@ -289,8 +289,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/database
       '@google/genai':
-        specifier: ^0.10.0
-        version: 0.10.0
+        specifier: ^0.12.0
+        version: 0.12.0
       '@octokit/rest':
         specifier: ^21.1.1
         version: 21.1.1
@@ -1023,6 +1023,10 @@ packages:
 
   '@google/genai@0.10.0':
     resolution: {integrity: sha512-LAbp0em5A+wRtQR2+r5ckRBg2U2cBy8cJHgyTHa9PUbK8zucApw6A93HWyom/qlUQBNCpnIHFp20RiJuYMQwAw==}
+    engines: {node: '>=18.0.0'}
+
+  '@google/genai@0.12.0':
+    resolution: {integrity: sha512-SJtCHac+HPgmwELpJpPKbaV4rk397bS2D42XgFR2NBEARDKd/79RcaRUFFd55pYUJ+gfaz9Bv6KYoiz/P6eZKA==}
     engines: {node: '>=18.0.0'}
 
   '@hookform/resolvers@5.0.1':
@@ -6992,6 +6996,18 @@ snapshots:
   '@formkit/auto-animate@0.8.2': {}
 
   '@google/genai@0.10.0':
+    dependencies:
+      google-auth-library: 9.15.1
+      ws: 8.18.1
+      zod: 3.24.3
+      zod-to-json-schema: 3.24.5(zod@3.24.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
+
+  '@google/genai@0.12.0':
     dependencies:
       google-auth-library: 9.15.1
       ws: 8.18.1

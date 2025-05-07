@@ -229,6 +229,13 @@ export const articlesRouter = router({
       const boss = createBoss();
       await boss.start();
       await boss.createQueue(queueName("new-article"));
+
+      if (article.job_id) {
+        await boss
+          .deleteJob(queueName("new-article"), article.job_id)
+          .catch(() => {});
+      }
+
       const jobId = await boss.send(queueName("new-article"), {
         id: article.id,
       });
@@ -261,6 +268,7 @@ export const articlesRouter = router({
           message: "Article cannot be deleted.",
         });
       }
+
       await prisma.article.delete({
         where: { id: article.id, website_id: website.id },
       });
@@ -312,7 +320,10 @@ export const articlesRouter = router({
       const boss = createBoss();
       await boss.start();
       await boss.createQueue(queueName("publish-article"));
-      await boss.send(queueName("publish-article"), { id: article.id });
+
+      await boss.send(queueName("publish-article"), {
+        id: article.id,
+      });
       await boss.stop();
     }),
 });

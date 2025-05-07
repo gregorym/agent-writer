@@ -52,7 +52,7 @@ export async function generateArticle(prompt: string) {
       },
     ],
   };
-  const model = "gemini-2.5-flash-preview-04-17";
+  const model = "gemini-2.5-pro-preview-05-06";
   const contents = [
     {
       role: "user",

@@ -4,7 +4,6 @@ dotenv.config();
 import * as dotenv from "dotenv";
 import { Image } from "mdast";
 import { toString } from "mdast-util-to-string";
-import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";
 import remarkStringify from "remark-stringify";
 import { unified } from "unified";
@@ -48,20 +47,22 @@ export async function execute(job: any): Promise<void> {
   const prompt: string = `
   - Website: ${article.website.name} (${article.website.url})
   - Context: ${article.website.context}
-  ${article.topic ? `- Article Details: ${article.topic}` : ""}
   ${article.keywords ? `- SEO Keywords: ${article.keywords}` : ""}
+  ${article.topic ? `- Article Details: ${article.topic}` : ""}
 
 Include the following backlinks in the article:
   ${article.backlinks.map((link) => `- ${link}`).join("\n")}
   `;
 
   let initialMarkdown = article.markdown ?? (await generateArticle(prompt));
-  if (!initialMarkdown) {
-    console.error("Failed to generate article content.");
-    return;
-  }
+  if (!initialMarkdown) return;
 
-  const tree = unified().use(remarkParse).use(remarkMdx).parse(initialMarkdown);
+  // Sanitize initialMarkdown to prevent parsing errors with attributes starting with numbers.
+  // This replaces attributes like " 0attr=" with " _0attr="
+  initialMarkdown = initialMarkdown.replace(/(\s)([0-9][\w:-]*=)/g, "$1_$2");
+
+  // Parse the sanitized markdown directly
+  const tree = unified().use(remarkParse).parse(initialMarkdown);
 
   const imagePromises: Promise<void>[] = [];
 
@@ -75,17 +76,8 @@ Include the following backlinks in the article:
 
             if (typeof newImageUrl === "string") {
               node.url = newImageUrl;
-            } else {
-              console.warn(
-                `Image generation for alt text "${altText}" did not return a valid URL.`
-              );
             }
-          } catch (error) {
-            console.error(
-              `Failed to generate image for alt text "${altText}":`,
-              error
-            );
-          }
+          } catch (error: any) {}
         })()
       );
     }
