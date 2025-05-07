@@ -229,9 +229,9 @@ export default function EditArticlePage() {
           <form
             id="edit-article-form"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-1 flex-col"
+            className="flex flex-col"
           >
-            <div className="flex flex-1 flex-col gap-2 p-4 md:p-6">
+            <div className="flex flex-col gap-2 p-4 md:p-6">
               {isLoading && !article && (
                 <div className="space-y-4 p-4">
                   <Skeleton className="h-8 w-1/4" />

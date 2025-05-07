@@ -37,6 +37,11 @@ export const websitesRouter = router({
               id: true,
             },
           },
+          googleSearchIntegration: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
       if (!website) {

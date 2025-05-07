@@ -3,6 +3,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { GhostIntegrationForm } from "@/components/ghost-integration-form"; // We will create this next
 import { GithubIntegrationForm } from "@/components/github-integration-form"; // Import the new form
+import { GoogleSearchConsoleIntegrationForm } from "@/components/google-search-console-integration-form";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +22,7 @@ export default function IntegrationsPage() {
   const websiteSlug = params.slug;
   const [isGhostOpen, setIsGhostOpen] = useState(false);
   const [isGithubOpen, setIsGithubOpen] = useState(false); // Add state for GitHub
+  const [isGoogleSearchOpen, setIsGoogleSearchOpen] = useState(false); // Add state for Google Search Console
 
   const {
     data: website,
@@ -122,16 +124,24 @@ export default function IntegrationsPage() {
                   </Collapsible>
 
                   {/* Google Search Console Integration (Placeholder) */}
-                  <Collapsible disabled>
-                    <div className="flex items-center justify-between space-x-4 rounded-md border px-4 py-2 opacity-50">
-                      <h4 className="text-sm font-semibold">
+                  <Collapsible
+                    open={isGoogleSearchOpen}
+                    onOpenChange={setIsGoogleSearchOpen}
+                  >
+                    <div className="flex items-center justify-between space-x-4 rounded-md border px-4 py-2">
+                      <h4 className="flex items-center gap-2 text-sm font-semibold">
                         Google Search Console Integration
+                        {website.googleSearchIntegration && <span>✅</span>}
                       </h4>
-                      <Button variant="ghost" size="sm" disabled>
-                        Configure
-                      </Button>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" size="sm">
+                          {isGoogleSearchOpen ? "Close" : "Configure"}
+                        </Button>
+                      </CollapsibleTrigger>
                     </div>
-                    {/* <CollapsibleContent>...</CollapsibleContent> */}
+                    <CollapsibleContent className="space-y-2 p-4">
+                      <GoogleSearchConsoleIntegrationForm />
+                    </CollapsibleContent>
                   </Collapsible>
                 </div>
               )}

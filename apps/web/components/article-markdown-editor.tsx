@@ -45,7 +45,7 @@ export function ArticleMarkdownEditor({
   const displayMarkdown = initialMarkdown ?? "";
 
   return (
-    <div className="flex-1 space-y-4">
+    <div className="flex space-y-4">
       {initialMarkdown !== null && initialMarkdown !== undefined ? (
         <FormField
           control={control}
@@ -58,8 +58,8 @@ export function ArticleMarkdownEditor({
                   ({wordCount} words)
                 </span>
               </FormLabel>
-              <Tabs defaultValue="preview" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
+              <Tabs defaultValue="preview" className="">
+                <TabsList className="grid grid-cols-2">
                   <TabsTrigger value="editor">Editor</TabsTrigger>
                   <TabsTrigger value="preview" disabled={!field.value}>
                     Preview
@@ -72,13 +72,13 @@ export function ArticleMarkdownEditor({
                       placeholder="Enter the article content in Markdown..."
                       {...field}
                       value={field.value ?? ""}
-                      className="min-h-[400px] md:min-h-[600px] mt-2"
+                      className="min-h-[400px] md:min-h-[600px] mt-2 w-full"
                     />
                   </FormControl>
                 </TabsContent>
                 <TabsContent value="preview">
                   {!!field.value && (
-                    <div className="mt-2 rounded-md border p-8 min-h-[400px] md:min-h-[600px] overflow-auto bg-white">
+                    <div className="mt-2 rounded-md border p-8 min-h-[400px] md:min-h-[600px] overflow-auto bg-white w-full max-w-screen">
                       <MarkdownPreview
                         source={field.value}
                         wrapperElement={{

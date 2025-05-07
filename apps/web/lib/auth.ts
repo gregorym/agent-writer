@@ -23,13 +23,21 @@ export const google = new Google(
   process.env.GOOGLE_OAUTH_CLIENT_ID!,
   process.env.GOOGLE_OAUTH_CLIENT_SECRET!,
   process.env.GOOGLE_OAUTH_REDIRECT_URI ||
-    "http://localhost:3000/api/auth/callback/google"
+    "http://localhost:3000/api/auth/google/callback"
+);
+
+export const googleSearchConsoleAuth = new Google(
+  process.env.GOOGLE_SEARCH_CONSOLE_CLIENT_ID!,
+  process.env.GOOGLE_SEARCH_CONSOLE_CLIENT_SECRET!,
+  process.env.GOOGLE_SEARCH_CONSOLE_REDIRECT_URI ||
+    "http://localhost:3000/api/auth/google/search-console/callback"
 );
 
 declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
-    Google: typeof google;
+    Google: typeof google; // Keep existing Google for general auth
+    googleSearchConsoleAuth: typeof googleSearchConsoleAuth; // Add new one for Search Console
     DatabaseUserAttributes: {
       email: string;
     };
