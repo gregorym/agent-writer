@@ -58,6 +58,7 @@ model Website {
   articles Article[]
   ghostIntegration GhostIntegration? 
   githubIntegration GithubIntegration? 
+  googleSearchIntegration GoogleSearchIntegration?
 
   @@index([user_id])
   @@index([slug])
@@ -136,4 +137,18 @@ model GithubIntegration {
   website Website @relation(fields: [website_id], references: [id])
 
   @@map("github_integrations")
+}
+
+model GoogleSearchIntegration {
+  id         Int      @id @default(autoincrement())
+  website_id Int      @unique
+  access_token String
+  refresh_token String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  website Website @relation(fields: [website_id], references: [id])
+
+  @@map("google_search_integrations")
 }
