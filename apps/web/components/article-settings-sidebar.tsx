@@ -66,12 +66,14 @@ interface ArticleSettingsSidebarProps {
   form: UseFormReturn<FormData>;
   article: Article;
   websiteSlug: string;
+  isSaving: boolean;
 }
 
 export function ArticleSettingsSidebar({
   form,
   article,
   websiteSlug,
+  isSaving,
 }: ArticleSettingsSidebarProps) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -188,10 +190,10 @@ export function ArticleSettingsSidebar({
           <Button
             type="submit"
             form="edit-article-form"
-            disabled={updateMutation.isPending || !form.formState.isDirty}
+            disabled={isSaving || !form.formState.isDirty}
             className="flex-grow"
           >
-            {updateMutation.isPending ? (
+            {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
               </>

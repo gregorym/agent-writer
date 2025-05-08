@@ -25,6 +25,12 @@ const articleUpdateSchema = z.object({
   backlinks: z.array(z.string()).optional(),
 });
 
+const articleUpdateScheduleSchema = z.object({
+  articleId: z.number(),
+  websiteSlug: z.string(),
+  scheduled_at: z.date().optional().nullable(),
+});
+
 const articleIdAndSlugSchema = z.object({
   articleId: z.number(),
   websiteSlug: z.string(),
@@ -167,7 +173,34 @@ export const articlesRouter = router({
         });
       }
 
-      if (data.scheduled_at && data.scheduled_at <= new Date()) {
+      return await prisma.article.update({
+        where: { id: articleId, website_id: website.id },
+        data: {
+          ...data,
+          backlinks: data.backlinks ?? undefined,
+        },
+      });
+    }),
+
+  updateSchedule: protectedProcedure
+    .input(articleUpdateScheduleSchema)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const { articleId, websiteSlug, scheduled_at } = input;
+      const website = await verifyWebsiteAccess(userId, websiteSlug);
+      const current = await prisma.article.findUnique({
+        where: { id: articleId, website_id: website.id },
+        select: { job_id: true, scheduled_at: true },
+      });
+
+      if (!current) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Article not found or does not belong to this website.",
+        });
+      }
+
+      if (scheduled_at && scheduled_at <= new Date()) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Scheduled date must be in the future.",
@@ -175,10 +208,7 @@ export const articlesRouter = router({
       }
 
       let newJobId = current.job_id;
-      if (
-        "scheduled_at" in data &&
-        data.scheduled_at?.toISOString() !== current.scheduled_at?.toISOString()
-      ) {
+      if (scheduled_at?.toISOString() !== current.scheduled_at?.toISOString()) {
         const boss = createBoss();
         await boss.start();
         await boss.createQueue(queueName("new-article"));
@@ -190,22 +220,20 @@ export const articlesRouter = router({
           newJobId = null;
         }
 
-        if (data.scheduled_at) {
+        if (scheduled_at) {
           newJobId = await boss.send(
             queueName("new-article"),
             { id: articleId },
-            { startAfter: data.scheduled_at }
+            { startAfter: scheduled_at }
           );
         }
-
         await boss.stop();
       }
 
       return await prisma.article.update({
         where: { id: articleId, website_id: website.id },
         data: {
-          ...data,
-          backlinks: data.backlinks ?? undefined,
+          scheduled_at: scheduled_at,
           job_id: newJobId,
         },
       });

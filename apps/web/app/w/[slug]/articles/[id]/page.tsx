@@ -108,20 +108,26 @@ export default function EditArticlePage() {
   const updateArticleMutation = trpc.articles.update.useMutation({
     onSuccess: (data) => {
       if (!article) return;
-      utils.articles.get.invalidate({ articleId: article.id, websiteSlug });
-      form.reset(
-        {
-          topic: data.topic ?? "",
-          title: data.title,
-          markdown: data.markdown,
-          scheduled_at: data.scheduled_at,
-          backlinks: transformBacklinksToObject(data.backlinks),
-        },
-        { keepValues: true }
+      toast.success(
+        `Article "${data.title || data.topic || "Untitled"}" saved successfully!`
       );
+      utils.articles.get.invalidate({ articleId: article.id, websiteSlug });
+      // form.reset is handled by useEffect when article data changes
     },
     onError: (error) => {
       toast.error(`Failed to save article: ${error.message}`);
+    },
+  });
+
+  const updateScheduleMutation = trpc.articles.updateSchedule.useMutation({
+    onSuccess: (data) => {
+      if (!article) return;
+      toast.success("Article schedule updated successfully!");
+      utils.articles.get.invalidate({ articleId: article.id, websiteSlug });
+      // form.reset is handled by useEffect when article data changes
+    },
+    onError: (error) => {
+      toast.error(`Failed to update schedule: ${error.message}`);
     },
   });
 
@@ -134,38 +140,63 @@ export default function EditArticlePage() {
       if (!article || isSavingRef.current || !initialLoadDoneRef.current)
         return;
 
-      const changed =
+      const scheduleDidChange =
+        (data.scheduled_at?.toISOString() ?? null) !==
+        (article.scheduled_at?.toISOString() ?? null);
+      const otherFieldsDidChange =
         data.topic !== (article.topic || "") ||
         data.title !== (article.title || "") ||
         data.markdown !== (article.markdown || "") ||
-        (data.scheduled_at?.toISOString() ?? null) !==
-          (article.scheduled_at?.toISOString() ?? null) ||
         JSON.stringify(transformBacklinksToString(data.backlinks)) !==
           JSON.stringify(article.backlinks || []);
 
-      if (!changed) {
-        return;
+      if (!scheduleDidChange && !otherFieldsDidChange) {
+        return; // No actual changes
       }
 
       isSavingRef.current = true;
-      updateArticleMutation.mutate(
-        {
-          articleId: article.id,
-          websiteSlug,
-          topic: data.topic,
-          title: data.title || undefined,
-          markdown: data.markdown || undefined,
-          scheduled_at: data.scheduled_at,
-          backlinks: transformBacklinksToString(data.backlinks),
-        },
-        {
-          onSettled: () => {
-            isSavingRef.current = false;
+
+      if (scheduleDidChange && !otherFieldsDidChange) {
+        updateScheduleMutation.mutate(
+          {
+            articleId: article.id,
+            websiteSlug,
+            scheduled_at: data.scheduled_at,
           },
-        }
-      );
+          {
+            onSettled: () => {
+              isSavingRef.current = false;
+            },
+          }
+        );
+      } else {
+        // This covers otherFieldsDidChange OR (scheduleDidChange AND otherFieldsDidChange)
+        updateArticleMutation.mutate(
+          {
+            articleId: article.id,
+            websiteSlug,
+            topic: data.topic,
+            title: data.title || undefined,
+            markdown: data.markdown || undefined,
+            scheduled_at: data.scheduled_at,
+            backlinks: transformBacklinksToString(data.backlinks),
+          },
+          {
+            onSettled: () => {
+              isSavingRef.current = false;
+            },
+          }
+        );
+      }
     }, 1500),
-    [article, websiteSlug, updateArticleMutation]
+    [
+      article,
+      websiteSlug,
+      updateArticleMutation,
+      updateScheduleMutation,
+      utils.articles.get, // Added utils for robust invalidation reference if needed by useCallback
+      form, // Added form for robust reference if needed by useCallback
+    ]
   );
 
   useEffect(() => {
@@ -183,8 +214,25 @@ export default function EditArticlePage() {
   function onSubmit(values: FormData) {
     if (!article) return;
 
-    updateArticleMutation.mutate(
-      {
+    const scheduleDidChange =
+      (values.scheduled_at?.toISOString() ?? null) !==
+      (article.scheduled_at?.toISOString() ?? null);
+    const otherFieldsDidChange =
+      values.topic !== (article.topic || "") ||
+      values.title !== (article.title || "") ||
+      values.markdown !== (article.markdown || "") ||
+      JSON.stringify(transformBacklinksToString(values.backlinks)) !==
+        JSON.stringify(article.backlinks || []);
+
+    if (scheduleDidChange && !otherFieldsDidChange) {
+      updateScheduleMutation.mutate({
+        articleId: article.id,
+        websiteSlug,
+        scheduled_at: values.scheduled_at,
+      });
+    } else if (otherFieldsDidChange || scheduleDidChange) {
+      // If other fields changed, or both types of fields changed
+      updateArticleMutation.mutate({
         articleId: article.id,
         websiteSlug,
         topic: values.topic,
@@ -192,24 +240,24 @@ export default function EditArticlePage() {
         markdown: values.markdown || undefined,
         scheduled_at: values.scheduled_at,
         backlinks: transformBacklinksToString(values.backlinks),
-      },
-      {
-        onSuccess: (data) => {
-          toast.success(
-            `Article "${data.title || data.topic || "Untitled"}" saved successfully!`
-          );
-          utils.articles.get.invalidate({ articleId: article.id, websiteSlug });
-          form.reset({
-            topic: data.topic ?? "",
-            title: data.title,
-            markdown: data.markdown,
-            scheduled_at: data.scheduled_at,
-            backlinks: transformBacklinksToObject(data.backlinks),
-          });
-        },
-      }
-    );
+      });
+    } else {
+      // This case should ideally not be hit if save button is disabled when form is not dirty.
+      toast.info("No changes to save.");
+    }
   }
+
+  const deleteArticleMutation = trpc.articles.delete.useMutation({
+    // Assuming a similar structure for delete, ensure onSuccess/onError are handled
+    onSuccess: () => {
+      toast.success("Article deleted successfully");
+      router.push(`/w/${websiteSlug}/articles`); // Redirect after delete
+      utils.articles.all.invalidate({ websiteSlug }); // Invalidate list view
+    },
+    onError: (error) => {
+      toast.error(`Failed to delete article: ${error.message}`);
+    },
+  });
 
   const handleDelete = () => {
     if (!article) return;
@@ -219,6 +267,9 @@ export default function EditArticlePage() {
   if (error) {
     return <div>Error loading article: {error.message}</div>;
   }
+
+  const isSaving =
+    updateArticleMutation.isPending || updateScheduleMutation.isPending;
 
   return (
     <SidebarProvider>
@@ -256,6 +307,7 @@ export default function EditArticlePage() {
             form={form}
             article={article}
             websiteSlug={websiteSlug}
+            isSaving={isSaving}
           />
         )}
         {isLoading && !article && (
