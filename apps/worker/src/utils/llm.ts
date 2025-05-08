@@ -81,7 +81,7 @@ export async function generateImage(
     responseMimeType: "text/plain",
   };
 
-  const model = "gemini-2.0-flash-exp-image-generation";
+  const model = "gemini-2.0-flash-preview-image-generation";
   const contents = [
     {
       role: "user",
