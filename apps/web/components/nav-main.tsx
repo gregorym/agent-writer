@@ -59,7 +59,7 @@ export function NavMain() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground bg-sidebar-accent"
             >
               <div className="flex items-center justify-between gap-2 w-full">
-                {website?.name ?? website?.slug ?? "GReg"}
+                {website?.name ?? website?.slug ?? "Loading..."}
                 <ChevronsUpDown className="size-4" />
               </div>
             </SidebarMenuButton>
