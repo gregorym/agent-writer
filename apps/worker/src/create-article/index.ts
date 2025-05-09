@@ -54,7 +54,8 @@ Include the following backlinks in the article:
   ${article.backlinks.map((link) => `- ${link}`).join("\n")}
   `;
 
-  let initialMarkdown = article.markdown ?? (await generateArticle(prompt));
+  let initialMarkdown =
+    article.markdown ?? (await generateArticle(prompt, article.website.prompt));
   if (!initialMarkdown) return;
 
   // Sanitize initialMarkdown to prevent parsing errors with attributes starting with numbers.

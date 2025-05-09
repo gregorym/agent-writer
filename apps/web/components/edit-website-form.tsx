@@ -8,18 +8,20 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/trpc/client";
-import type { Website } from "@prisma/client"; // Import Website type
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import type { Website } from "../../../packages/database/generated/client";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -29,47 +31,58 @@ const formSchema = z.object({
     message: "Please enter a valid URL.",
   }),
   topic: z.string().min(1, {
-    message: "Topic cannot be empty.",
+    message: "Topic/Context cannot be empty.",
   }),
+  customPromptEnabled: z.boolean(),
+  prompt: z.string().optional().nullable(),
 });
 
 type EditWebsiteFormProps = {
-  website: Website; // Pass the website data to pre-fill the form
+  website: Website;
 };
+
+type FormValues = z.infer<typeof formSchema>;
 
 export function EditWebsiteForm({ website }: EditWebsiteFormProps) {
   const router = useRouter();
   const utils = trpc.useUtils();
 
-  const updateWebsiteMutation = trpc.websites.update.useMutation({
-    onSuccess: async (data) => {
-      toast.success(`Website "${data.name}" updated successfully!`);
-      // Invalidate queries to refetch data
-      await utils.websites.get.invalidate({ slug: website.slug });
-      await utils.websites.all.invalidate();
-      // Optionally redirect or perform other actions
-      // router.push(`/w/${data.slug}`); // Redirect if slug changes, though not implemented here
-    },
-    onError: (error) => {
-      toast.error(`Failed to update website: ${error.message}`);
-    },
-  });
+  const updateWebsiteMutation = trpc.websites.update.useMutation();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: website.name || "",
       url: website.url || "",
-      topic: website.context || "", // Use 'context' field from prisma model
+      topic: website.context || "",
+      customPromptEnabled: website.prompt ? true : false,
+      prompt: website.prompt ?? null,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    updateWebsiteMutation.mutate({
-      ...values,
-      slug: website.slug, // Pass the current slug to identify the website
-    });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const updatedWebsite = await updateWebsiteMutation.mutateAsync({
+        slug: website.slug,
+        name: values.name,
+        url: values.url,
+        topic: values.topic,
+        prompt:
+          (values.customPromptEnabled ?? false) ? values.prompt || "" : null, // Handle possible undefined
+      });
+      toast.success(`Website "${updatedWebsite.name}" updated successfully!`);
+      await utils.websites.get.invalidate({ slug: website.slug });
+      await utils.websites.all.invalidate();
+    } catch (error) {
+      toast.error(
+        `Failed to update website: ${
+          error instanceof Error ? error.message : "An unknown error occurred"
+        }`
+      );
+    }
   }
+
+  const watchCustomPromptEnabled = form.watch("customPromptEnabled");
 
   return (
     <Form {...form}>
@@ -105,11 +118,11 @@ export function EditWebsiteForm({ website }: EditWebsiteFormProps) {
           name="topic"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Topic</FormLabel>
+              <FormLabel>Context</FormLabel>
               <FormControl>
                 <Textarea
                   rows={4}
-                  placeholder="Describe the main topic of your website..."
+                  placeholder="Describe the main topic/context of your website..."
                   {...field}
                 />
               </FormControl>
@@ -117,6 +130,48 @@ export function EditWebsiteForm({ website }: EditWebsiteFormProps) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="customPromptEnabled"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  Enable Custom Prompt
+                </FormLabel>
+                <FormDescription>
+                  Use your own prompt to generate your blog posts.
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        {watchCustomPromptEnabled && (
+          <FormField
+            control={form.control}
+            name="prompt"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Custom Prompt</FormLabel>
+                <FormControl>
+                  <Textarea
+                    rows={6}
+                    placeholder="e.g., Write in a witty and engaging tone, focusing on..."
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <Button type="submit" disabled={updateWebsiteMutation.isPending}>
           {updateWebsiteMutation.isPending && (
             <Loader2 className="animate-spin mr-2" />

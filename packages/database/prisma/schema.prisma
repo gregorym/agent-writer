@@ -50,6 +50,7 @@ model Website {
   location_name String @default("United States")
   language_name String @default("English")
   partner     Boolean @default(false)
+  prompt      String?
 
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt

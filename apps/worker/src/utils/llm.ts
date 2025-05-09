@@ -40,9 +40,16 @@ export async function generateWebsiteContext(prompt: string) {
   return response?.candidates?.[0]?.content?.parts?.[0]?.text;
 }
 
-export async function generateArticle(prompt: string) {
+export async function generateArticle(
+  prompt: string,
+  overridePrompt?: string | null
+) {
   const promptPath = path.join(__dirname, "../prompt.md");
-  const promptContent = fs.readFileSync(promptPath, "utf-8");
+  let promptContent = fs.readFileSync(promptPath, "utf-8");
+
+  if (overridePrompt) {
+    promptContent = overridePrompt;
+  }
 
   const config = {
     responseMimeType: "text/plain",

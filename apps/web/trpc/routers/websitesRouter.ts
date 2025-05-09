@@ -13,6 +13,7 @@ const websiteSchema = z.object({
 const updateWebsiteSchema = websiteSchema.extend({
   slug: z.string(),
   topic: z.string().min(1, "Topic cannot be empty"),
+  prompt: z.string().optional().nullable(),
 });
 
 export const websitesRouter = router({
