@@ -39,7 +39,7 @@ async function queryKeywordsByWebsite(
       filters: [
         ["keyword_properties.keyword_difficulty", ">", 0],
         "and",
-        ["keyword_properties.competition", ">", 0],
+        ["keyword_info.competition", ">", 0],
         "and",
         ["keyword_info.search_volume", ">", 50],
       ],
@@ -111,7 +111,7 @@ async function queryKeywordSuggestion(
       filters: [
         ["keyword_properties.keyword_difficulty", ">", 0],
         "and",
-        ["keyword_properties.competition", ">", 0],
+        ["keyword_info.competition", ">", 0],
         "and",
         ["keyword_info.search_volume", ">", 50],
       ],
@@ -134,10 +134,13 @@ async function queryKeywordSuggestion(
     }
 
     const data = await response.json();
+    console.log(JSON.stringify(data, null, 2));
 
     if (!data.tasks || !data.tasks[0] || !data.tasks[0].result) {
       return [];
     }
+
+    console.log(data.tasks[0].result[0].items);
 
     return data.tasks[0].result[0].items.map((item: any) => ({
       keyword: item.keyword,
