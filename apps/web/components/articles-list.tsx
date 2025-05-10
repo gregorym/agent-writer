@@ -59,14 +59,9 @@ const columns: ColumnDef<Article>[] = [
         "secondary";
       let Icon = Pencil;
 
-      if (
-        article.markdown &&
-        article.scheduled_at &&
-        !article.published_at &&
-        new Date(article.scheduled_at) > new Date()
-      ) {
+      if (article.markdown && article.scheduled_at && !article.published_at) {
         statusText = "Ready to Publish";
-        badgeVariant = "default";
+        badgeVariant = "outline";
         Icon = Check;
       } else if (article.markdown && article.published_at) {
         statusText = "Published";

@@ -11,12 +11,11 @@ Write a LONG-FORM, value-packed article that mirrors the structure below.
    • Keep paragraphs ≤ 3 lines. Use vivid analogies and action verbs.
 
 2. **Formatting**  
-    • Output _only_ the raw Markdown content, starting directly with the H1 title. Do not start with language identifiers like ```markdown or backticks.
-• H1 for the title, H2 for major sections, H3 for sub-sections.  
-• Insert a **Table of Contents** after the intro (linked with Markdown anchors).  
-• Sprinkle in bulleted & numbered lists, bold call‑outs, and short, descriptive code‑blocks or quotes if relevant.  
-• Include at least **one data table** and **one boxed statistic** (use `> **Stat:** …`).  
-• Mark image placeholders like: `![descriptive alt text](notion-image-placeholder)`.
+   • H1 for the title, H2 for major sections, H3 for sub-sections.  
+   • Insert a **Table of Contents** after the intro (linked with Markdown anchors).  
+   • Sprinkle in bulleted & numbered lists, bold call‑outs, and short, descriptive code‑blocks or quotes if relevant.  
+   • Include at least **one data table** and **one boxed statistic** (use `> **Stat:** …`).  
+   • Mark image placeholders like: `![descriptive alt text](notion-image-placeholder)`.
    • H2 should start with an image (ALT should be a prompt to generate the image)
 
 3. **Length & Depth**  

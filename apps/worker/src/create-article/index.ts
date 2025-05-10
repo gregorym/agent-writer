@@ -45,6 +45,11 @@ export async function execute(job: any): Promise<void> {
   if (!article) return;
 
   const prompt: string = `
+  Extra rules:  
+  - Output _only_ the raw Markdown content, starting directly with the H1 title. Do not start with language identifiers like markdown or backticks.
+  - Mark image placeholders like: "![descriptive alt text](notion-image-placeholder)".
+
+  ---
   - Website: ${article.website.name} (${article.website.url})
   - Context: ${article.website.context}
   ${article.keywords ? `- SEO Keywords: ${article.keywords}` : ""}

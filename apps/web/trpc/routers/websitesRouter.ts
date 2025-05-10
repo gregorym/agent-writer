@@ -129,6 +129,7 @@ export const websitesRouter = router({
             name,
             url,
             context: topic,
+            prompt: input.prompt ?? null,
           },
         });
         return updatedWebsite;
