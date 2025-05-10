@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -131,85 +131,13 @@ export default function EditArticlePage() {
     },
   });
 
-  const watchedFields = form.watch();
-  const isSavingRef = useRef(false);
   const initialLoadDoneRef = useRef(false);
-
-  const debouncedSave = useCallback(
-    debounce((data: FormData) => {
-      if (!article || isSavingRef.current || !initialLoadDoneRef.current)
-        return;
-
-      const scheduleDidChange =
-        (data.scheduled_at?.toISOString() ?? null) !==
-        (article.scheduled_at?.toISOString() ?? null);
-      const otherFieldsDidChange =
-        data.topic !== (article.topic || "") ||
-        data.title !== (article.title || "") ||
-        data.markdown !== (article.markdown || "") ||
-        JSON.stringify(transformBacklinksToString(data.backlinks)) !==
-          JSON.stringify(article.backlinks || []);
-
-      if (!scheduleDidChange && !otherFieldsDidChange) {
-        return; // No actual changes
-      }
-
-      isSavingRef.current = true;
-
-      if (scheduleDidChange && !otherFieldsDidChange) {
-        updateScheduleMutation.mutate(
-          {
-            articleId: article.id,
-            websiteSlug,
-            scheduled_at: data.scheduled_at,
-          },
-          {
-            onSettled: () => {
-              isSavingRef.current = false;
-            },
-          }
-        );
-      } else {
-        // This covers otherFieldsDidChange OR (scheduleDidChange AND otherFieldsDidChange)
-        updateArticleMutation.mutate(
-          {
-            articleId: article.id,
-            websiteSlug,
-            topic: data.topic,
-            title: data.title || undefined,
-            markdown: data.markdown || undefined,
-            scheduled_at: data.scheduled_at,
-            backlinks: transformBacklinksToString(data.backlinks),
-          },
-          {
-            onSettled: () => {
-              isSavingRef.current = false;
-            },
-          }
-        );
-      }
-    }, 1500),
-    [
-      article,
-      websiteSlug,
-      updateArticleMutation,
-      updateScheduleMutation,
-      utils.articles.get, // Added utils for robust invalidation reference if needed by useCallback
-      form, // Added form for robust reference if needed by useCallback
-    ]
-  );
 
   useEffect(() => {
     if (article && !initialLoadDoneRef.current) {
       initialLoadDoneRef.current = true;
     }
   }, [article]);
-
-  useEffect(() => {
-    if (initialLoadDoneRef.current && form.formState.isDirty) {
-      debouncedSave(watchedFields);
-    }
-  }, [watchedFields, debouncedSave, form.formState.isDirty]);
 
   function onSubmit(values: FormData) {
     if (!article) return;
