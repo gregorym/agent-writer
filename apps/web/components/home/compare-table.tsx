@@ -15,77 +15,83 @@ export default function CompareTable() {
       </span>
 
       <h3 className="font-bold text-2xl md:text-5xl tracking-tight">
-        How You Create YouTube Videos
+        Unlock Top Rankings on Google & ChatGPT
       </h3>
       <h4 className="text-3xl font-bold mb-6 dark:text-white">
-        <span className="text-red-500">The Old Way</span> vs{" "}
-        <span className="text-green-400">Your New Way with Shorts Studio</span>
+        <span className="text-red-500">The Complex, Manual Way</span> vs{" "}
+        <span className="text-green-400">
+          Effortless Results with Agent Writer
+        </span>
       </h4>
       <Table className="">
         <TableHeader>
           <TableRow className="">
-            <TableHead className="dark:text-white w-1/4">Step</TableHead>
+            <TableHead className="dark:text-white w-1/4">Aspect</TableHead>
             <TableHead className="text-red-500 dark:text-red-400 w-1/3">
-              Traditional YouTube
+              The DIY / Multi-Tool Way
             </TableHead>
             <TableHead className="text-green-500 dark:text-green-200 w-1/3">
-              With Shorts Studio
+              With Agent Writer
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="text-pretty">
           {[
             [
-              "Finding an idea",
-              "Brainstorm and research trending topics",
-              "We send you viral clips to react to",
+              "Keyword & Topic Strategy",
+              "Hours of manual research with multiple SEO tools (Ahrefs, SEMrush), analyzing competitors, and guessing intent.",
+              "AI discovers high-impact keywords and topics; our experts validate and build your content roadmap.",
             ],
             [
-              "Scripting",
-              "Write detailed scripts or outlines",
-              "No script needed — just react authentically",
+              "Content Creation",
+              "Writing yourself (days per article), or hiring expensive writers, managing revisions, ensuring quality and SEO.",
+              "AI drafts SEO-optimized content, then our human editors refine it to perfection for your brand voice.",
             ],
             [
-              "Recording",
-              "Multiple takes to get it right",
-              "One take — quick, natural reaction",
+              "On-Page SEO",
+              "Manually optimizing titles, metas, headers, images, internal links. Constant learning curve for SEO best practices.",
+              "Fully managed on-page optimization by our AI and SEO specialists. Always up-to-date.",
             ],
             [
-              "Editing",
-              "Requires software and hours of fine-tuning",
-              "Auto-edited by Shorts Studio",
+              "Technical SEO",
+              "Wrestling with site speed, mobile usability, schema markup, sitemaps. Often requires developer help.",
+              "We handle the technical complexities to ensure your site is loved by search engines.",
             ],
             [
-              "Thumbnail",
-              "Design or pay for a custom thumbnail",
-              "Not needed (shorts don’t use thumbnails)",
+              "Content for ChatGPT",
+              "Guessing what works for AI discovery, separate optimization efforts, hoping for visibility.",
+              "Content structured for discoverability on ChatGPT and other AI platforms, expanding your reach.",
             ],
             [
-              "On-camera pressure",
-              "High — you need to perform and present well",
-              "Low — just give your honest reaction",
-            ],
-            ["Time required", "2–10 hours per video", "Less than 10 minutes"],
-            [
-              "Barrier to start",
-              "High — tools, skills, and confidence needed",
-              "Extremely low — anyone can start",
+              "Tracking & Reporting",
+              "Juggling Google Analytics, Search Console, and rank trackers. Difficult to see the full picture.",
+              "Clear, concise reports on your progress and ROI. We track everything for you.",
             ],
             [
-              "Expert positioning",
-              "Slow and uncertain build-up",
-              "Immediate — you're seen reacting in your niche",
+              "Adapting to Changes",
+              "Constantly chasing Google algorithm updates and new AI trends. Risk of falling behind.",
+              "Our team stays ahead of the curve, proactively adapting your strategy for sustained growth.",
             ],
-          ].map(([step, traditional, shorts], index) => (
-            <TableRow key={step}>
+            [
+              "Tool & Team Costs",
+              "Subscriptions for SEO tools ($100s/mo), writing tools, analytics, plus potential freelancer/agency fees.",
+              "One simple, all-inclusive plan. No hidden fees, no extra tools needed.",
+            ],
+            [
+              "Time Investment",
+              "10-20+ hours per week managing everything yourself or coordinating multiple providers.",
+              "Minimal effort from your side. Focus on your product, we handle the growth.",
+            ],
+          ].map(([aspect, diy, agentWriter]) => (
+            <TableRow key={aspect}>
               <TableCell className="dark:text-white font-medium">
-                {step}
+                {aspect}
               </TableCell>
-              <TableCell className="text-red-500 dark:text-red-300 flex gap-1 items-center">
-                {traditional}
+              <TableCell className="text-red-500 dark:text-red-300">
+                {diy}
               </TableCell>
               <TableCell className="text-green-500 dark:text-green-200">
-                {shorts}
+                {agentWriter}
               </TableCell>
             </TableRow>
           ))}

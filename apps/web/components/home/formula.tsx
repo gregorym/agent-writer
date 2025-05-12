@@ -3,25 +3,30 @@ export default function TheFormula() {
     <div className="mt-24">
       <div className="flex flex-col gap-2 w-full -mb-4">
         <span className="flex gap-1.5 hover:opacity-80 transition-opacity items-center font-semibold text-blue-500">
-          The Formula
+          Formula
         </span>
         <h4 className="font-bold text-2xl md:text-5xl tracking-tight">
-          The magic formula
+          Our formula
         </h4>
         <p className="text-pretty text-lg">
-          Grow your personal brand on YouTube and establish yourself as the
-          expert in your niche with Reaction Shorts—it's the fastest way.
+          Agent Writer handles your blog content from start to finish. Our
+          AI-driven process covers keyword research, content creation, backlink
+          suggestions, and scheduling. While human review is an option for those
+          who prefer it, our system is designed to deliver quality content
+          autonomously.
         </p>
         <p className="text-pretty text-lg">
-          With Shorts Studio, we've made it incredibly simple. You just react to
-          relevant content in your space—like viral clips, podcast moments, or
-          trending opinions—and we handle all the production.
+          Our goal is to help you produce relevant, data-informed content to
+          improve your visibility on search engines like Google. The AI assists
+          in finding useful keywords, and the system offers tools to help you
+          build backlinks, which can contribute to your site's authority over
+          time.
         </p>
         <p className="text-pretty text-lg">
-          This format isn't just powerful; it's also 100x easier for you. No
-          need to write long scripts, film complex scenes, or hire editors.
-          Simply show up, share your perspective, and build an audience that
-          sees you as the go-to authority.
+          Enjoy a fully automated content solution, or choose to review and
+          refine articles at your discretion. Agent Writer is built to provide a
+          seamless, hands-off experience, efficiently combining AI capabilities
+          with optional human oversight to build your credible online presence.
         </p>
       </div>
     </div>
