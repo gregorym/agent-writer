@@ -299,7 +299,7 @@ export async function keywordsByWebsiteLLM(
   description: string,
   location: string,
   lang: string
-): Promise<string[]> {
+): Promise<KeywordResult[]> {
   const FOUR_WEEK_IN_SECONDS = 7 * 24 * 60 * 60 * 4; // 4 week
 
   return unstable_cache(

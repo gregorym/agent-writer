@@ -35,7 +35,7 @@ export type KeywordData = {
 };
 
 interface KeywordsTableProps {
-  data: string[];
+  data: KeywordData[];
   isLoading: boolean;
   websiteSlug: string;
 }
