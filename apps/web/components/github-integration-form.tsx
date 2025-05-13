@@ -97,7 +97,7 @@ export function GithubIntegrationForm({}: GithubIntegrationFormProps) {
           await utils.github.listRepos.invalidate({ websiteSlug: slug });
         }
       }
-      form.setValue("repoName", data.repo_name);
+      form.setValue("repoName", data?.repo_name);
     },
     onError: (error) => {
       toast.error(`Failed to update GitHub integration: ${error.message}`);

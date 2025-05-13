@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Check, CheckCheck, Clock, FileText, Pencil, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreateArticleForm } from "./create-article-form";
 import { Badge } from "./ui/badge";
@@ -32,9 +32,7 @@ import {
   TableRow,
 } from "./ui/table";
 
-interface ArticlesListProps {
-  websiteSlug: string;
-}
+interface ArticlesListProps {}
 
 const columns: ColumnDef<Article>[] = [
   {
@@ -103,10 +101,13 @@ const columns: ColumnDef<Article>[] = [
   },
 ];
 
-export function ArticlesList({ websiteSlug }: ArticlesListProps) {
+export function ArticlesList({}: ArticlesListProps) {
+  const params = useParams();
   const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
   const router = useRouter();
-  const utils = trpc.useUtils();
+
+  const websiteSlug = params.slug as string;
+
   const {
     data: articles,
     isLoading,

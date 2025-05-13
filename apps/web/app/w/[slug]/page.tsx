@@ -1,15 +1,17 @@
-"use client"; // Add this if not present, needed for hooks
-
 import { AppSidebar } from "@/components/app-sidebar";
-import { ArticlesList } from "@/components/articles-list"; // Import the new component
+import { ArticlesList } from "@/components/articles-list";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { useParams } from "next/navigation"; // Import useParams
+import { lucia } from "@/lib/auth";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-// Rename the page component for clarity
-export default function WebsiteDashboardPage() {
-  const params = useParams();
-  const slug = params.slug as string; // Get slug from URL
+export default async function WebsiteDashboardPage() {
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get(lucia.sessionCookieName)?.value ?? null;
+  if (!sessionId) {
+    return redirect("/login");
+  }
 
   return (
     <SidebarProvider
@@ -25,14 +27,8 @@ export default function WebsiteDashboardPage() {
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2 p-4 md:p-6">
-            {/* Remove the h1 title, it's now inside ArticlesList */}
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              {/* Render the ArticlesList component */}
-              {slug ? (
-                <ArticlesList websiteSlug={slug} />
-              ) : (
-                <p>Loading website...</p>
-              )}
+              <ArticlesList />
             </div>
           </div>
         </div>

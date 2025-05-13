@@ -1,9 +1,29 @@
 import { PenTool } from "lucide-react";
 
 import { LoginForm } from "@/components/login-form";
+import { lucia } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get(lucia.sessionCookieName)?.value ?? null;
+
+  if (sessionId) {
+    const { user } = await lucia.validateSession(sessionId);
+    const website = await prisma?.website.findFirst({
+      where: {
+        user_id: user?.id,
+      },
+      select: {
+        slug: true,
+      },
+    });
+    if (website) return redirect(`/w/${website.slug}`);
+  }
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">

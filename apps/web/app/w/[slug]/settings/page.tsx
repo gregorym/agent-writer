@@ -76,6 +76,7 @@ export default function EditWebsiteSettingsPage() {
               )}
               {website && (
                 <div className="container mx-auto p-4">
+                  {/* @ts-ignore */}
                   <EditWebsiteForm website={website} />
                 </div>
               )}

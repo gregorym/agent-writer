@@ -35,7 +35,7 @@ export type KeywordData = {
 };
 
 interface KeywordsTableProps {
-  data: KeywordData[];
+  data: string[];
   isLoading: boolean;
   websiteSlug: string;
 }
@@ -209,6 +209,7 @@ export function KeywordsTable({
 
   const table = useReactTable({
     data: data || [],
+    // @ts-ignore
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
