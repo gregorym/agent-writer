@@ -2,10 +2,7 @@ export default function TheFormula() {
   return (
     <div className="mt-24">
       <div className="flex flex-col gap-2 w-full -mb-4">
-        <span className="flex gap-1.5 hover:opacity-80 transition-opacity items-center font-semibold text-blue-500">
-          Formula
-        </span>
-        <h4 className="font-bold text-2xl md:text-5xl tracking-tight">
+        <h4 className="font-bold text-2xl md:text-5xl tracking-tight text-blue-500">
           Our formula
         </h4>
         <p className="text-pretty text-lg">

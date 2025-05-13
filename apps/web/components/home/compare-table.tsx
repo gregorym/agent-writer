@@ -1,13 +1,49 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function CompareTable() {
+  const comparisonData = [
+    [
+      "Overall Approach",
+      "Juggling multiple SEO tools, freelance writers, and your own time to piece together a content strategy. Constant research and learning required.",
+      "A single, unified solution. We handle every step from keyword research to publishing, so you get expert results without the complexity. Focus on your core business, we'll handle the blog.",
+    ],
+    [
+      "Strategy & Research",
+      "Spending hours on keyword research, competitor analysis, and topic ideation using expensive tools. Guessing what content will actually rank and resonate.",
+      "Our AI and expert team perform in-depth market and keyword research, crafting a data-driven content strategy tailored to your goals. All research and strategy included.",
+    ],
+    [
+      "Content Creation & SEO",
+      "Writing articles yourself (taking days), or managing and paying expensive writers. Then, more time spent on manual on-page SEO for each piece.",
+      "High-quality, SEO-optimized articles created for you. Our Agent Writer drafts content, and human editors refine it, ensuring it matches your brand and is primed for search engines. All writing, editing, and SEO included.",
+    ],
+    [
+      "Review & Quality Assurance",
+      "Multiple back-and-forths with writers, proofreading, fact-checking, and ensuring SEO best practices are met. Risk of inconsistent quality.",
+      "Rigorous in-house review process. Our editorial team ensures every article is polished, accurate, and perfectly optimized before it goes live. Consistent, high-quality content, every time.",
+    ],
+    [
+      "Scheduling & Publishing",
+      "Manually planning content calendars, remembering to publish at optimal times, or wrestling with third-party scheduling tools.",
+      "Fully automated content scheduling and publishing. We ensure your blog has a consistent flow of fresh content, published optimally, without you lifting a finger.",
+    ],
+    [
+      "Cost & Resources",
+      "Monthly subscriptions for multiple SEO tools (Ahrefs, SEMrush, etc.), writer fees, editor fees, and potentially agency retainers. Costs quickly add up.",
+      "One predictable, all-inclusive price. No need to pay for separate SEO tools, writers, or editors. Everything is covered in your plan, saving you significant costs.",
+    ],
+    [
+      "Time Investment",
+      "10-20+ hours per week dedicated to managing your blog, from research and writing to optimization and scheduling. Time you could spend on your product or customers.",
+      "Virtually zero time required from you. We take care of the entire blogging lifecycle, freeing you up to focus on what you do best. Reclaim your valuable time.",
+    ],
+    [
+      "Staying Updated",
+      "Constantly trying to keep up with ever-changing Google algorithms, new AI trends, and SEO best practices. It's a full-time job in itself.",
+      "Our team of experts is always ahead of the curve, proactively adapting your strategy to the latest algorithm updates and AI advancements, ensuring sustained growth.",
+    ],
+  ];
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 mt-48">
       <span className="flex gap-1.5 hover:opacity-80 transition-opacity items-center font-semibold text-blue-500">
@@ -17,86 +53,41 @@ export default function CompareTable() {
       <h3 className="font-bold text-2xl md:text-5xl tracking-tight">
         Unlock Top Rankings on Google & ChatGPT
       </h3>
-      <h4 className="text-3xl font-bold mb-6 dark:text-white">
+      <h4 className="text-3xl font-bold mb-10 dark:text-white text-center md:text-left">
         <span className="text-red-500">The Complex, Manual Way</span> vs{" "}
         <span className="text-green-400">
           Effortless Results with Agent Writer
         </span>
       </h4>
-      <Table className="">
-        <TableHeader>
-          <TableRow className="">
-            <TableHead className="dark:text-white w-1/4">Aspect</TableHead>
-            <TableHead className="text-red-500 dark:text-red-400 w-1/3">
-              The DIY / Multi-Tool Way
-            </TableHead>
-            <TableHead className="text-green-500 dark:text-green-200 w-1/3">
-              With Agent Writer
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="text-pretty">
-          {[
-            [
-              "Keyword & Topic Strategy",
-              "Hours of manual research with multiple SEO tools (Ahrefs, SEMrush), analyzing competitors, and guessing intent.",
-              "AI discovers high-impact keywords and topics; our experts validate and build your content roadmap.",
-            ],
-            [
-              "Content Creation",
-              "Writing yourself (days per article), or hiring expensive writers, managing revisions, ensuring quality and SEO.",
-              "AI drafts SEO-optimized content, then our human editors refine it to perfection for your brand voice.",
-            ],
-            [
-              "On-Page SEO",
-              "Manually optimizing titles, metas, headers, images, internal links. Constant learning curve for SEO best practices.",
-              "Fully managed on-page optimization by our AI and SEO specialists. Always up-to-date.",
-            ],
-            [
-              "Technical SEO",
-              "Wrestling with site speed, mobile usability, schema markup, sitemaps. Often requires developer help.",
-              "We handle the technical complexities to ensure your site is loved by search engines.",
-            ],
-            [
-              "Content for ChatGPT",
-              "Guessing what works for AI discovery, separate optimization efforts, hoping for visibility.",
-              "Content structured for discoverability on ChatGPT and other AI platforms, expanding your reach.",
-            ],
-            [
-              "Tracking & Reporting",
-              "Juggling Google Analytics, Search Console, and rank trackers. Difficult to see the full picture.",
-              "Clear, concise reports on your progress and ROI. We track everything for you.",
-            ],
-            [
-              "Adapting to Changes",
-              "Constantly chasing Google algorithm updates and new AI trends. Risk of falling behind.",
-              "Our team stays ahead of the curve, proactively adapting your strategy for sustained growth.",
-            ],
-            [
-              "Tool & Team Costs",
-              "Subscriptions for SEO tools ($100s/mo), writing tools, analytics, plus potential freelancer/agency fees.",
-              "One simple, all-inclusive plan. No hidden fees, no extra tools needed.",
-            ],
-            [
-              "Time Investment",
-              "10-20+ hours per week managing everything yourself or coordinating multiple providers.",
-              "Minimal effort from your side. Focus on your product, we handle the growth.",
-            ],
-          ].map(([aspect, diy, agentWriter]) => (
-            <TableRow key={aspect}>
-              <TableCell className="dark:text-white font-medium">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {comparisonData.map(([aspect, diy, agentWriter]) => (
+          <Card key={aspect} className="flex flex-col">
+            <CardHeader>
+              <CardTitle className="dark:text-white text-lg">
                 {aspect}
-              </TableCell>
-              <TableCell className="text-red-500 dark:text-red-300">
-                {diy}
-              </TableCell>
-              <TableCell className="text-green-500 dark:text-green-200">
-                {agentWriter}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow grid grid-cols-1 gap-4">
+              <div className="border-t pt-4">
+                <h5 className="font-semibold text-red-500 dark:text-red-400 mb-1 text-sm">
+                  The DIY / Multi-Tool Way
+                </h5>
+                <p className="text-xs text-muted-foreground dark:text-gray-400">
+                  {diy}
+                </p>
+              </div>
+              <div className="border-t pt-4">
+                <h5 className="font-semibold text-green-500 dark:text-green-300 mb-1 text-sm">
+                  With Agent Writer
+                </h5>
+                <p className="text-xs text-muted-foreground dark:text-gray-300">
+                  {agentWriter}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
