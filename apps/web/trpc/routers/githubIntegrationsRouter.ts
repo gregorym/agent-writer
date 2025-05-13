@@ -195,7 +195,7 @@ export const githubIntegrationsRouter = router({
         validatedRepoName = currentIntegration.repo_name;
       }
 
-      const updateData: Prisma.GithubIntegrationUpdateInput = {};
+      const updateData: any = {};
       let needsUpdate = false;
 
       if (apiKey !== undefined && apiKey !== currentIntegration.api_key) {
@@ -253,8 +253,6 @@ export const githubIntegrationsRouter = router({
           message: "Github integration deleted successfully.",
         };
       } catch (error: unknown) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        }
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to delete Github integration",

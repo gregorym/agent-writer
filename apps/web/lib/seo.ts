@@ -204,9 +204,9 @@ async function queryKeywordsFromLLM(
     contents,
   });
 
-  const { keywords } = JSON.parse(
-    response.candidates[0]?.content?.parts[0]?.text || '{"keywords":[]}'
-  ) as { keywords: string[] };
+  const responseText =
+    response?.candidates?.[0]?.content?.parts?.[0]?.text || '{"keywords":[]}';
+  const { keywords } = JSON.parse(responseText) as { keywords: string[] };
 
   const apiUrl =
     "https://api.dataforseo.com/v3/dataforseo_labs/google/keyword_overview/live";
