@@ -14,14 +14,8 @@ import {
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/trpc/client";
-import { Metadata } from "next";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-
-export const metadata: Metadata = {
-  title: "Agent Writer - Integrations",
-  description: "Manage your website integrations.",
-};
 
 export default function IntegrationsPage() {
   const params = useParams<{ slug: string }>();

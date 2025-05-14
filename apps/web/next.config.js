@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [new URL("https://ipfs.io/ipfs/*")],
+  },
+};
 
 export default nextConfig;

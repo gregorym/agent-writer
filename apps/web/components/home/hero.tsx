@@ -27,12 +27,12 @@ export default function Hero() {
     <div className="flex flex-col py-12">
       <div className="">
         <div className="text-2.5xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
-          <span className="">
+          <h1 className="">
             The SEO Agent working for you.
             <span className="text-[#d4af37] bg-[rgba(212,175,55,0.3)] px-1 rounded relative z-1">
               Writing, research and scheduling automated.
             </span>
-          </span>
+          </h1>
         </div>
       </div>
       <div className="flex gap-2.5 mt-5">

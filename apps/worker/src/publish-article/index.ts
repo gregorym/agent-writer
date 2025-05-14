@@ -55,14 +55,14 @@ export async function execute(job: any): Promise<void> {
 
   if (!article || !article.website) return;
 
-  const { ghostIntegration, GithubIntegration } = article.website;
+  const { ghostIntegration, githubIntegration } = article.website;
 
   if (ghostIntegration) {
     await publishToGhost(article, ghostIntegration);
   }
 
-  if (GithubIntegration) {
-    await publishToGithub(article, githubIntegration[0]);
+  if (githubIntegration) {
+    await publishToGithub(article, githubIntegration);
   }
 
   await prisma?.article.update({
@@ -194,28 +194,11 @@ async function publishToGhost(article: any, ghost: any): Promise<void> {
 async function publishToGithub(article: any, github: any): Promise<void> {
   try {
     const octokit = new Octokit({ auth: github.api_key });
-
-    const { data: userData } = await octokit.users.getAuthenticated();
-    const owner = userData.login;
-    const repo = github.repo_name;
+    const [owner, repo] = github.repo_name.split("/");
     if (!repo) {
       throw new Error(
         "Repository name is missing in GithubIntegration settings. Please add it in the website settings."
       );
-    }
-
-    try {
-      await octokit.repos.get({ owner, repo });
-    } catch (error: any) {
-      if (error.status === 404) {
-        throw new Error(
-          `Error: Cannot access repository '${owner}/${repo}'. Check repository name and token permissions.`
-        );
-      } else {
-        throw new Error(
-          `Error verifying repository access: ${error.message || error}`
-        );
-      }
     }
 
     const branchName = `feat/add-article-${slugify(article.title!, {
