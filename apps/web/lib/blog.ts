@@ -1,4 +1,3 @@
-// filepath: /Users/gregorymarcilhacy/code/bloggy-ai-bot/apps/web/lib/blog.ts
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";

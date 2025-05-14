@@ -1,6 +1,6 @@
+import MarkdownRenderer from "@/components/blog/markdown-renderer";
 import Footer from "@/components/home/footer";
 import Navbar from "@/components/home/navbar";
-import MarkdownRenderer from "@/components/markdown-renderer";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { getPostData } from "@/lib/blog";
 import fs from "fs";
-import { Metadata, ResolvingMetadata } from "next";
 import path from "path";
 
 const postsDirectory = path.join(process.cwd(), "content/blog");
@@ -24,15 +23,11 @@ export async function generateStaticParams() {
 }
 
 type Props = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const post = getPostData(params.slug);
+export async function generateMetadata({ params }: Props) {
+  const post = getPostData((await params).slug);
 
   if (!post) {
     return {
@@ -84,8 +79,12 @@ export async function generateMetadata(
   };
 }
 
-export default function PostPage({ params }: { params: { slug: string } }) {
-  const post = getPostData(params.slug);
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const post = getPostData((await params).slug);
 
   if (!post) {
     return <div>Post not found</div>;

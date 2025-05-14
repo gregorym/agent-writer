@@ -6,13 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/trpc/client";
-import { Metadata } from "next";
 import { useParams } from "next/navigation";
-
-export const metadata: Metadata = {
-  title: "Agent Writer - Settings",
-  description: "Manage your website settings.",
-};
 
 export default function EditWebsiteSettingsPage() {
   const params = useParams<{ slug: string }>(); // Get slug from params

@@ -1,4 +1,4 @@
-import { BlogCard } from "@/components/blog-card";
+import { BlogCard } from "@/components/blog/blog-card";
 import Footer from "@/components/home/footer";
 import Navbar from "@/components/home/navbar";
 import { getSortedPostsData, type BlogPost } from "@/lib/blog";
