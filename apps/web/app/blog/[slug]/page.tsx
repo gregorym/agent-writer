@@ -9,53 +9,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getPostData } from "@/lib/blog";
 import fs from "fs";
-import matter from "gray-matter";
 import { Metadata, ResolvingMetadata } from "next";
 import path from "path";
 
 const postsDirectory = path.join(process.cwd(), "content/blog");
-
-interface PostData {
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  imageUrl: string;
-  authorName: string;
-  authorAvatarUrl: string;
-  content: string;
-  [key: string]: any;
-}
-
-function getPostData(slug: string): PostData {
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
-  const fileContents = fs.readFileSync(fullPath, "utf8");
-  const matterResult = matter(fileContents);
-
-  let imageUrlFromContent = null;
-  const imageRegex = /!\[.*?\]\((.*?)\)/; // Markdown image regex
-  const match = imageRegex.exec(matterResult.content);
-  if (match && match[1]) {
-    imageUrlFromContent = match[1];
-  }
-
-  return {
-    slug,
-    title: matterResult.data.title || slug,
-    description: matterResult.data.description || "",
-    date: matterResult.data.date || new Date().toISOString().split("T")[0],
-    imageUrl:
-      matterResult.data.imageUrl ||
-      matterResult.data.image ||
-      imageUrlFromContent ||
-      "/placeholder-image.jpg",
-    authorName: matterResult.data.authorName,
-    authorAvatarUrl: matterResult.data.authorAvatarUrl,
-    content: matterResult.content,
-    ...matterResult.data,
-  };
-}
 
 export async function generateStaticParams() {
   const fileNames = fs.readdirSync(postsDirectory);
@@ -73,11 +32,7 @@ export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // fetch data
   const post = getPostData(params.slug);
-
-  // optionally access and extend (rather than replace) parent metadata
-  // const previousImages = (await parent).openGraph?.images || []
 
   if (!post) {
     return {
@@ -105,8 +60,8 @@ export async function generateMetadata(
               url: post.imageUrl.startsWith("http")
                 ? post.imageUrl
                 : `${siteUrl}${post.imageUrl}`,
-              width: 1200, // Adjust as needed
-              height: 630, // Adjust as needed
+              width: 1200,
+              height: 630,
               alt: post.title,
             },
           ]
