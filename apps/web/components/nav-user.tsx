@@ -51,9 +51,6 @@ export function NavUser() {
                 <span className="text-muted-foreground truncate text-xs">
                   {me?.email}
                 </span>
-                <span className="text-muted-foreground truncate text-xs">
-                  Role: {me?.role}
-                </span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
             </SidebarMenuButton>
