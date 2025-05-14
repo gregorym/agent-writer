@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -16,10 +16,10 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/trpc/client";
 
-export const metadata: Metadata = {
-  title: "Agent Writer - Article",
-  description: "View and edit your article.",
-};
+// export const metadata: Metadata = {
+//   title: "Agent Writer - Article",
+//   description: "View and edit your article.",
+// };
 
 const formSchema = z.object({
   topic: z.string().min(1, { message: "Topic cannot be empty." }),
@@ -37,20 +37,6 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
-  let timeout: ReturnType<typeof setTimeout> | null = null;
-
-  const debounced = (...args: Parameters<F>) => {
-    if (timeout !== null) {
-      clearTimeout(timeout);
-      timeout = null;
-    }
-    timeout = setTimeout(() => func(...args), waitFor);
-  };
-
-  return debounced as (...args: Parameters<F>) => ReturnType<F>;
-}
 
 const transformBacklinksToObject = (backlinks: string[] | null | undefined) => {
   if (!backlinks) return [];
