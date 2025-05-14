@@ -3,8 +3,14 @@ import { ArticlesList } from "@/components/articles-list";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { lucia } from "@/lib/auth";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Agent Writer - Website",
+  description: "Manage your website content.",
+};
 
 export default async function WebsiteDashboardPage() {
   const cookieStore = await cookies();

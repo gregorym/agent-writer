@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Metadata } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -14,6 +15,11 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/trpc/client";
+
+export const metadata: Metadata = {
+  title: "Agent Writer - Article",
+  description: "View and edit your article.",
+};
 
 const formSchema = z.object({
   topic: z.string().min(1, { message: "Topic cannot be empty." }),

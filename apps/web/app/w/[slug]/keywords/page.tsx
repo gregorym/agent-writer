@@ -8,7 +8,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/trpc/client";
+import { Metadata } from "next";
 import { useParams } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Agent Writer - Keywords",
+  description: "Manage your website keywords.",
+};
 
 export default function KeywordsPage() {
   const params = useParams<{ slug: string }>();

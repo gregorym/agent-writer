@@ -1,8 +1,14 @@
 import { LoginForm } from "@/components/login-form";
 import { lucia } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Agent Writer - Login",
+  description: "Login to your Agent Writer account.",
+};
 
 export default async function LoginPage() {
   const cookieStore = await cookies();

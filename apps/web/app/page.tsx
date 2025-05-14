@@ -8,7 +8,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Agent Writer - Home",
-  description: "Welcome to Agent Writer.",
+  description: "Create and publish articles with AI.",
 };
 
 export default function IndexPage() {
