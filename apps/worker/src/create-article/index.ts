@@ -1,8 +1,7 @@
-import Boss from "pg-boss";
-dotenv.config();
-
 import * as dotenv from "dotenv";
 import { Image } from "mdast";
+import Boss from "pg-boss";
+
 import { toString } from "mdast-util-to-string";
 import remarkParse from "remark-parse";
 import remarkStringify from "remark-stringify";
@@ -13,6 +12,7 @@ import { generateArticle, generateImage } from "../utils/llm";
 import { prisma } from "../utils/prisma";
 import trackJob from "../utils/track-job";
 
+dotenv.config();
 const CONCURRENCY = 1;
 const INTERVAL = 10;
 
