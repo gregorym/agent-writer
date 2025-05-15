@@ -33,6 +33,7 @@ import { Input } from "./ui/input";
 
 const formSchema = z
   .object({
+    title: z.string().optional(),
     topic: z.string(),
     scheduled_at: z.date().optional().nullable(),
     keyword: z.string().optional(),
@@ -82,6 +83,7 @@ export function CreateArticleForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      title: undefined,
       topic: "",
       scheduled_at: null,
       backlinks: [],
@@ -154,6 +156,19 @@ export function CreateArticleForm({
                   placeholder="Describe the main topic for the article..."
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Blog post title (optional)" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
