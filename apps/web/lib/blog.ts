@@ -20,6 +20,9 @@ export interface PostData extends BlogPost {
 }
 
 export function getSortedPostsData(): BlogPost[] {
+  if (!fs.existsSync(postsDirectory)) {
+    return [];
+  }
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map((fileName) => {
     const slug = fileName.replace(/\.mdx$/, "");
@@ -63,6 +66,9 @@ export function getSortedPostsData(): BlogPost[] {
 
 export function getPostData(slug: string): PostData {
   const fullPath = path.join(postsDirectory, `${slug}.mdx`);
+  if (!fs.existsSync(fullPath)) {
+    throw new Error(`Post not found: ${slug}`);
+  }
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const matterResult = matter(fileContents);
 
