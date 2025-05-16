@@ -64,14 +64,14 @@ export function getSortedPostsData(): BlogPost[] {
   });
 }
 
-export function getPostData(slug: string): PostData {
+export function getPostData(slug: string): PostData | null {
   if (!fs.existsSync(postsDirectory)) {
-    throw new Error(`Post not found: ${slug}`);
+    return null;
   }
 
   const fullPath = path.join(postsDirectory, `${slug}.mdx`);
   if (!fs.existsSync(fullPath)) {
-    throw new Error(`Post not found: ${slug}`);
+    return null;
   }
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const matterResult = matter(fileContents);

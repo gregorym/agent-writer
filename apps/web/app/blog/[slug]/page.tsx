@@ -11,19 +11,20 @@ import {
 } from "@/components/ui/breadcrumb";
 import { getPostData } from "@/lib/blog";
 import fs from "fs";
+import { notFound } from "next/navigation";
 import path from "path";
 
 const postsDirectory = path.join(process.cwd(), "content/blog");
 
 export async function generateStaticParams() {
-  if (!fs.existsSync(postsDirectory)) {
+  try {
+    const fileNames = fs.readdirSync(postsDirectory);
+    return fileNames.map((fileName) => ({
+      slug: fileName.replace(/\.mdx$/, ""),
+    }));
+  } catch (err: any) {
     return [];
   }
-
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map((fileName) => ({
-    slug: fileName.replace(/\.mdx$/, ""),
-  }));
 }
 
 type Props = {
@@ -89,9 +90,8 @@ export default async function PostPage({
   params: Promise<{ slug: string }>;
 }) {
   const post = getPostData((await params).slug);
-
   if (!post) {
-    return <div>Post not found</div>;
+    return notFound();
   }
 
   return (
