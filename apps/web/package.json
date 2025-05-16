@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "postinstall": "node prisma-generate.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.787.0",
