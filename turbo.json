@@ -17,5 +17,17 @@
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalEnv": [
+    "DATAFORSEO_USERNAME",
+    "DATAFORSEO_PASSWORD",
+    "GEMINI_API_KEY",
+    "GOOGLE_OAUTH_CLIENT_ID",
+    "NODE_ENV",
+    "GOOGLE_OAUTH_CLIENT_SECRET",
+    "GOOGLE_OAUTH_REDIRECT_URI",
+    "GOOGLE_SEARCH_CONSOLE_CLIENT_ID",
+    "GOOGLE_SEARCH_CONSOLE_CLIENT_SECRET",
+    "GOOGLE_SEARCH_CONSOLE_REDIRECT_URI"
+  ]
 }

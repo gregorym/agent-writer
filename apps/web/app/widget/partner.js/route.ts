@@ -1,23 +1,12 @@
-import { prisma } from "@/lib/prisma";
 import type { NextRequest } from "next/server";
 
 // export const runtime = "edge";
-export const revalidate = 60 * 60; // Revalidate every 1 hour (3600 seconds)
-
-async function fetchPartners() {
-  return await prisma?.website.findMany({
-    where: {
-      partner: true,
-    },
-    select: {
-      name: true,
-      url: true,
-    },
-  });
-}
+// export const revalidate = 3600 * 24; // 1 day
 
 export async function GET(_req: NextRequest) {
-  const partners = await fetchPartners();
+  const url = new URL(_req.url);
+  const res = await fetch(`${url.origin}/api/partners`);
+  const partners = await res.json();
 
   const code = `(()=>{try{
     const __agentwriter_data__=${JSON.stringify(partners)};
