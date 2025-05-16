@@ -27,6 +27,7 @@
     "@lucia-auth/oauth": "^3.5.3",
     "@node-rs/argon2": "^2.0.2",
     "@octokit/rest": "^21.1.1",
+    "@prisma/client": "6.7.0",
     "@radix-ui/react-accordion": "^1.2.8",
     "@radix-ui/react-avatar": "^1.1.7",
     "@radix-ui/react-checkbox": "^1.1.5",
@@ -100,6 +101,7 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.25.0",
+    "prisma": "6.7.0",
     "smee-client": "^3.1.1",
     "tw-animate-css": "^1.2.8",
     "typescript": "5.8.2"

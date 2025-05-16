@@ -39,3 +39,5 @@ yarn-error.log*
 
 # Prisma
 packages/database/generated/*
+apps/web/prisma/*
+apps/web/generated/*
