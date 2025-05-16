@@ -12,7 +12,7 @@ export async function GET(_req: NextRequest) {
     const __agentwriter_data__=${JSON.stringify(partners)};
     const targetElement=document.getElementById('agentwriter-partners');
     if(!targetElement) {console.error('#agentwriter-partners not found'); return; }
-    targetElement.innerHTML = '<ul>' + __agentwriter_data__.map(p => '<li><a href="' + p.url + '">' + p.name + '</a></li>').join('') + '</ul>';
+    targetElement.innerHTML = '<ul>' + __agentwriter_data__.map(p => '<li><a target="_blank" href="' + p.url + '">' + p.name + '</a></li>').join('') + '</ul>';
   }catch(e){console.error('SEO-widget error',e);}})();`;
 
   return new Response(code, {
