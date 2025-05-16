@@ -16,6 +16,10 @@ import path from "path";
 const postsDirectory = path.join(process.cwd(), "content/blog");
 
 export async function generateStaticParams() {
+  if (!fs.existsSync(postsDirectory)) {
+    return [];
+  }
+
   const fileNames = fs.readdirSync(postsDirectory);
   return fileNames.map((fileName) => ({
     slug: fileName.replace(/\.mdx$/, ""),

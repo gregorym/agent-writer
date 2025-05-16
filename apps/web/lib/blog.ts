@@ -65,6 +65,10 @@ export function getSortedPostsData(): BlogPost[] {
 }
 
 export function getPostData(slug: string): PostData {
+  if (!fs.existsSync(postsDirectory)) {
+    throw new Error(`Post not found: ${slug}`);
+  }
+
   const fullPath = path.join(postsDirectory, `${slug}.mdx`);
   if (!fs.existsSync(fullPath)) {
     throw new Error(`Post not found: ${slug}`);
