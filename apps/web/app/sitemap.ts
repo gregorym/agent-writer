@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getSortedPostsData();
 
   const blogs = posts.map((post) => ({
-    url: `https://agentwriter.co/blog/${post.slug}`,
+    url: `https://www.agentwriter.co/blog/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "weekly" as const,
     priority: 0.7,
@@ -13,13 +13,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: "https://agentwriter.co",
+      url: "https://www.agentwriter.co",
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: "https://agentwriter.com/blog",
+      url: "https://www.agentwriter.co/blog",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
