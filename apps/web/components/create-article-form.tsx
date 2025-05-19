@@ -116,6 +116,7 @@ export function CreateArticleForm({
     try {
       const article = await createArticleMutation.mutateAsync({
         topic: values.topic,
+        title: values.title,
         scheduled_at: values.scheduled_at,
         websiteSlug,
         backlinks: formattedBacklinks,
