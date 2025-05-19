@@ -1,6 +1,6 @@
 # Agent Writer
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 Agent Writer is an open-source application designed to automate blog content creation and publishing using AI. It helps users manage websites, perform keyword analysis, generate articles, and publish them to platforms like Ghost or GitHub repositories.
 
@@ -41,4 +41,4 @@ Contributions are welcome! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) fil
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details (You'll need to add a LICENSE file).
+This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
