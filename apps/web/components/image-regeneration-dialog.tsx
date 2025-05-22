@@ -55,7 +55,9 @@ export function ImageRegenerationDialog({
         ); // Add to history, limit size, ensure unique
         setActiveImageUrl(newUrl); // Set the newly generated image as the active one
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error generating image:", error);
+    }
   };
 
   if (!imageUrl) {
