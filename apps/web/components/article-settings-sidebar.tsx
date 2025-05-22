@@ -82,19 +82,19 @@ export function ArticleSettingsSidebar({
     name: "backlinks",
   });
   const retryMutation = trpc.articles.retry.useMutation();
-  const updateMutation = trpc.articles.update.useMutation();
   const publishMutation = trpc.articles.publish.useMutation();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
 
   const images = useMemo(() => {
-    if (!article?.markdown) return [];
-    const imageUrls = article.markdown.match(/!\[.*?\]\((.*?)\)/g);
+    const markdown = form.getValues("markdown");
+    if (!markdown) return [];
+    const imageUrls = markdown.match(/!\[.*?\]\((.*?)\)/g);
     return imageUrls
       ? imageUrls.map((img) => img.replace(/!\[.*?\]\((.*?)\)/, "$1"))
       : [];
-  }, [article]);
+  }, [form.getValues("markdown")]);
 
   const articleGenerated = !!article.markdown;
   const canDownload = !!article.markdown;
@@ -104,6 +104,14 @@ export function ArticleSettingsSidebar({
   const handleImageClick = (imageUrl: string) => {
     setSelectedImage(imageUrl);
     setIsImageDialogOpen(true);
+  };
+
+  const handleReplaceImage = (prevUrl: string, newUrl: string) => {
+    const currentMarkdown = form.getValues("markdown") || "";
+    const updatedMarkdown = currentMarkdown.replace(prevUrl, newUrl);
+    form.setValue("markdown", updatedMarkdown, { shouldDirty: true });
+    setSelectedImage(newUrl);
+    setIsImageDialogOpen(false);
   };
 
   return (
@@ -321,7 +329,7 @@ export function ArticleSettingsSidebar({
         isOpen={isImageDialogOpen}
         onOpenChange={setIsImageDialogOpen}
         imageUrl={selectedImage}
-        onReplaceUrl={() => {}}
+        onReplaceImage={handleReplaceImage}
       />
     </Sidebar>
   );

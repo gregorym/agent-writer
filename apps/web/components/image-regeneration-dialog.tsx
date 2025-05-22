@@ -13,6 +13,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/trpc/client";
 import { useAtom } from "jotai";
+import { RefreshCcw } from "lucide-react";
 import { useEffect, useState } from "react"; // Added useEffect
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
@@ -20,13 +21,13 @@ interface ImageRegenerationDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   imageUrl: string | null;
-  onReplaceImage: (url: string) => void;
+  onReplaceImage: (prevUrl: string, newUrl: string) => void;
 }
 
 export function ImageRegenerationDialog({
   isOpen,
   onOpenChange,
-  imageUrl, // This is the initial image from the parent
+  imageUrl,
   onReplaceImage,
 }: ImageRegenerationDialogProps) {
   const [prompt, setPrompt] = useState("");
@@ -34,13 +35,10 @@ export function ImageRegenerationDialog({
   const [activeImageUrl, setActiveImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    setActiveImageUrl(imageUrl);
-    // Reset prompt when the main image context changes
-    if (imageUrl) {
-      // Only reset prompt if there's a new image to work on
-      setPrompt("");
+    if (imageUrl && !activeImageUrl) {
+      setActiveImageUrl(imageUrl);
     }
-  }, [imageUrl]);
+  }, [activeImageUrl, imageUrl]);
 
   const createImageMutation = trpc.ai.createImage.useMutation();
 
@@ -56,15 +54,11 @@ export function ImageRegenerationDialog({
           [newUrl, ...prev.filter((url) => url !== newUrl)].slice(0, 10)
         ); // Add to history, limit size, ensure unique
         setActiveImageUrl(newUrl); // Set the newly generated image as the active one
-        onReplaceImage(newUrl); // Inform the parent component
       }
-    } catch (error) {
-      // Error handling can be added here if needed (e.g., toast notification)
-    }
+    } catch (error) {}
   };
 
   if (!imageUrl) {
-    // Initial guard based on prop: if no image, dialog shouldn't be open/useful
     return null;
   }
 
@@ -78,11 +72,23 @@ export function ImageRegenerationDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <img
-            src={activeImageUrl || ""} // Use activeImageUrl for the main display
-            alt="Selected image"
-            className="rounded-md w-full object-contain"
-          />
+          <div className="relative">
+            <img
+              src={activeImageUrl || ""}
+              alt="Selected image"
+              className="rounded-md w-full object-contain"
+            />
+            {imageUrl != activeImageUrl && activeImageUrl && (
+              <Button
+                variant="secondary"
+                className="absolute bottom-2 right-2 flex items-center gap-1"
+                onClick={onReplaceImage.bind(null, imageUrl, activeImageUrl)}
+              >
+                <RefreshCcw className="h-4 w-4" />
+                Replace
+              </Button>
+            )}
+          </div>
           <Textarea
             placeholder="Enter new prompt for the image..."
             value={prompt}
@@ -107,7 +113,11 @@ export function ImageRegenerationDialog({
                             ? "border-2 border-black"
                             : "" // Compare with activeImageUrl
                         }`}
-                        onClick={() => setActiveImageUrl(imgUrl)} // Update local activeImageUrl
+                        onClick={() =>
+                          activeImageUrl === imgUrl
+                            ? setActiveImageUrl(null)
+                            : setActiveImageUrl(imgUrl)
+                        } // Update local activeImageUrl
                       />
                     </CarouselItem>
                   ))}
