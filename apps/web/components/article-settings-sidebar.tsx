@@ -203,7 +203,7 @@ export function ArticleSettingsSidebar({
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon">
+              <Button variant="outline" size="icon">
                 <MoreHorizontal className="h-4 w-4" />
                 <span className="sr-only">More options</span>
               </Button>
