@@ -41,6 +41,7 @@ interface BacklinksInputProps<
   fields: FieldArrayWithId<TFieldValues, TName, "id">[]; // Use TName
   append: UseFieldArrayAppend<TFieldValues, TName>; // Use TName
   remove: UseFieldArrayRemove;
+  disabled?: boolean;
 }
 
 // Use generic types for the component function as well
@@ -53,6 +54,7 @@ export function BacklinksInput<
   fields,
   append,
   remove,
+  disabled,
 }: BacklinksInputProps<TFieldValues, TName>) {
   return (
     <div>
@@ -68,7 +70,11 @@ export function BacklinksInput<
                 <FormItem className="flex-1">
                   <FormLabel className="sr-only">URL</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com" {...field} />
+                    <Input
+                      placeholder="https://example.com"
+                      {...field}
+                      disabled={disabled}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -82,7 +88,11 @@ export function BacklinksInput<
                 <FormItem className="flex-1">
                   <FormLabel className="sr-only">Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Link Title" {...field} />
+                    <Input
+                      placeholder="Link Title"
+                      {...field}
+                      disabled={disabled}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,6 +105,7 @@ export function BacklinksInput<
               onClick={() => remove(index)}
               className="text-destructive hover:text-destructive"
               aria-label="Remove backlink"
+              disabled={disabled}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -105,12 +116,9 @@ export function BacklinksInput<
         type="button"
         variant="outline"
         size="sm"
+        onClick={() => append({ url: "", title: "" } as any)} // Use type assertion for append
         className="mt-2"
-        // Ensure the appended object matches the expected structure (url, title)
-        // This assumes the array items always have 'url' and 'title' fields.
-        // For more complex scenarios, the append function might need adjustment
-        // or the default value passed differently.
-        onClick={() => append({ url: "", title: "" } as any)} // Cast to any for simplicity here, or refine types further
+        disabled={disabled}
       >
         <PlusCircle className="mr-2 h-4 w-4" />
         Add Backlink

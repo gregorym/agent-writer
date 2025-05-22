@@ -83,6 +83,7 @@ export function ArticleSettingsSidebar({
   const updateMutation = trpc.articles.update.useMutation();
   const publishMutation = trpc.articles.publish.useMutation();
 
+  const articleGenerated = !!article.markdown;
   const canDownload = !!article.markdown;
   const canPublish = !publishMutation.isPending && !article.published_at;
   const canRetry = !retryMutation.isPending && !article.markdown;
@@ -108,6 +109,7 @@ export function ArticleSettingsSidebar({
                   {...field}
                   value={field.value ?? ""}
                   className="bg-white"
+                  disabled={articleGenerated}
                 />
               </FormControl>
               <FormMessage />
@@ -122,7 +124,7 @@ export function ArticleSettingsSidebar({
             <FormItem className="flex flex-col">
               <FormLabel>Schedule Date</FormLabel>
               <Popover>
-                <PopoverTrigger asChild>
+                <PopoverTrigger asChild disabled={articleGenerated}>
                   <FormControl>
                     <Button
                       variant={"outline"}
@@ -170,6 +172,7 @@ export function ArticleSettingsSidebar({
                   {...field}
                   value={field.value ?? ""}
                   className="bg-white"
+                  disabled={articleGenerated}
                 />
               </FormControl>
               <FormMessage />
@@ -183,6 +186,7 @@ export function ArticleSettingsSidebar({
           fields={fields}
           append={append}
           remove={remove}
+          disabled={articleGenerated}
         />
       </SidebarContent>
       <SidebarFooter className="p-4 border-t">
