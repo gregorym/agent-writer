@@ -43,6 +43,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
+import { useMemo } from "react";
 import { BacklinksInput } from "./backlinks-input";
 
 const formSchema = z.object({
@@ -82,6 +83,14 @@ export function ArticleSettingsSidebar({
   const retryMutation = trpc.articles.retry.useMutation();
   const updateMutation = trpc.articles.update.useMutation();
   const publishMutation = trpc.articles.publish.useMutation();
+
+  const images = useMemo(() => {
+    if (!article?.markdown) return [];
+    const imageUrls = article.markdown.match(/!\[.*?\]\((.*?)\)/g);
+    return imageUrls
+      ? imageUrls.map((img) => img.replace(/!\[.*?\]\((.*?)\)/, "$1"))
+      : [];
+  }, [article]);
 
   const articleGenerated = !!article.markdown;
   const canDownload = !!article.markdown;
@@ -188,6 +197,22 @@ export function ArticleSettingsSidebar({
           remove={remove}
           disabled={articleGenerated}
         />
+
+        {images.length > 0 && (
+          <>
+            <FormLabel className="mb-0">Images</FormLabel>
+            <div className="grid grid-cols-3 gap-1">
+              {images.map((image, index) => (
+                <img
+                  src={image}
+                  alt={`Generated image ${index + 1}`}
+                  key={index}
+                  className="rounded-md hover:opacity-50 transition-opacity duration-200 cursor-pointer"
+                />
+              ))}
+            </div>
+          </>
+        )}
       </SidebarContent>
       <SidebarFooter className="p-4 border-t">
         <div className="flex items-center space-x-2">
