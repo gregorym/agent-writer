@@ -1,4 +1,4 @@
-import { PrismaClient } from "@repo/database";
+import { PrismaClient } from "@bloggy/database";
 
 declare global {
   var prisma: PrismaClient | undefined;
