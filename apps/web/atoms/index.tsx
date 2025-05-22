@@ -1,7 +1,9 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
-export const imageHistoryAtom = atomWithStorage<string[]>("history", []);
+export const imageHistoryAtom = atomWithStorage<
+  Array<{ url: string; prompt: string }>
+>("history", []);
 
 type SearchHistoryState = Record<string, string[]>;
 type ArticleKeywordHistoryState = Record<string, string[]>; // New type for article keywords
