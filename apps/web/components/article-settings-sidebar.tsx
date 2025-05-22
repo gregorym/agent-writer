@@ -43,8 +43,9 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { BacklinksInput } from "./backlinks-input";
+import { ImageRegenerationDialog } from "./image-regeneration-dialog";
 
 const formSchema = z.object({
   topic: z.string().min(1, { message: "Topic cannot be empty." }),
@@ -84,6 +85,9 @@ export function ArticleSettingsSidebar({
   const updateMutation = trpc.articles.update.useMutation();
   const publishMutation = trpc.articles.publish.useMutation();
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
+
   const images = useMemo(() => {
     if (!article?.markdown) return [];
     const imageUrls = article.markdown.match(/!\[.*?\]\((.*?)\)/g);
@@ -96,6 +100,11 @@ export function ArticleSettingsSidebar({
   const canDownload = !!article.markdown;
   const canPublish = !publishMutation.isPending && !article.published_at;
   const canRetry = !retryMutation.isPending && !article.markdown;
+
+  const handleImageClick = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setIsImageDialogOpen(true);
+  };
 
   return (
     <Sidebar
@@ -208,6 +217,7 @@ export function ArticleSettingsSidebar({
                   alt={`Generated image ${index + 1}`}
                   key={index}
                   className="rounded-md hover:opacity-50 transition-opacity duration-200 cursor-pointer"
+                  onClick={() => handleImageClick(image)}
                 />
               ))}
             </div>
@@ -307,6 +317,12 @@ export function ArticleSettingsSidebar({
           </DropdownMenu>
         </div>
       </SidebarFooter>
+      <ImageRegenerationDialog
+        isOpen={isImageDialogOpen}
+        onOpenChange={setIsImageDialogOpen}
+        imageUrl={selectedImage}
+        onReplaceUrl={() => {}}
+      />
     </Sidebar>
   );
 }
