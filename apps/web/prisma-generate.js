@@ -1,7 +1,7 @@
 // prisma-generate.js - Script to handle Prisma client generation for Vercel deployment
-import { execSync } from "child_process";
-import fs from "fs";
-import path from "path";
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
 // This script ensures that Prisma client is generated with the correct binary targets for Vercel
 
