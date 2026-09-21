@@ -24,6 +24,7 @@ Agent Writer supports publishing generated content directly to:
 
 - **Ghost:** Connect your Ghost blog via its Admin API key to publish articles automatically.
 - **GitHub:** Connect a GitHub repository (using a Personal Access Token or a dedicated GitHub App) to publish articles as MDX files via Pull Requests.
+- **Notion:** Connect a Notion database (using an internal integration token) to publish articles as pages.
 
 ## 🔧 Usage
 
