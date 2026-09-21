@@ -60,6 +60,7 @@ model Website {
   ghostIntegration GhostIntegration? 
   githubIntegration GithubIntegration? 
   googleSearchIntegration GoogleSearchIntegration?
+  notionIntegration NotionIntegration?
 
   @@index([user_id])
   @@index([slug])
@@ -138,6 +139,20 @@ model GithubIntegration {
   website Website @relation(fields: [website_id], references: [id])
 
   @@map("github_integrations")
+}
+
+model NotionIntegration {
+  id          Int      @id @default(autoincrement())
+  website_id  Int      @unique
+  api_key     String
+  database_id String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  website Website @relation(fields: [website_id], references: [id])
+
+  @@map("notion_integrations")
 }
 
 model GoogleSearchIntegration {

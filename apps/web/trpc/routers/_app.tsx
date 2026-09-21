@@ -6,6 +6,7 @@ import { ghostIntegrationsRouter } from "./ghostIntegrationsRouter";
 import { githubIntegrationsRouter } from "./githubIntegrationsRouter";
 import { googleSearchIntegrationsRouter } from "./googleSearchIntegrationRouter";
 import { keywordsRouter } from "./keywordsRouter";
+import { notionIntegrationsRouter } from "./notionIntegrationsRouter";
 import { usersRouter } from "./usersRouter";
 import { websitesRouter } from "./websitesRouter";
 
@@ -13,6 +14,7 @@ export const appRouter = router({
   googleSearch: googleSearchIntegrationsRouter,
   github: githubIntegrationsRouter,
   ghost: ghostIntegrationsRouter,
+  notion: notionIntegrationsRouter,
   websites: websitesRouter,
   articles: articlesRouter,
   keywords: keywordsRouter,

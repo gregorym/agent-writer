@@ -43,6 +43,11 @@ export const websitesRouter = router({
               id: true,
             },
           },
+          notionIntegration: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
       if (!website) {
